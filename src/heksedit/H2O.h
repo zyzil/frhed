@@ -46,8 +46,9 @@ typedef struct _IMAGELIST { int unused; } IMAGELIST__;
 #define MAASSERT _ASSERT
 
 #ifdef _DEBUG
-#define ASSERT_MSG(cond, msg) \
-	(cond) ? (void)0 : _RPT_BASE((_CRT_ASSERT, __FILE__, __LINE__, NULL, msg))
+//#define ASSERT_MSG(cond, msg) \
+//	(cond) ? (void)0 : _RPT_BASE((_CRT_ASSERT, __FILE__, __LINE__, NULL, msg))
+#define ASSERT_MSG(cond, msg)
 #else
 #define ASSERT_MSG(cond, msg)
 #endif
