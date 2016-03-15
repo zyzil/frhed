@@ -54,7 +54,7 @@ static HWND hwndMain = nullptr;
 static HWND hwndHex = nullptr;
 static HWND hwndToolBar = nullptr;
 static HWND hwndStatusBar = nullptr;
-static HexEditorWindow *pHexWnd = nullptr;
+static HexEditorWindow* pHexWnd = nullptr;
 static BOOL bIsNT = FALSE;
 
 /**
@@ -201,7 +201,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, LPWSTR szCmdLine, int)
 	}
 
 	if (iCmd != 0)
-		PostMessage(hwndMain, WM_COMMAND, iCmd, 0);
+	PostMessage(hwndMain, WM_COMMAND, iCmd, 0);
 
 	while (GetMessage(&msg, nullptr, 0, 0))
 	{
@@ -237,8 +237,8 @@ void WINAPI wWinMainCRTStartup()
 LRESULT CALLBACK HexWndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
 	if (iMsg == WM_NCCREATE)
-		SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(new HexEditorWindow));
-	HexEditorWindow *pHexWnd = reinterpret_cast<HexEditorWindow *>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
+	SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(new HexEditorWindow));
+	HexEditorWindow* pHexWnd = reinterpret_cast<HexEditorWindow *>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
 	LRESULT lResult = pHexWnd->OnWndMsg(hwnd, iMsg, wParam, lParam);
 	if (iMsg == WM_NCDESTROY)
 		delete pHexWnd;
@@ -254,8 +254,8 @@ LRESULT CALLBACK MainWndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 	case WM_CREATE:
 		hwndMain = hwnd;
 		hwndHex = CreateWindowEx(WS_EX_CLIENTEDGE, szHexClass, nullptr,
-			WS_TABSTOP | WS_CHILD | WS_VISIBLE | WS_VSCROLL | WS_HSCROLL,
-			10, 10, 100, 100, hwnd, nullptr, hMainInstance, nullptr);
+		                                         WS_TABSTOP | WS_CHILD | WS_VISIBLE | WS_VSCROLL | WS_HSCROLL,
+		                                         10, 10, 100, 100, hwnd, nullptr, hMainInstance, nullptr);
 		pHexWnd = reinterpret_cast<HexEditorWindow *>(GetWindowLongPtr(hwndHex, GWLP_USERDATA));
 		if (!pHexWnd)
 			return -1;
@@ -275,7 +275,7 @@ LRESULT CALLBACK MainWndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 		// Exit command must be handled in zhed executable,
 		// not in hexeditctl dll.
 		if (LOWORD(wParam) == IDM_EXIT)
-			SendMessage(hwnd, WM_CLOSE, 0, 0);
+		SendMessage(hwnd, WM_CLOSE, 0, 0);
 		else
 			pHexWnd->command(LOWORD(wParam));
 		break;
@@ -284,7 +284,7 @@ LRESULT CALLBACK MainWndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 	case WM_SETFOCUS:
 		SetFocus(hwndHex);
 		break;
-	case WM_CLOSE: 
+	case WM_CLOSE:
 		if (!pHexWnd->close())
 			return 0;
 		break;
@@ -313,7 +313,7 @@ LRESULT CALLBACK MainWndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 			//--------------------------------------------
 			// Set statusbar divisions.
 			// Calculate the right edge coordinate for each part
-			int parts[] = { MulDiv(cx, 4, 6), MulDiv(cx, 5, 6), cx };
+			int parts[] = {MulDiv(cx, 4, 6), MulDiv(cx, 5, 6), cx};
 			SendMessage(hwndStatusBar, SB_SETPARTS, RTL_NUMBER_OF(parts), reinterpret_cast<LPARAM>(parts));
 			MoveWindow(hwndHex, 0, cyToolBar, cx, cy - cyToolBar - cyStatusBar, TRUE);
 		}
@@ -336,5 +336,6 @@ LRESULT CALLBACK MainWndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 		PostQuitMessage(0);
 		break;
 	}
-	return DefWindowProc(hwnd, iMsg, wParam, lParam );
+	return DefWindowProc(hwnd, iMsg, wParam, lParam);
 }
+

@@ -49,19 +49,6 @@ using H2O::HBrush;
 using H2O::HPen;
 using H2O::HMenu;
 
-namespace NT4
-{
-	struct OPENFILENAME : public OPENFILENAME_NT4
-	{
-	};
-	extern "C" BOOL APIENTRY GetOpenFileName(OPENFILENAME *);
-	extern "C" BOOL APIENTRY GetSaveFileName(OPENFILENAME *);
-}
-
-using NT4::OPENFILENAME;
-using NT4::GetOpenFileName;
-using NT4::GetSaveFileName;
-
 #include <windowsx.h>
 #include <crtdbg.h>
 #include <crtdefs.h>

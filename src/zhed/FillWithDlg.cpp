@@ -26,7 +26,6 @@ Last change: 2013-02-24 by Jochen Neubeck
  *
  */
 #include "precomp.h"
-#include "resource.h"
 #include "hexwnd.h"
 #include "hexwdlg.h"
 #include "StringTable.h"
@@ -45,7 +44,7 @@ TCHAR FillWithDialog::curtyp;//filling with input-0 or file-1
 TCHAR FillWithDialog::asstyp;
 //see CMD_fw below
 
-void FillWithDialog::inittxt(HWindow *pDlg)
+void FillWithDialog::inittxt(HWindow *pDlg) const
 {
 	int iStartOfSelSetting;
 	int iEndOfSelSetting;
@@ -85,14 +84,14 @@ void FillWithDialog::inittxt(HWindow *pDlg)
 			_stprintf(bufff, _T("%d=0x%x"), d, d);
 			pDlg->SetDlgItemText(IDC_IFS, bufff);
 			HFont *hfdef = pDlg->GetFont();
-			pDlg->SendDlgItemMessage(IDC_IFS, WM_SETFONT, (WPARAM)hfdef, MAKELPARAM(TRUE, 0));
+			pDlg->SendDlgItemMessage(IDC_IFS, WM_SETFONT, reinterpret_cast<WPARAM>(hfdef), MAKELPARAM(TRUE, 0));
 			_stprintf(bufff, _T("%d=0x%x"), m, m);
 			pDlg->SetDlgItemText(IDC_R, bufff);
 		}
 		else
 		{
 			pDlg->SetDlgItemText(IDC_IFS, _T("\xa5"));//set to infinity symbol
-			pDlg->SendDlgItemMessage(IDC_IFS, WM_SETFONT, (WPARAM)hfon, MAKELPARAM(TRUE, 0));
+			pDlg->SendDlgItemMessage(IDC_IFS, WM_SETFONT, reinterpret_cast<WPARAM>(hfon), MAKELPARAM(TRUE, 0));
 			pDlg->SetDlgItemText(IDC_R, _T("0=0x0"));
 		}
 	}
@@ -132,7 +131,7 @@ void FillWithDialog::hexstring2charstring()
 		buf[ii]=a;//store it
 		*/
 		// Replaced with this line:
-		_stscanf(pcFWText + i, _T("%2x"), buf + ii);//get byte from the hexstring
+		_stscanf(pcFWText + i, _T("%hhx"), buf + ii);//get byte from the hexstring
 		ii++;
 	}//for
 	buflen = ii;//store length
@@ -162,18 +161,18 @@ LRESULT CALLBACK FillWithDialog::HexProc(HWND hEdit, UINT iMsg, WPARAM wParam, L
 	{
 	case WM_CHAR:
 		// only enter chars if they are hex digits or backspace
-		if (!_istxdigit((TBYTE)wParam) && wParam != VK_BACK)
+		if (!_istxdigit(static_cast<TBYTE>(wParam)) && wParam != VK_BACK)
 		{
 			MessageBeep(MB_ICONEXCLAMATION);
 			return 0;
 		}
 		break;
 	case WM_PASTE:
-		CallWindowProc((WNDPROC)oldproc, hEdit, iMsg, wParam, lParam);//paste as usual
+		CallWindowProc(reinterpret_cast<WNDPROC>(oldproc), hEdit, iMsg, wParam, lParam);//paste as usual
 		deletenonhex(hEdit);//but delete non-hex chars
 		return 0;
 	}
-	return CallWindowProc((WNDPROC)oldproc, hEdit, iMsg, wParam, lParam);
+	return CallWindowProc(reinterpret_cast<WNDPROC>(oldproc), hEdit, iMsg, wParam, lParam);
 }
 
 /**
@@ -195,7 +194,7 @@ INT_PTR FillWithDialog::DlgProc(HWindow *pDlg, UINT iMsg, WPARAM wParam, LPARAM 
 			pEditt->SetWindowText(pcFWText);//init hex text
 			pEditt->SetFocus();//give the hex box focus
 			pEditt->EnableWindow(!curtyp);
-			oldproc = (LONG_PTR) pEditt->SetWindowLongPtr(GWLP_WNDPROC, (LONG_PTR)HexProc);//override the old proc to be HexProc
+			oldproc = static_cast<LONG_PTR>(pEditt->SetWindowLongPtr(GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(HexProc)));//override the old proc to be HexProc
 			EnableDlgItem(pDlg, IDC_HEXSTAT, !curtyp);
 
 			HComboBox *typ = static_cast<HComboBox *>(pDlg->GetDlgItem(IDC_TYPE));
@@ -231,7 +230,6 @@ INT_PTR FillWithDialog::DlgProc(HWindow *pDlg, UINT iMsg, WPARAM wParam, LPARAM 
 			}
 			return 0;//stop the system from setting focus to the control handle in (HWND) wParam because we already set focus above
 		}
-		break;
 	case WM_COMMAND:
 		switch (wParam)
 		{
@@ -287,7 +285,7 @@ INT_PTR FillWithDialog::DlgProc(HWindow *pDlg, UINT iMsg, WPARAM wParam, LPARAM 
 					asstyp = 3;
 
 				// go ahead
-				SetCursor(LoadCursor(NULL, IDC_WAIT));
+				SetCursor(LoadCursor(nullptr, IDC_WAIT));
 				BYTE (*fnc)(int);
 				int iStartOfSelSetting;
 				int iEndOfSelSetting;
@@ -351,7 +349,7 @@ INT_PTR FillWithDialog::DlgProc(HWindow *pDlg, UINT iMsg, WPARAM wParam, LPARAM 
 				push_undorecord(iStartOfSelSetting, olddata, olddata.GetLength(), &m_dataArray[iStartOfSelSetting], olddata.GetLength());
 				if (curtyp)
 					_close(FWFile);//close file
-				SetCursor(LoadCursor(NULL, IDC_ARROW));
+				SetCursor(LoadCursor(nullptr, IDC_ARROW));
 				bFilestatusChanged = true;
 				repaint();//you tell me
 			}
@@ -362,7 +360,7 @@ INT_PTR FillWithDialog::DlgProc(HWindow *pDlg, UINT iMsg, WPARAM wParam, LPARAM 
 			return 1;//did process this message
 		case MAKEWPARAM(IDC_TYPE, CBN_SELCHANGE):
 			//thing to fill selection with changes
-			curtyp = (char)pDlg->SendDlgItemMessage(IDC_TYPE, CB_GETCURSEL, 0, 0);//get cursel
+			curtyp = static_cast<char>(pDlg->SendDlgItemMessage(IDC_TYPE, CB_GETCURSEL, 0, 0));//get cursel
 			EnableDlgItem(pDlg, IDC_FN, curtyp);//en/disable fnamebox and browse button
 			EnableDlgItem(pDlg, IDC_BROWSE, curtyp);
 			EnableDlgItem(pDlg, IDC_FILESTAT, curtyp);

@@ -48,6 +48,8 @@ file(GLOB zhed_res
 
 add_executable (zhed ${zhed_src} ${zhed_hdr} ${zhed_res})
 target_link_libraries (zhed version comctl32 wininet shlwapi Htmlhelp)
+set_target_properties(zhed PROPERTIES COMPILE_FLAGS "/Yuprecomp.h")
+set_source_files_properties(src/zhed/precomp.cpp PROPERTIES COMPILE_FLAGS "/Ycprecomp.h")
 set_target_properties (zhed PROPERTIES OUTPUT_NAME zhed)
 set_target_properties(zhed PROPERTIES LINK_FLAGS_DEBUG "/SUBSYSTEM:WINDOWS")
 set_target_properties(zhed PROPERTIES LINK_FLAGS_RELWITHDEBINFO "/SUBSYSTEM:WINDOWS")

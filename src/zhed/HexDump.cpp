@@ -30,16 +30,16 @@ Last change: 2013-02-24 by Jochen Neubeck
 #include "simparr.h"
 
 HexDump::HexDump()
-: m_pData(NULL)
-, m_pBuffer(NULL)
+: m_pData(nullptr)
+, m_pBuffer(nullptr)
 , m_bytesPerLine(0)
 , m_charsPerLine(0)
 , m_offsetMaxLen(0)
 , m_offsetMinLen(0)
-, m_partialOffset(0)
 , m_partialStats(false)
+, m_partialOffset(0)
 , m_byteSpace(0)
-, m_charSpace(0)
+, m_charSpace(0), m_charset(0)
 {
 }
 
@@ -84,7 +84,7 @@ char *HexDump::GetBuffer() const
 	return m_pBuffer;
 }
 
-void HexDump::Write(int startInd, int endInd)
+void HexDump::Write(int startInd, int endInd) const
 {
 	char buf2[128];
 
@@ -98,7 +98,7 @@ void HexDump::Write(int startInd, int endInd)
 			a += m_bytesPerLine, k += m_charsPerLine + 2)
 	{
 		// Write offset.
-		int m = sprintf(buf2, "%*.*x", m_offsetMinLen, m_offsetMinLen,
+		int m = sprintf(buf2, "%*.*llx", m_offsetMinLen, m_offsetMinLen,
 				m_partialStats ? a + m_partialOffset : a);
 
 		for (int i = m; i < m_offsetMaxLen + m_byteSpace - m; i++)
@@ -124,18 +124,18 @@ void HexDump::Write(int startInd, int endInd)
 			else
 			{
 				// Write byte.
-				sprintf(buf2, "%2.2x ", (*m_pData)[(int)a + j]);
+				sprintf(buf2, "%2.2x ", (*m_pData)[static_cast<int>(a) + j]);
 				m_pBuffer[k + l + j*3    ] = buf2[0];
 				m_pBuffer[k + l + j*3 + 1] = buf2[1];
 				m_pBuffer[k + l + j*3 + 2] = buf2[2];
 				// Write char.
-				if (m_charset == OEM_FIXED_FONT && (*m_pData)[(int)a + j] != 0)
-					m_pBuffer[k + l + m_bytesPerLine*3 + m_charSpace + j] = (*m_pData)[(int)a + j];
-				else if (((*m_pData)[(int)a + j] >= 32 && (*m_pData)[(int)a + j] <= 126) ||
-						((*m_pData)[(int)a + j]>=160 && (*m_pData)[(int)a + j] <= 255) ||
-						((*m_pData)[(int)a + j] >= 145 && (*m_pData)[(int)a + j] <= 146))
+				if (m_charset == OEM_FIXED_FONT && (*m_pData)[static_cast<int>(a) + j] != 0)
+					m_pBuffer[k + l + m_bytesPerLine*3 + m_charSpace + j] = (*m_pData)[static_cast<int>(a) + j];
+				else if (((*m_pData)[static_cast<int>(a) + j] >= 32 && (*m_pData)[static_cast<int>(a) + j] <= 126) ||
+						((*m_pData)[static_cast<int>(a) + j]>=160 && (*m_pData)[static_cast<int>(a) + j] <= 255) ||
+						((*m_pData)[static_cast<int>(a) + j] >= 145 && (*m_pData)[static_cast<int>(a) + j] <= 146))
 				{
-					m_pBuffer[k + l + m_bytesPerLine*3 + m_charSpace + j] = (*m_pData)[(int)a + j];
+					m_pBuffer[k + l + m_bytesPerLine*3 + m_charSpace + j] = (*m_pData)[static_cast<int>(a) + j];
 				}
 				else
 					m_pBuffer[k + l + m_bytesPerLine*3 + m_charSpace + j] = '.';

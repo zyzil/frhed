@@ -46,10 +46,10 @@ class AboutDlg : public HexEditorWindow
 {
 public:
 	enum { IDD = IDD_ABOUTDIALOG };
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM);
+	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM) const;
 protected:
-	BOOL OnInitDialog(HWindow *);
-	BOOL OnCommand(HWindow *, WPARAM, LPARAM);
+	static BOOL OnInitDialog(HWindow *);
+	BOOL OnCommand(HWindow *, WPARAM, LPARAM) const;
 };
 
 class DragDropOptionsDlg : public HexEditorWindow
@@ -111,7 +111,7 @@ private:
 	static HFONT hfon;//needed so possible to display infinity char in fill with dlg box
 	static TCHAR curtyp;//filling with input-0 or file-1
 	static TCHAR asstyp;
-	void inittxt(HWindow *);
+	void inittxt(HWindow *) const;
 	static BYTE input(int);
 	static BYTE file(int);
 	static void hexstring2charstring();

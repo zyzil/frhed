@@ -26,7 +26,6 @@ Last change: 2013-02-24 by Jochen Neubeck
  *
  */
 #include "precomp.h"
-#include "resource.h"
 #include "Constants.h"
 #include "hexwnd.h"
 #include "hexwdlg.h"
@@ -60,7 +59,7 @@ BOOL AboutDlg::OnInitDialog(HWindow *pDlg)
  * @param [in] lParam Optional parameter for the command.
  * @return TRUE if the command was handled, FALSE otherwise.
  */
-BOOL AboutDlg::OnCommand(HWindow *pDlg, WPARAM wParam, LPARAM lParam)
+BOOL AboutDlg::OnCommand(HWindow *pDlg, WPARAM wParam, LPARAM lParam) const
 {
 	switch (wParam)
 	{
@@ -72,8 +71,8 @@ BOOL AboutDlg::OnCommand(HWindow *pDlg, WPARAM wParam, LPARAM lParam)
 	case IDC_ABOUT_OPENURL:
 		{
 			HINSTANCE hi = ShellExecute(pDlg->m_hWnd,
-				_T("open"), ZhedHomepageURL, 0, NULL, SW_SHOWNORMAL);
-			if ((UINT)hi <= HINSTANCE_ERROR)
+				_T("open"), ZhedHomepageURL, nullptr, nullptr, SW_SHOWNORMAL);
+			if (reinterpret_cast<UINT>(hi) <= HINSTANCE_ERROR)
 			{
 				MessageBox(pDlg, GetLangString(IDS_ABOUT_BROWSER_ERR), MB_ICONERROR);
 			}
@@ -83,12 +82,12 @@ BOOL AboutDlg::OnCommand(HWindow *pDlg, WPARAM wParam, LPARAM lParam)
 	case IDC_ABOUTCONTRIBS:
 		{
 			TCHAR contrList[MAX_PATH];
-			GetModuleFileName(NULL, contrList, MAX_PATH);
+			GetModuleFileName(nullptr, contrList, MAX_PATH);
 			PathRemoveFileSpec(contrList);
 			PathAppend(contrList, ContributorsList);
 			if (PathFileExists(contrList))
 			{
-				ShellExecute(pDlg->m_hWnd, _T("open"), _T("notepad.exe"), contrList, NULL, SW_SHOWNORMAL);
+				ShellExecute(pDlg->m_hWnd, _T("open"), _T("notepad.exe"), contrList, nullptr, SW_SHOWNORMAL);
 			}
 			else
 			{
@@ -110,7 +109,7 @@ BOOL AboutDlg::OnCommand(HWindow *pDlg, WPARAM wParam, LPARAM lParam)
  * @param [in] lParam The optional parameter for the command.
  * @return TRUE if the message was handled, FALSE otherwise.
  */
-INT_PTR AboutDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR AboutDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) const
 {
 	switch (uMsg)
 	{
