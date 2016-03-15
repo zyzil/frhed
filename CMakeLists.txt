@@ -1,4 +1,4 @@
-project (frhed CXX)
+project (zhed CXX)
 
 #######################
 # cmake settings
@@ -24,53 +24,33 @@ endif()
 # project
 #######################
 
+add_definitions(-DUNICODE -D_UNICODE)
 add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-include_directories ("${PROJECT_SOURCE_DIR}/src/heksedit")
-include_directories ("${PROJECT_SOURCE_DIR}/src/frhed")
+include_directories ("${PROJECT_SOURCE_DIR}/src/zhed")
 
 #######################
-# heksedit
+# zhed
 #######################
 
-file(GLOB heksedit_src
-    "src/heksedit/MAUtil/*.cpp"
-    "src/heksedit/*.cpp"
+file(GLOB zhed_src
+	"src/zhed/MAUtil/*.cpp"
+    "src/zhed/*.cpp"
 )
 
-file(GLOB heksedit_hdr
-    "src/heksedit/MAUtil/*.h"
-    "src/heksedit/*.h"
+file(GLOB zhed_hdr
+	"src/zhed/MAUtil/*.h"
+    "src/zhed/*.h"
 )
 
-file(GLOB heksedit_res
-    "src/heksedit/*.rc"
+file(GLOB zhed_res
+    "src/zhed/*.rc"
 )
 
-add_library (heksedit SHARED ${heksedit_src} ${heksedit_hdr} ${heksedit_res})
-target_link_libraries (heksedit version comctl32 wininet shlwapi Htmlhelp)
-set_target_properties (heksedit PROPERTIES OUTPUT_NAME hekseditU)
-
-#######################
-# frhed
-#######################
-
-file(GLOB frhed_src
-    "src/frhed/*.cpp"
-)
-
-file(GLOB frhed_hdr
-    "src/frhed/*.h"
-)
-
-file(GLOB frhed_res
-    "src/frhed/*.rc"
-)
-
-add_executable (frhed ${frhed_src} ${frhed_hdr} ${frhed_res})
-target_link_libraries (frhed version comctl32 wininet shlwapi Htmlhelp)
-set_target_properties (frhed PROPERTIES OUTPUT_NAME frhed)
-set_target_properties(frhed PROPERTIES LINK_FLAGS_DEBUG "/SUBSYSTEM:WINDOWS")
-set_target_properties(frhed PROPERTIES LINK_FLAGS_RELWITHDEBINFO "/SUBSYSTEM:WINDOWS")
-set_target_properties(frhed PROPERTIES LINK_FLAGS_RELEASE "/SUBSYSTEM:WINDOWS")
-set_target_properties(frhed PROPERTIES LINK_FLAGS_MINSIZEREL "/SUBSYSTEM:WINDOWS")
+add_executable (zhed ${zhed_src} ${zhed_hdr} ${zhed_res})
+target_link_libraries (zhed version comctl32 wininet shlwapi Htmlhelp)
+set_target_properties (zhed PROPERTIES OUTPUT_NAME zhed)
+set_target_properties(zhed PROPERTIES LINK_FLAGS_DEBUG "/SUBSYSTEM:WINDOWS")
+set_target_properties(zhed PROPERTIES LINK_FLAGS_RELWITHDEBINFO "/SUBSYSTEM:WINDOWS")
+set_target_properties(zhed PROPERTIES LINK_FLAGS_RELEASE "/SUBSYSTEM:WINDOWS")
+set_target_properties(zhed PROPERTIES LINK_FLAGS_MINSIZEREL "/SUBSYSTEM:WINDOWS")
     

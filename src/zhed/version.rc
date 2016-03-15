@@ -1,0 +1,38 @@
+#include "version.h"
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION ZHED_MAJOR_VERSION,ZHED_MINOR_VERSION,ZHED_SUB_RELEASE_NO,ZHED_BUILD_NO
+ PRODUCTVERSION ZHED_MAJOR_VERSION,ZHED_MINOR_VERSION,ZHED_SUB_RELEASE_NO,ZHED_BUILD_NO
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x21L
+#else
+ FILEFLAGS 0x20L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904e4"
+        BEGIN
+            VALUE "Comments", "Homepage: https://github.com/zyzil\0"
+            VALUE "CompanyName", "(c) Raihan Kibria 2000-2015"
+            VALUE "FileDescription", "zhed - Free hex editor based on Frhed (modified version for WinMerge)" SHARPEN(ZHED_VERSION_4)
+            VALUE "FileVersion", SHARPEN(ZHED_VERSION_4)
+            VALUE "InternalName", "zhed\0"
+            VALUE "LegalCopyright", "GNU General Public License v2.0"
+            VALUE "LegalTrademarks", ""
+            VALUE "OriginalFilename", "zhed.exe"
+            VALUE "PrivateBuild", ""
+            VALUE "ProductName", "zhed"
+            VALUE "ProductVersion", SHARPEN(ZHED_VERSION_4)
+            VALUE "SpecialBuild", ""
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END
