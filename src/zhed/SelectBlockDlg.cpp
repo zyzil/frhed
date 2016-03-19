@@ -39,7 +39,7 @@ static const int OffsetLen = 16;
  * @brief Initialize the dialog.
  * @param [in] hDlg Handle to the dialog.
  */
-BOOL SelectBlockDlg::OnInitDialog(HWindow *pDlg)
+BOOL SelectBlockDlg::OnInitDialog(HWindow* pDlg)
 {
 	TCHAR buf[128];
 	_stprintf(buf, _T("x%x"), bSelected ? iStartOfSelection : iCurByte);
@@ -59,11 +59,11 @@ BOOL SelectBlockDlg::OnInitDialog(HWindow *pDlg)
  * @param [in] lParam Optional parameter for the command.
  * @return TRUE if the command was handled, FALSE otherwise.
  */
-BOOL SelectBlockDlg::OnCommand(HWindow *pDlg, WPARAM wParam, LPARAM lParam)
+BOOL SelectBlockDlg::OnCommand(HWindow* pDlg, WPARAM wParam, LPARAM lParam)
 {
 	TCHAR buf[128];
 	int iStartOfSelSetting = 0;
-	int iEndOfSelSetting =  0;
+	int iEndOfSelSetting = 0;
 	int maxb;
 	switch (wParam)
 	{
@@ -111,7 +111,7 @@ BOOL SelectBlockDlg::OnCommand(HWindow *pDlg, WPARAM wParam, LPARAM lParam)
  * @param [in] lParam The optional parameter for the command.
  * @return TRUE if the message was handled, FALSE otherwise.
  */
-INT_PTR SelectBlockDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR SelectBlockDlg::DlgProc(HWindow* pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
@@ -126,3 +126,4 @@ INT_PTR SelectBlockDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM 
 	}
 	return FALSE;
 }
+

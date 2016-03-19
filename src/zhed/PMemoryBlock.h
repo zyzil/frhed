@@ -42,9 +42,9 @@ public:
 
 	PMemoryBlock& operator=(const PMemoryBlock& objectSrc);
 	virtual BOOL Create(DWORD dwSize, LPBYTE lpbSource = NULL,
-			DWORD dwPadBytes = 0);
+	                    DWORD dwPadBytes = 0);
 	virtual BOOL CreateAligned(DWORD dwUnalignedSize, DWORD dwAlignment,
-			LPBYTE lpbSource = NULL, DWORD dwPadBytes = 0);
+	                           LPBYTE lpbSource = NULL, DWORD dwPadBytes = 0);
 	virtual void Delete();
 	DWORD GetObjectSize() const;
 	LPBYTE GetObjectMemory() const;
@@ -55,3 +55,5 @@ protected:
 };
 
 #endif // PMemoryBlock_h
+
+

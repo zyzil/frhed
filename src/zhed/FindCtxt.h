@@ -31,22 +31,36 @@ Last change: 2013-02-24 by Jochen Neubeck
 class FindCtxt
 {
 public:
-	enum { MAX_TEXT_LEN = 32 * 1024 };
+	enum
+	{
+		MAX_TEXT_LEN = 32 * 1024
+	};
 
 	FindCtxt();
 	~FindCtxt();
-	
+
 	void SetText(LPCSTR text);
-	bool HasText() const { return m_pText != NULL; }
+
+	bool HasText() const
+	{
+		return m_pText != NULL;
+	}
+
 	void ClearText();
-	LPCSTR GetText() const { return m_pText; }
+
+	LPCSTR GetText() const
+	{
+		return m_pText;
+	}
 
 	bool m_bMatchCase; /**< Do we match case? */
 	int m_iDirection; /**< Direction of the find? */
 	int m_bUnicode; /**< Find Unicode data? */
 
 private:
-	CHAR *m_pText; /**< Text to find. */
+	CHAR* m_pText; /**< Text to find. */
 };
 
 #endif // _FIND_CTXT_H_
+
+

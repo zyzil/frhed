@@ -32,12 +32,12 @@ Last change: 2013-02-24 by Jochen Neubeck
 #include "LangArray.h"
 #include "StringTable.h"
 
-IPhysicalDrive *CreatePhysicalDriveInstance()
+IPhysicalDrive* CreatePhysicalDriveInstance()
 {
 	return new PNtPhysicalDrive;
 }
 
-LPTSTR PartitionInfo::GetNameAsString(PFormat *pFormat)
+LPTSTR PartitionInfo::GetNameAsString(PFormat* pFormat)
 {
 	if (m_bIsPartition)
 	{
@@ -50,7 +50,7 @@ LPTSTR PartitionInfo::GetNameAsString(PFormat *pFormat)
 	return pFormat->buffer;
 }
 
-LPTSTR PartitionInfo::GetSizeAsString(PFormat *pFormat)
+LPTSTR PartitionInfo::GetSizeAsString(PFormat* pFormat)
 {
 	const double sizeInMB = (double) m_PartitionLength / (1024 * 1024);
 	if (sizeInMB < 1024.0)
@@ -82,12 +82,12 @@ void IPhysicalDrive::GetPartitionInfo(PList* lpList)
 	BYTE bLayoutInfo[20240];
 	DISK_GEOMETRY dg;
 
-	for( int iDrive = 0; iDrive < 8; iDrive++ )
+	for (int iDrive = 0; iDrive < 8; iDrive++)
 	{
-		if( !Open(iDrive) )
+		if (!Open(iDrive))
 			continue;
 
-		if( GetDriveGeometryEx( (DISK_GEOMETRY_EX*) bLayoutInfo, sizeof(bLayoutInfo) ) )
+		if (GetDriveGeometryEx((DISK_GEOMETRY_EX*) bLayoutInfo, sizeof(bLayoutInfo)))
 		{
 			DISK_GEOMETRY& dgref = (((DISK_GEOMETRY_EX*)bLayoutInfo)->Geometry);
 			dg = dgref;
@@ -105,10 +105,10 @@ void IPhysicalDrive::GetPartitionInfo(PList* lpList)
 			p->m_PartitionLength *= dg.BytesPerSector;
 
 			lpList->AddTail(p);
-			if( GetDriveLayoutEx( bLayoutInfo, sizeof(bLayoutInfo) ) )
+			if (GetDriveLayoutEx(bLayoutInfo, sizeof(bLayoutInfo)))
 			{
 				PDRIVE_LAYOUT_INFORMATION_EX pLI = (PDRIVE_LAYOUT_INFORMATION_EX)bLayoutInfo;
-				for( DWORD iPartition = 0; iPartition < pLI->PartitionCount; iPartition++ )
+				for (DWORD iPartition = 0; iPartition < pLI->PartitionCount; iPartition++)
 				{
 					PARTITION_INFORMATION_EX* pi = &(pLI->PartitionEntry[iPartition]);
 
@@ -129,7 +129,7 @@ void IPhysicalDrive::GetPartitionInfo(PList* lpList)
 		}
 		else
 		{
-			if( GetDriveGeometry( &dg ) )
+			if (GetDriveGeometry(&dg))
 			{
 				PartitionInfo* p = new PartitionInfo();
 				p->m_dwDrive = (DWORD) iDrive;
@@ -146,14 +146,14 @@ void IPhysicalDrive::GetPartitionInfo(PList* lpList)
 
 				lpList->AddTail(p);
 
-				if( GetDriveLayout( bLayoutInfo, sizeof(bLayoutInfo) ) )
+				if (GetDriveLayout(bLayoutInfo, sizeof(bLayoutInfo)))
 				{
 					PDRIVE_LAYOUT_INFORMATION pLI = (PDRIVE_LAYOUT_INFORMATION)bLayoutInfo;
-					for( DWORD iPartition = 0; iPartition < pLI->PartitionCount; iPartition++ )
+					for (DWORD iPartition = 0; iPartition < pLI->PartitionCount; iPartition++)
 					{
 						PARTITION_INFORMATION* pi = &(pLI->PartitionEntry[iPartition]);
 
-						if( !pi->PartitionLength.QuadPart )
+						if (!pi->PartitionLength.QuadPart)
 							continue;
 
 						PartitionInfo* p = new PartitionInfo();
@@ -175,3 +175,4 @@ void IPhysicalDrive::GetPartitionInfo(PList* lpList)
 		Close();
 	}
 }
+

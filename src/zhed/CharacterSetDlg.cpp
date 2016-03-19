@@ -30,7 +30,7 @@ Last change: 2013-02-24 by Jochen Neubeck
 #include "hexwnd.h"
 #include "hexwdlg.h"
 
-INT_PTR CharacterSetDlg::DlgProc(HWindow *pDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR CharacterSetDlg::DlgProc(HWindow* pDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (iMsg)
 	{
@@ -53,7 +53,7 @@ INT_PTR CharacterSetDlg::DlgProc(HWindow *pDlg, UINT iMsg, WPARAM wParam, LPARAM
 			iFontSize = pDlg->GetDlgItemInt(IDC_CHSET_FONTSIZE, 0, TRUE);
 			iFontZoom = 0;
 			iCharacterSet = pDlg->IsDlgButtonChecked(IDC_CHSET_ANSI) ?
-				ANSI_FIXED_FONT : OEM_FIXED_FONT;
+				                ANSI_FIXED_FONT : OEM_FIXED_FONT;
 			save_ini_data();
 			resize_window();
 			// fall through
@@ -69,3 +69,4 @@ INT_PTR CharacterSetDlg::DlgProc(HWindow *pDlg, UINT iMsg, WPARAM wParam, LPARAM
 	}
 	return FALSE;
 }
+

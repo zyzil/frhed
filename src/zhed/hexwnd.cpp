@@ -64,7 +64,7 @@ const int LineAdditionalSpace = LineSpaceAbove + LineSpaceBelow;
 
 //CF_RTF defined in Richedit.h, but we don't include it cause that would be overkill
 #ifndef CF_RTF
-	#define CF_RTF TEXT("Rich Text Format")
+#define CF_RTF TEXT("Rich Text Format")
 #endif
 
 const CLIPFORMAT CF_BINARYDATA = (CLIPFORMAT)RegisterClipboardFormat(_T("BinaryData"));
@@ -97,7 +97,7 @@ HexEditorWindow::HexEditorWindow()
 	Drive = 0;
 	SelectedPartitionInfo = 0;
 	CurrentSectorNumber = 0;
-//Pabs inserted
+	//Pabs inserted
 	bSaveIni = FALSE;
 	bCenterCaret = FALSE;
 	bMakeBackups = 0;
@@ -115,7 +115,7 @@ HexEditorWindow::HexEditorWindow()
 	output_text_special = FALSE;
 	output_text_hexdump_display = TRUE;
 	output_CF_RTF = FALSE;
-//end
+	//end
 
 	iWindowX = CW_USEDEFAULT;
 	iWindowY = CW_USEDEFAULT;
@@ -135,7 +135,7 @@ HexEditorWindow::HexEditorWindow()
 
 	iMRU_count = MRUMAX;
 	while (iMRU_count)
-		_stprintf(strMRU[--iMRU_count], _T("dummy%d"), iMRU_count);
+	_stprintf(strMRU[--iMRU_count], _T("dummy%d"), iMRU_count);
 
 	bFilestatusChanged = true;
 	iBinaryMode = ENDIAN_LITTLE;
@@ -219,7 +219,7 @@ unsigned HexEditorWindow::get_interface_version()
 }
 
 //--------------------------------------------------------------------------------------------
-BYTE *HexEditorWindow::get_buffer(int len)
+BYTE* HexEditorWindow::get_buffer(int len)
 {
 	if (!m_dataArray.SetSize(len))
 		return 0;
@@ -233,34 +233,34 @@ int HexEditorWindow::get_length()
 	return m_dataArray.GetLength();
 }
 
-void HexEditorWindow::set_sibling(IHexEditorWindow *p)
+void HexEditorWindow::set_sibling(IHexEditorWindow* p)
 {
 	ary_sibling[0] = p;
 	ary_sibling[1] = this;
 }
 
-void HexEditorWindow::set_sibling2(IHexEditorWindow *p1, IHexEditorWindow *p2)
+void HexEditorWindow::set_sibling2(IHexEditorWindow* p1, IHexEditorWindow* p2)
 {
 	ary_sibling[0] = p1;
 	ary_sibling[1] = p2;
 }
 
-HexEditorWindow::Colors *HexEditorWindow::get_colors()
+HexEditorWindow::Colors* HexEditorWindow::get_colors()
 {
 	return this;
 }
 
-HexEditorWindow::Settings *HexEditorWindow::get_settings()
+HexEditorWindow::Settings* HexEditorWindow::get_settings()
 {
 	return this;
 }
 
-HexEditorWindow::Status *HexEditorWindow::get_status()
+HexEditorWindow::Status* HexEditorWindow::get_status()
 {
 	return this;
 }
 
-int HexEditorWindow::translate_accelerator(MSG *pMsg)
+int HexEditorWindow::translate_accelerator(MSG* pMsg)
 {
 	return TranslateAccelerator(pwnd->m_hWnd, hAccel, pMsg);
 }
@@ -315,15 +315,14 @@ static LPTSTR NTAPI LoadResString(UINT uStringID)
 
 void HexEditorWindow::LoadStringTable()
 {
-	for (int i = 0 ; i < RTL_NUMBER_OF(S) ; ++i)
+	for (int i = 0; i < RTL_NUMBER_OF(S); ++i)
 		S[i] = LoadResString(IDS[i]);
 }
 
 void HexEditorWindow::FreeStringTable()
 {
-	for (int i = 0 ; i < RTL_NUMBER_OF(S) ; ++i)
+	for (int i = 0; i < RTL_NUMBER_OF(S); ++i)
 		SysFreeString((BSTR)S[i]);
-
 }
 
 static void TrimFileDialogFilters(LPTSTR p)
@@ -396,7 +395,7 @@ int HexEditorWindow::load_file(LPCTSTR fname)
 {
 	WaitCursor wc;
 	int bLoaded = FALSE;
-	int filehandle = _topen(fname, _O_RDONLY|_O_BINARY);
+	int filehandle = _topen(fname, _O_RDONLY | _O_BINARY);
 	if (filehandle != -1)
 	{
 		int filelen = _filelength(filehandle);
@@ -466,7 +465,7 @@ int HexEditorWindow::open_file(LPCWSTR wszCmdLine)
 	{
 		// Trying to open a link file: decision by user required.
 		int ret = MessageBox(pwnd, GetLangString(IDS_OPEN_SHORTCUT),
-				MB_YESNOCANCEL | MB_ICONQUESTION);
+		                     MB_YESNOCANCEL | MB_ICONQUESTION);
 		switch (ret)
 		{
 		case IDYES:
@@ -523,7 +522,7 @@ int HexEditorWindow::at_window_create(HWND hw, HINSTANCE hI)
 
 //-------------------------------------------------------------------
 // Set member for passed-in control bar handle.
-void HexEditorWindow::set_control_bar(HWindow *pwndBar)
+void HexEditorWindow::set_control_bar(HWindow* pwndBar)
 {
 	if (pwndBar == pwnd->FindWindowEx(NULL, _T("ToolbarWindow32")))
 	{
@@ -559,9 +558,9 @@ void HexEditorWindow::resize_window()
 	RECT rcClient;
 	pwnd->GetClientRect(&rcClient);
 	// Get font data.
-	HSurface *pdc = pwnd->GetDC();
+	HSurface* pdc = pwnd->GetDC();
 	make_font();
-	HGdiObj *of = pdc->SelectObject(pFont);
+	HGdiObj* of = pdc->SelectObject(pFont);
 	TEXTMETRIC tm;
 	pdc->GetTextMetrics(&tm);
 	cxChar = tm.tmAveCharWidth;
@@ -604,11 +603,11 @@ void HexEditorWindow::resize_window()
 		if (iCenter < iVscrollPos || iCenter > iVscrollPos + cyBuffer)
 			iVscrollPos = max(0, iCenter - cyBuffer / 2);
 	}
-//Pabs removed - scrollbar fix
+	//Pabs removed - scrollbar fix
 
-//Pabs replaced "iOffsetLen" with "iMaxOffsetLen"
+	//Pabs replaced "iOffsetLen" with "iMaxOffsetLen"
 	int iCharsPerLine = iGetCharsPerLine(); //iMaxOffsetLen + iByteSpace + iBytesPerLine*3 + iCharSpace + iBytesPerLine;
-//end
+	//end
 
 	// Get number of lines to display.
 	iNumlines = (length + iBytesPerLine) / iBytesPerLine;
@@ -620,13 +619,13 @@ void HexEditorWindow::resize_window()
 	}
 	iVscrollMax = (length + iBytesPerLine) / iBytesPerLine;
 
-//Pabs inserted "ffff" after each 0xffff - 32bit scrolling
+	//Pabs inserted "ffff" after each 0xffff - 32bit scrolling
 	if (iVscrollMax <= 0xffffffff)
 		iVscrollMax = iVscrollMax - 1;
 	else
 		iVscrollMax = 0xffffffff;
-//end
-//Pabs reorganised this bit to fix the scrollbars
+	//end
+	//Pabs reorganised this bit to fix the scrollbars
 	SCROLLINFO SI;
 	SI.cbSize = sizeof SI;
 	SI.fMask = SIF_RANGE | SIF_POS | SIF_DISABLENOSCROLL | SIF_PAGE;
@@ -686,7 +685,7 @@ void HexEditorWindow::kill_focus()
 	{
 		if (ary_sibling[i] != this)
 		{
-			Status *sibling_status = ary_sibling[i]->get_status();
+			Status* sibling_status = ary_sibling[i]->get_status();
 			int sibling_length = ary_sibling[i]->get_length();
 			sibling_status->iEnteringMode = iEnteringMode;
 			sibling_status->iCurByte = iCurByte < sibling_length ? iCurByte : sibling_length;
@@ -746,11 +745,11 @@ void HexEditorWindow::keydown(int key)
 	}
 
 	const bool shiftDown = (GetAsyncKeyState(VK_SHIFT) & 0x8000) != 0;
-	const bool ctrlDown = (GetAsyncKeyState(VK_CONTROL) &0x8000) != 0;
+	const bool ctrlDown = (GetAsyncKeyState(VK_CONTROL) & 0x8000) != 0;
 
-	int *a = NULL;//Data to update
+	int* a = NULL;//Data to update
 	int b = 0;//How much to update it by
-	int c =  0;//The original value
+	int c = 0;//The original value
 	const bool sel = bSelected;
 
 	if (shiftDown)
@@ -834,7 +833,7 @@ void HexEditorWindow::keydown(int key)
 	if (!bSelected)
 		lastbyte++;
 
-	switch(key)
+	switch (key)
 	{
 	case VK_LEFT:
 		b = iEnteringMode == CHARS || bSelected ? 1 : iCurNibble = !iCurNibble;
@@ -852,9 +851,9 @@ void HexEditorWindow::keydown(int key)
 		break;
 	}
 
-	switch(key)
+	switch (key)
 	{
-	case VK_LEFT: case VK_UP:  case VK_PRIOR:
+	case VK_LEFT: case VK_UP: case VK_PRIOR:
 		*a -= b;
 		break;
 	case VK_RIGHT: case VK_DOWN: case VK_NEXT:
@@ -970,7 +969,7 @@ void HexEditorWindow::character(char ch)
 		else return;
 	}
 	SimpleArray<BYTE> olddata;
-	
+
 	// If there is selection replace.
 	if (bSelected)
 	{
@@ -1084,12 +1083,12 @@ void HexEditorWindow::vscroll(int cmd)
 	default:
 		return;//break;//Pabs put return here - don't repaint if don't need to
 	}
-//Pabs inserted
+	//Pabs inserted
 	if (iVscrollPos > iVscrollMax - cyBuffer + 1)
 		iVscrollPos = iVscrollMax - cyBuffer + 1;
 	if (iVscrollPos < 0)
 		iVscrollPos = 0;
-//end
+	//end
 	scroll_window(0, SI.nPos - iVscrollPos);
 	SI.fMask = SIF_POS | SIF_DISABLENOSCROLL;
 	SI.nPos = iVscrollPos;
@@ -1129,7 +1128,7 @@ void HexEditorWindow::hscroll(int cmd)
 			iHscrollInc = -iHscrollPos;
 		break;
 	case SB_PAGEDOWN:
-		if (iHscrollPos <= iHscrollMax-cxBuffer)
+		if (iHscrollPos <= iHscrollMax - cxBuffer)
 			iHscrollInc = cxBuffer;
 		else
 			iHscrollInc = iHscrollMax - iHscrollPos;
@@ -1141,12 +1140,12 @@ void HexEditorWindow::hscroll(int cmd)
 		return;//break;//Pabs put return here - don't repaint if don't need to
 	}
 	iHscrollPos += iHscrollInc;
-//Pabs inserted
+	//Pabs inserted
 	if (iHscrollPos > iHscrollMax - cxBuffer + 1)
 		iHscrollPos = iHscrollMax - cxBuffer + 1;
 	if (iHscrollPos < 0)
 		iHscrollPos = 0;
-//end
+	//end
 	scroll_window(SI.nPos - iHscrollPos, 0);
 	SI.fMask = SIF_POS | SIF_DISABLENOSCROLL;
 	SI.nPos = iHscrollPos;
@@ -1158,7 +1157,7 @@ void HexEditorWindow::hscroll(int cmd)
 int HexEditorWindow::paint()
 {
 	PAINTSTRUCT ps;
-	HSurface *pdc = pwnd->BeginPaint(&ps);
+	HSurface* pdc = pwnd->BeginPaint(&ps);
 	//-------------------------------------------------------
 	pwnd->HideCaret();
 	// Delete remains of last position.
@@ -1168,7 +1167,7 @@ int HexEditorWindow::paint()
 		b = iNumlines - 1;
 	int iBkColor = PALETTERGB(GetRValue(iBkColorValue), GetGValue(iBkColorValue), GetBValue(iBkColorValue));
 	RECT rc;
-	HBrush *pbr = HBrush::CreateSolidBrush(iBkColor);
+	HBrush* pbr = HBrush::CreateSolidBrush(iBkColor);
 	// Delete lower border if there are empty lines on screen.
 	pwnd->GetClientRect(&rc);
 	rc.top = (b - iVscrollPos + 1) * cyChar;
@@ -1182,12 +1181,12 @@ int HexEditorWindow::paint()
 	pbr->DeleteObject();
 
 	// Get font.
-	HGdiObj *oldfont = pdc->SelectObject(pFont);
-	HPen *sep_pen = HPen::Create(PS_SOLID, 1, iSepColorValue);
-	HGdiObj *oldpen = pdc->SelectObject(sep_pen);
+	HGdiObj* oldfont = pdc->SelectObject(pFont);
+	HPen* sep_pen = HPen::Create(PS_SOLID, 1, iSepColorValue);
+	HGdiObj* oldpen = pdc->SelectObject(sep_pen);
 	pbr = HBrush::CreateSolidBrush(iBmkColor);
 
-	for (int i = a ; i <= b ; i++)
+	for (int i = a; i <= b; i++)
 	{
 		print_line(pdc, i, pbr);
 		// Mark character.
@@ -1214,9 +1213,9 @@ void HexEditorWindow::command(int cmd)
 	HMENU hMenu = GetMenu(hwndMain);
 	switch (cmd)
 	{
-//Pabs changed - line insert
-//File Menu
-	// What is this??
+		//Pabs changed - line insert
+		//File Menu
+		// What is this??
 	case 0xE140:
 		assert(FALSE);
 		break;
@@ -1235,7 +1234,7 @@ void HexEditorWindow::command(int cmd)
 	case IDM_OPEN_HEXDUMP:
 		CMD_open_hexdump();
 		break;
-//Edit Menu
+		//Edit Menu
 	case IDM_FILL_WITH:
 		CMD_fw();
 		break;
@@ -1245,7 +1244,7 @@ void HexEditorWindow::command(int cmd)
 	case IDM_EDIT_REVERSE:
 		CMD_reverse();
 		break;
-//Options menu
+		//Options menu
 	case IDM_MAKE_BACKUPS:
 		bMakeBackups = !bMakeBackups;
 		break;
@@ -1255,7 +1254,7 @@ void HexEditorWindow::command(int cmd)
 	case IDM_OLE_DRAG_DROP:
 		static_cast<dialog<DragDropOptionsDlg>*>(this)->DoModal(pwnd);
 		break;
-//Registry menu
+		//Registry menu
 	case IDM_SHORTCUTS:
 		static_cast<dialog<ShortcutsDlg>*>(this)->DoModal(pwnd);
 		break;
@@ -1320,12 +1319,12 @@ void HexEditorWindow::command(int cmd)
 				hr = HRESULT_FROM_WIN32(err);
 		}
 		break;
-//end
+		//end
 	case IDM_REPLACE:
 		CMD_replace();
 		break;
 
-//Pabs removed IDM_EXPLORERSETTINGS
+		//Pabs removed IDM_EXPLORERSETTINGS
 
 	case IDM_OPEN_TEXT:
 		CMD_summon_text_edit();
@@ -1398,7 +1397,7 @@ void HexEditorWindow::command(int cmd)
 	case IDM_READFLOAT:
 		{
 			TCHAR buf[500];
-			TCHAR *buf2 = buf;
+			TCHAR* buf2 = buf;
 			buf[0] = '\0';
 			union
 			{
@@ -1520,7 +1519,7 @@ void HexEditorWindow::command(int cmd)
 			n += buf[n].Format(_T("cxBuffer: %d\n"), cxBuffer);
 			n += buf[n].Format(_T("iMRU_count: %d\n"), iMRU_count);
 			int i;
-			for (i = 0 ; i < MRUMAX ; i++)
+			for (i = 0; i < MRUMAX; i++)
 			{
 				n += buf[n].Format(_T("MRU %d=%s\n"), i + 1, strMRU[i]);
 			}
@@ -1570,7 +1569,7 @@ void HexEditorWindow::command(int cmd)
 		break;
 
 	case IDM_FIND:
-		CMD_find ();
+		CMD_find();
 		break;
 
 	case IDM_GO_TO:
@@ -1621,7 +1620,7 @@ void HexEditorWindow::command(int cmd)
 		CMD_new();
 		break;
 
-	//GK20AUG2K
+		//GK20AUG2K
 	case ID_MISC_GOTO_DLL_EXPORTS:
 		CMD_GotoDllExports();
 		break;
@@ -1661,7 +1660,7 @@ void HexEditorWindow::command(int cmd)
 }
 
 //--------------------------------------------------------------------------------------------
-void HexEditorWindow::notify(NMHDR *pNMHDR)
+void HexEditorWindow::notify(NMHDR* pNMHDR)
 {
 	HWND hwndFrom = pNMHDR->hwndFrom;
 	UINT code = pNMHDR->code;
@@ -1674,7 +1673,7 @@ void HexEditorWindow::notify(NMHDR *pNMHDR)
 	{
 		if (code == TBN_GETINFOTIP)
 		{
-			NMTBGETINFOTIP *pNM = reinterpret_cast<NMTBGETINFOTIP *>(pNMHDR);
+			NMTBGETINFOTIP* pNM = reinterpret_cast<NMTBGETINFOTIP *>(pNMHDR);
 			if (LPTSTR text = load_string(pNM->iItem))
 			{
 				StrCpyN(pNM->pszText, text, pNM->cchTextMax);
@@ -1701,10 +1700,10 @@ void HexEditorWindow::set_and_format_title()
 	TCHAR buf[512];
 	_stprintf(buf, _T("[%s"), filename);
 	if (get_modified())
-		_tcscat(buf, _T(" *"));
+	_tcscat(buf, _T(" *"));
 	_tcscat(buf, _T("]"));
 	if (bPartialOpen)
-		_tcscat(buf, _T(" - P"));
+	_tcscat(buf, _T(" - P"));
 	_tcscat(buf, _T(" - "));
 	_tcscat(buf, ApplicationName);
 	SetWindowText(hwndMain, buf);
@@ -1720,9 +1719,9 @@ void HexEditorWindow::format_bit_string(TCHAR* buf, BYTE by)
 	int i;
 	for (i = 0; i < 8; i++)
 		buf[i] = ((by >> i) & 0x1 ? '1' : '0');//Extract bits
-	for (i = 0;i < 4; i++)
+	for (i = 0; i < 4; i++)
 		swap(buf[i], buf[7 - i]);//flip order-for some reason it doesn't display correctly going i-- or i++ in for loop
-	buf[8]='\0';//terminate string
+	buf[8] = '\0';//terminate string
 }
 
 /**
@@ -1788,21 +1787,21 @@ void HexEditorWindow::set_wnd_title()
 
 	if (!pwndStatusBar)
 		return;
-	
+
 	// Selection going on.
 	if (bSelected)
 	{
 		if (iEndOfSelection >= iStartOfSelection)
 		{
 			_stprintf(buf, GetLangString(IDS_SBAR_SELECTED_OFFSET),
-				iStartOfSelection, iStartOfSelection,
-				iEndOfSelection, iEndOfSelection, iEndOfSelection - iStartOfSelection+1);
+			          iStartOfSelection, iStartOfSelection,
+			          iEndOfSelection, iEndOfSelection, iEndOfSelection - iStartOfSelection + 1);
 		}
 		else
 		{
 			_stprintf(buf, GetLangString(IDS_SBAR_SELECTED_OFFSET),
-				iEndOfSelection, iEndOfSelection,
-				iStartOfSelection, iStartOfSelection, iStartOfSelection-iEndOfSelection+1);
+			          iEndOfSelection, iEndOfSelection,
+			          iStartOfSelection, iStartOfSelection, iStartOfSelection - iEndOfSelection + 1);
 		}
 		pwndStatusBar->SetPartText(0, buf);
 	}
@@ -1833,10 +1832,10 @@ void HexEditorWindow::set_wnd_title()
 				if (m_dataArray.GetLength() - iCurByte >= 1)
 				{
 					_stprintf(buf2, _T("\t%s: %s:%u"), GetLangString(IDS_SBAR_UNSIGNED),
-						GetLangString(IDS_SBAR_BYTE_SHORT), (unsigned int) m_dataArray[iCurByte]);
+					          GetLangString(IDS_SBAR_BYTE_SHORT), (unsigned int) m_dataArray[iCurByte]);
 				}
 				else
-					_stprintf(buf2, _T("\t%s"), GetLangString(IDS_SBAR_END));
+				_stprintf(buf2, _T("\t%s"), GetLangString(IDS_SBAR_END));
 				_tcscat(buf, buf2);
 
 				// Space enough for a word?
@@ -1845,16 +1844,16 @@ void HexEditorWindow::set_wnd_title()
 					// Space enough for a word.
 					wordval = (m_dataArray[iCurByte + 1] << 8) | m_dataArray[iCurByte];
 					_stprintf(buf2, _T(",%s:%u"), GetLangString(IDS_SBAR_WORD_SHORT),
-							(unsigned int) wordval);
+					          (unsigned int) wordval);
 					_tcscat(buf, buf2);
 				}
 				if (m_dataArray.GetLength() - iCurByte >= 4)
 				{
 					// Space enough for a longword.
 					longval = wordval | (((m_dataArray[iCurByte + 3] << 8) |
-							m_dataArray[iCurByte + 2]) << 16);
+						m_dataArray[iCurByte + 2]) << 16);
 					_stprintf(buf2, _T(",%s:%u"), GetLangString(IDS_SBAR_LONG_SHORT),
-							(unsigned int) longval);
+					          (unsigned int) longval);
 					_tcscat(buf, buf2);
 				}
 			}
@@ -1863,10 +1862,10 @@ void HexEditorWindow::set_wnd_title()
 				// UNSIGNED BIGENDIAN_MODE
 				// Decimal value of byte.
 				if (m_dataArray.GetLength() - iCurByte >= 1)
-					_stprintf(buf2, _T("\t%s: %s:%u"), GetLangString(IDS_SBAR_UNSIGNED),
-							GetLangString(IDS_SBAR_BYTE_SHORT), (unsigned int) m_dataArray[iCurByte]);
+				_stprintf(buf2, _T("\t%s: %s:%u"), GetLangString(IDS_SBAR_UNSIGNED),
+				          GetLangString(IDS_SBAR_BYTE_SHORT), (unsigned int) m_dataArray[iCurByte]);
 				else
-					_stprintf(buf2, _T("\t%s"), GetLangString(IDS_SBAR_END));
+				_stprintf(buf2, _T("\t%s"), GetLangString(IDS_SBAR_END));
 				_tcscat(buf, buf2);
 
 				// Space enough for a word?
@@ -1875,16 +1874,16 @@ void HexEditorWindow::set_wnd_title()
 					// Space enough for a word.
 					wordval = (m_dataArray[iCurByte] << 8) | m_dataArray[iCurByte + 1];
 					_stprintf(buf2, _T(",%s:%u"), GetLangString(IDS_SBAR_WORD_SHORT),
-							(unsigned int) wordval);
+					          (unsigned int) wordval);
 					_tcscat(buf, buf2);
 				}
 				if (m_dataArray.GetLength() - iCurByte >= 4)
 				{
 					// Space enough for a longword.
-					longval = (wordval << 16) | (m_dataArray[iCurByte + 2] <<	8) |
-							(m_dataArray[iCurByte + 3]);
+					longval = (wordval << 16) | (m_dataArray[iCurByte + 2] << 8) |
+						(m_dataArray[iCurByte + 3]);
 					_stprintf(buf2, _T(",%s:%u"), GetLangString(IDS_SBAR_LONG_SHORT),
-							(unsigned int) longval);
+					          (unsigned int) longval);
 					_tcscat(buf, buf2);
 				}
 			}
@@ -1896,11 +1895,11 @@ void HexEditorWindow::set_wnd_title()
 				// SIGNED LITTLEENDIAN_MODE
 				// Decimal value of byte.
 				if (m_dataArray.GetLength() - iCurByte >= 1)
-					_stprintf(buf2, _T("\t%s: %s:%d"), GetLangString(IDS_SBAR_SIGNED),
-							GetLangString(IDS_SBAR_BYTE_SHORT),
-							(int) (signed char) m_dataArray[iCurByte]);
+				_stprintf(buf2, _T("\t%s: %s:%d"), GetLangString(IDS_SBAR_SIGNED),
+				          GetLangString(IDS_SBAR_BYTE_SHORT),
+				          (int) (signed char) m_dataArray[iCurByte]);
 				else
-					_stprintf(buf2, _T("\t%s"), GetLangString(IDS_SBAR_END));
+				_stprintf(buf2, _T("\t%s"), GetLangString(IDS_SBAR_END));
 				_tcscat(buf, buf2);
 
 				// Space enough for a word?
@@ -1909,16 +1908,16 @@ void HexEditorWindow::set_wnd_title()
 					// Space enough for a word.
 					wordval = (m_dataArray[iCurByte + 1] << 8) | m_dataArray[iCurByte];
 					_stprintf(buf2, _T(",%s:%d"), GetLangString(IDS_SBAR_WORD_SHORT),
-							(int) (signed short) wordval);
+					          (int) (signed short) wordval);
 					_tcscat(buf, buf2);
 				}
 				if (m_dataArray.GetLength() - iCurByte >= 4)
 				{
 					// Space enough for a longword.
 					longval = wordval | (((m_dataArray[iCurByte + 3] << 8) |
-							m_dataArray[iCurByte + 2]) << 16);
+						m_dataArray[iCurByte + 2]) << 16);
 					_stprintf(buf2, _T(",%s:%d"), GetLangString(IDS_SBAR_LONG_SHORT),
-							(signed int) longval);
+					          (signed int) longval);
 					_tcscat(buf, buf2);
 				}
 			}
@@ -1927,12 +1926,12 @@ void HexEditorWindow::set_wnd_title()
 				// SIGNED BIGENDIAN_MODE
 				// Decimal value of byte.
 				if (m_dataArray.GetLength() - iCurByte >= 1)
-					_stprintf(buf2, _T("\t%s: %s:%d"), GetLangString(IDS_SBAR_SIGNED),
-							GetLangString(IDS_SBAR_BYTE_SHORT),
-							(signed char) m_dataArray[iCurByte]);
+				_stprintf(buf2, _T("\t%s: %s:%d"), GetLangString(IDS_SBAR_SIGNED),
+				          GetLangString(IDS_SBAR_BYTE_SHORT),
+				          (signed char) m_dataArray[iCurByte]);
 				else
-					_stprintf(buf2, _T("\t%s"), GetLangString(IDS_SBAR_END));
-				_tcscat (buf, buf2);
+				_stprintf(buf2, _T("\t%s"), GetLangString(IDS_SBAR_END));
+				_tcscat(buf, buf2);
 
 				// Space enough for a word.
 				if (m_dataArray.GetLength() - iCurByte >= 2)
@@ -1940,16 +1939,16 @@ void HexEditorWindow::set_wnd_title()
 					// Space enough for a longword.
 					wordval = (m_dataArray[iCurByte] << 8) | m_dataArray[iCurByte + 1];
 					_stprintf(buf2, _T(",%s:%d"), GetLangString(IDS_SBAR_WORD_SHORT),
-							(int) (signed short) wordval);
+					          (int) (signed short) wordval);
 					_tcscat(buf, buf2);
 				}
 				if (m_dataArray.GetLength() - iCurByte >= 4)
 				{
 					// Space enough for a longword.
 					longval = (wordval << 16) | (m_dataArray[iCurByte + 2] << 8) |
-							(m_dataArray[iCurByte + 3]);
+						(m_dataArray[iCurByte + 3]);
 					_stprintf(buf2, _T(",%s:%d"), GetLangString(IDS_SBAR_LONG_SHORT),
-							(signed int) longval);
+					          (signed int) longval);
 					_tcscat(buf, buf2);
 				}
 			}
@@ -1958,8 +1957,8 @@ void HexEditorWindow::set_wnd_title()
 		pwndStatusBar->GetPartRect(0, &rc);
 
 		SIZE sa;
-		HSurface *pdc = pwndStatusBar->GetDC();
-		HGdiObj *fontold = pdc->SelectObject(pwndStatusBar->GetFont());
+		HSurface* pdc = pwndStatusBar->GetDC();
+		HGdiObj* fontold = pdc->SelectObject(pwndStatusBar->GetFont());
 		pdc->GetTextExtent(buf, _tcslen(buf), &sa);
 
 		if (rc.right - rc.left < sa.cx)
@@ -1967,14 +1966,14 @@ void HexEditorWindow::set_wnd_title()
 			SIZE s0;
 			pdc->GetTextExtent(buf, pos_bits, &s0);
 			if (rc.right - rc.left < sa.cx - s0.cx)
-				_tcscpy(buf, _tcschr(buf, '\t'));
+			_tcscpy(buf, _tcschr(buf, '\t'));
 			else
-				_tcscpy(buf + pos_bits, _tcschr(buf, '\t'));
+			_tcscpy(buf + pos_bits, _tcschr(buf, '\t'));
 		}
 
 		pdc->SelectObject(fontold);
 		pwndStatusBar->ReleaseDC(pdc);
-		
+
 		pwndStatusBar->SetPartText(0, buf);
 	}
 
@@ -2116,7 +2115,7 @@ void HexEditorWindow::adjust_hscrollbar()
  * highlighting is done by inverting the character's block area.
  * @param [in] hdc If non-NULL invert the char rect else invalidate it.
  */
-void HexEditorWindow::mark_char(HSurface *pdc)
+void HexEditorWindow::mark_char(HSurface* pdc)
 {
 	RECT r;
 	r.left = iMaxOffsetLen + iByteSpace - iHscrollPos;
@@ -2160,10 +2159,10 @@ void HexEditorWindow::mark_char(HSurface *pdc)
  * @param [in] pch String to draw.
  * @param [in] cch Number of characters to print.
  */
-void HexEditorWindow::print_text(HSurface *pdc, int x, int y, TCHAR *pch, int cch)
+void HexEditorWindow::print_text(HSurface* pdc, int x, int y, TCHAR* pch, int cch)
 {
-	const RECT rc = { x * cxChar, y * cyChar,
-			rc.left + cch * cxChar, rc.top + cyChar };
+	const RECT rc = {x * cxChar, y * cyChar,
+		rc.left + cch * cxChar, rc.top + cyChar};
 	pdc->ExtTextOut(rc.left, rc.top + LineSpaceAbove, ETO_OPAQUE, &rc, pch, cch, 0);
 }
 
@@ -2173,7 +2172,7 @@ void HexEditorWindow::print_text(HSurface *pdc, int x, int y, TCHAR *pch, int cc
  * @param [in] line Absolute line number to print.
  * @param [in] hbr Paint brush.
  */
-void HexEditorWindow::print_line(HSurface *pdc, int line, HBrush *pbr)
+void HexEditorWindow::print_line(HSurface* pdc, int line, HBrush* pbr)
 {
 	int startpos = line * iBytesPerLine;
 
@@ -2182,11 +2181,11 @@ void HexEditorWindow::print_line(HSurface *pdc, int line, HBrush *pbr)
 	assert(startpos <= m_dataArray.GetLength());
 
 	int length = get_length();
-	BYTE *buffer = get_buffer(length);
+	BYTE* buffer = get_buffer(length);
 	int sibling1_length = ary_sibling[0]->get_length();
-	BYTE *sibling1_buffer = ary_sibling[0]->get_buffer(sibling1_length);
+	BYTE* sibling1_buffer = ary_sibling[0]->get_buffer(sibling1_length);
 	int sibling2_length = ary_sibling[1]->get_length();
-	BYTE *sibling2_buffer = ary_sibling[1]->get_buffer(sibling2_length);
+	BYTE* sibling2_buffer = ary_sibling[1]->get_buffer(sibling2_length);
 
 	int iBkColor = PALETTERGB (GetRValue(iBkColorValue),GetGValue(iBkColorValue),GetBValue(iBkColorValue));
 	int iTextColor = PALETTERGB (GetRValue(iTextColorValue),GetGValue(iTextColorValue),GetBValue(iTextColorValue));
@@ -2210,7 +2209,7 @@ void HexEditorWindow::print_line(HSurface *pdc, int line, HBrush *pbr)
 	// Write offset, filling rest of linbuf with spaces.
 	linbuf[RTL_NUMBER_OF(linbuf) - 1] = _T('\0');
 	_sntprintf(linbuf, RTL_NUMBER_OF(linbuf) - 1, _T("%-18.*I64x"), iMinOffsetLen,
-		bPartialStats ? startpos + iPartialOffset : startpos);
+	           bPartialStats ? startpos + iPartialOffset : startpos);
 
 	pdc->SetTextColor(iTextColor);
 	pdc->SetBkColor(iBkColor);
@@ -2235,7 +2234,7 @@ void HexEditorWindow::print_line(HSurface *pdc, int line, HBrush *pbr)
 
 	int i;
 	// Write bytes.
-	for (i = startpos ; i <= endpos ; i++)
+	for (i = startpos; i <= endpos; i++)
 	{
 		TBYTE u = ' ';
 		if (i < length)
@@ -2289,7 +2288,7 @@ void HexEditorWindow::print_line(HSurface *pdc, int line, HBrush *pbr)
 	// Separators.
 	r.top = (line - iVscrollPos) * cyChar;
 	r.bottom = r.top + cyChar;
-	for (i = 0 ; i <= iBytesPerLine ; i += 4)
+	for (i = 0; i <= iBytesPerLine; i += 4)
 	{
 		r.left = r.right = (iMaxOffsetLen + iByteSpace - iHscrollPos + i * 3) * cxChar - cxChar / 2;
 		pdc->Polyline(reinterpret_cast<POINT *>(&r), 2);
@@ -2310,7 +2309,7 @@ void HexEditorWindow::print_line(HSurface *pdc, int line, HBrush *pbr)
  * @param [in] hbr Paint brush.
  * @param [in] startpos Start position of the line.
  */
-void HexEditorWindow::PrintBookmarkIndicators(HSurface *pdc, HBrush *pbr, int startpos)
+void HexEditorWindow::PrintBookmarkIndicators(HSurface* pdc, HBrush* pbr, int startpos)
 {
 	// Print bookmark indicators.
 	// Are there bookmarks in this line?
@@ -2360,25 +2359,25 @@ void HexEditorWindow::adjust_view_for_caret()
 	else
 		col += iBytesPerLine * 3 + iCharSpace + iCurByte % iBytesPerLine; //CHARS_LOGICAL_COLUMN;
 
-//Pabs changed to put cursor in center of screen
-	if ( col < iHscrollPos
-	  || col >= iHscrollPos + cxBuffer )
+	//Pabs changed to put cursor in center of screen
+	if (col < iHscrollPos
+		|| col >= iHscrollPos + cxBuffer)
 		iHscrollPos = col - cxBuffer / 2;
-	if( iHscrollPos > iHscrollMax - cxBuffer + 1 )
+	if (iHscrollPos > iHscrollMax - cxBuffer + 1)
 		iHscrollPos = iHscrollMax - cxBuffer + 1;
-	if( iHscrollPos < 0 )
+	if (iHscrollPos < 0)
 		iHscrollPos = 0;
 	adjust_hscrollbar();
 	int row = iCurByte / iBytesPerLine;
-	if( row < iVscrollPos
-	 || row >= iVscrollPos + cyBuffer )
+	if (row < iVscrollPos
+		|| row >= iVscrollPos + cyBuffer)
 		iVscrollPos = row - cyBuffer / 2;
-	if( iVscrollPos > iVscrollMax - cyBuffer + 1 )
+	if (iVscrollPos > iVscrollMax - cyBuffer + 1)
 		iVscrollPos = iVscrollMax - cyBuffer + 1;
-	if( iVscrollPos < 0 )
+	if (iVscrollPos < 0)
 		iVscrollPos = 0;
 	adjust_vscrollbar();
-//end
+	//end
 }
 
 /**
@@ -2519,6 +2518,7 @@ BOOL HexEditorWindow::queryCommandEnabled(UINT id)
 	}
 	return TRUE;
 }
+
 //--------------------------------------------------------------------------------------------
 // Initialize main menu items.
 int HexEditorWindow::initmenupopup(WPARAM w, LPARAM l)
@@ -2530,11 +2530,21 @@ int HexEditorWindow::initmenupopup(WPARAM w, LPARAM l)
 		if (UINT id = GetMenuItemID(h, --i))
 		{
 			EnableMenuItem(h, i, queryCommandEnabled(id) ?
-				MF_ENABLED | MF_BYPOSITION : MF_GRAYED | MF_BYPOSITION);
+				                     MF_ENABLED | MF_BYPOSITION : MF_GRAYED | MF_BYPOSITION);
 		}
 	}
 
-	enum { File, Disk, Edit, View, Options, Registry, Bookmarks, Help };
+	enum
+		{
+			File,
+			Disk,
+			Edit,
+			View,
+			Options,
+			Registry,
+			Bookmarks,
+			Help
+		};
 	switch (l)
 	{
 	case File:
@@ -2577,7 +2587,7 @@ bool HexEditorWindow::close()
 	{
 		int res = MessageBox(pwnd, GetLangString(IDS_SAVE_MODIFIED), MB_YESNOCANCEL | MB_ICONWARNING);
 		if (res == IDCANCEL || res == IDYES && !(bFileNeverSaved ? CMD_save_as() : CMD_save()))
-			//User doesn't want to quit or User wants to save and the save was unsuccessful
+		//User doesn't want to quit or User wants to save and the save was unsuccessful
 			return false;//Don't exit
 	}
 	EnableDriveButtons(FALSE);
@@ -2708,10 +2718,10 @@ int HexEditorWindow::mousemove(int xPos, int yPos)
 	else
 	{
 		SetCursor(LoadCursor(NULL,
-			enable_drag && bSelected &&
-			new_pos >= iGetStartOfSelection() &&
-			new_pos <= iGetEndOfSelection() ?
-			IDC_ARROW : IDC_IBEAM));
+		                         enable_drag && bSelected &&
+		                         new_pos >= iGetStartOfSelection() &&
+		                         new_pos <= iGetEndOfSelection() ?
+			                         IDC_ARROW : IDC_IBEAM));
 	}
 
 	old_pos = new_pos;
@@ -2794,7 +2804,7 @@ int HexEditorWindow::lbuttondown(int nFlags, int xPos, int yPos)
  */
 void HexEditorWindow::mousewheel(int delta)
 {
-	const bool ctrlDown = (GetAsyncKeyState(VK_CONTROL) &0x8000) != 0;
+	const bool ctrlDown = (GetAsyncKeyState(VK_CONTROL) & 0x8000) != 0;
 	if (!ctrlDown)
 	{
 		// If CTRL-key not pressed, scroll
@@ -2835,14 +2845,16 @@ void HexEditorWindow::get_pos(long x, long y)
 		area = AREA_OFFSETS;
 	}
 	// Click on bytes.
-	else if ( column >= iStartofBytes && column < iStartofChars - iCharSpace - 1)
+	else if (column >= iStartofBytes && column < iStartofChars - iCharSpace - 1)
 	{
 		int relpos = column - iStartofBytes;
-		nibblenum = relpos%3;
-		bytenum = relpos/3;
+		nibblenum = relpos % 3;
+		bytenum = relpos / 3;
 		area = AREA_BYTES;
-		if( nibblenum==2 ){
-			if( x%cxChar > cxChar/2 ){
+		if (nibblenum == 2)
+		{
+			if (x % cxChar > cxChar / 2)
+			{
 				bytenum++;
 				nibblenum = 0;
 			}
@@ -2850,13 +2862,16 @@ void HexEditorWindow::get_pos(long x, long y)
 		}
 	}
 	// Click between bytes and chars
-	else if ( column >= iStartofChars - iCharSpace - 1 && column < iStartofChars )
+	else if (column >= iStartofChars - iCharSpace - 1 && column < iStartofChars)
 	{
-		if( x + iHscrollPos*cxChar <= cxChar*(iStartofChars-1)-cxChar*iCharSpace/2 ){
+		if (x + iHscrollPos * cxChar <= cxChar * (iStartofChars - 1) - cxChar * iCharSpace / 2)
+		{
 			area = AREA_BYTES;
 			nibblenum = 1;
 			bytenum = iBytesPerLine - (dragging ? 0 : 1);
-		} else {
+		}
+		else
+		{
 			area = AREA_CHARS;
 			bytenum = 0;
 		}
@@ -2871,22 +2886,23 @@ void HexEditorWindow::get_pos(long x, long y)
 	else
 	{
 		bytenum = iBytesPerLine;
-		new_pos = (line+1) * iBytesPerLine - 1;
+		new_pos = (line + 1) * iBytesPerLine - 1;
 	}
 
-	if( area >= AREA_BYTES ){
+	if (area >= AREA_BYTES)
+	{
 		new_pos = line * iBytesPerLine + bytenum;
 	}
 
 	int lastbyte = m_dataArray.GetUpperBound();
-	if( new_pos > lastbyte+1 )
+	if (new_pos > lastbyte + 1)
 	{
 		nibblenum = 1;
-		new_pos = lastbyte+1;
-		bytenum = new_pos%iBytesPerLine;
-		line = new_pos/iBytesPerLine;
+		new_pos = lastbyte + 1;
+		bytenum = new_pos % iBytesPerLine;
+		line = new_pos / iBytesPerLine;
 	}
-	else if( new_pos < 0 )
+	else if (new_pos < 0)
 		line = bytenum = nibblenum = new_pos = 0;
 }
 
@@ -2896,17 +2912,19 @@ void HexEditorWindow::set_drag_caret(long x, long y, bool Copying, bool Overwrit
 
 	int iStartofBytes = iMaxOffsetLen + iByteSpace;
 
-	if( area == AREA_OFFSETS ){
+	if (area == AREA_OFFSETS)
+	{
 		area = AREA_BYTES;
 	}
-	else if( column >= iGetCharsPerLine() ){
+	else if (column >= iGetCharsPerLine())
+	{
 		new_pos++;
 		area = AREA_CHARS;
 	}
 
 	int update = 0;
 	int lastbyte = m_dataArray.GetUpperBound();
-	if (bSelected /*&& !bAllowDropInSel*/ )
+	if (bSelected /*&& !bAllowDropInSel*/)
 	{
 		int iStartOfSelSetting = iStartOfSelection;
 		int iEndOfSelSetting = iEndOfSelection;
@@ -2984,7 +3002,8 @@ void HexEditorWindow::set_drag_caret(long x, long y, bool Copying, bool Overwrit
 
 	if (x != old_col || y != old_row)
 	{
-		old_col = x; old_row = y;
+		old_col = x;
+		old_row = y;
 
 		x *= cxChar;
 		y *= cyChar;
@@ -3093,7 +3112,7 @@ void HexEditorWindow::CMD_edit_undo()
 		rec.pwnd->m_dataArray.RemoveAt(rec.offset, rec.newdata.GetLength() - rec.olddata.GetLength());
 		memcpy(&rec.pwnd->m_dataArray[rec.offset], rec.olddata, rec.olddata.GetLength());
 	}
-	else 
+	else
 	{
 		rec.pwnd->m_dataArray.InsertAtGrow(rec.offset, 0, rec.olddata.GetLength() - rec.newdata.GetLength());
 		memcpy(&rec.pwnd->m_dataArray[rec.offset], rec.olddata, rec.olddata.GetLength());
@@ -3121,7 +3140,7 @@ void HexEditorWindow::CMD_edit_redo()
 		rec.pwnd->m_dataArray.RemoveAt(rec.offset, rec.olddata.GetLength() - rec.newdata.GetLength());
 		memcpy(&rec.pwnd->m_dataArray[rec.offset], rec.newdata, rec.newdata.GetLength());
 	}
-	else 
+	else
 	{
 		rec.pwnd->m_dataArray.InsertAtGrow(rec.offset, 0, rec.newdata.GetLength() - rec.olddata.GetLength());
 		memcpy(&rec.pwnd->m_dataArray[rec.offset], rec.newdata, rec.newdata.GetLength());
@@ -3141,47 +3160,47 @@ void HexEditorWindow::CMD_edit_copy()
 //-------------------------------------------------------------------
 // On hexdump to file/clipboard command.
 int HexEditorWindow::CMD_copy_hexdump(int iCopyHexdumpMode, int iCopyHexdumpType,
-	int iCopyHexdumpDlgStart, int iCopyHexdumpDlgEnd, char* mem, DWORD memlen)
+                                      int iCopyHexdumpDlgStart, int iCopyHexdumpDlgEnd, char* mem, DWORD memlen)
 {
 	int iCharsPerLine = iGetCharsPerLine();
 
-//Pabs changed - bugfix insert
+	//Pabs changed - bugfix insert
 	if (iCopyHexdumpDlgEnd < iCopyHexdumpDlgStart)
 		swap(iCopyHexdumpDlgStart, iCopyHexdumpDlgEnd);
-//end
+	//end
 	// Show wait cursor.
 
-//Pabs removed - see further down
-//Done so that you can select partial lines for non-display output
-//If both on the same line in display output just that line is output
+	//Pabs removed - see further down
+	//Done so that you can select partial lines for non-display output
+	//If both on the same line in display output just that line is output
 
-//Pabs changed - line insert & following lines indented
-	char *pMem = mem;
+	//Pabs changed - line insert & following lines indented
+	char* pMem = mem;
 	SIZE_T buflen;
 	if (iCopyHexdumpType == IDC_EXPORTDISPLAY)
 	{
 		iCopyHexdumpDlgStart = iCopyHexdumpDlgStart / iBytesPerLine * iBytesPerLine;//cut back to the line start
 		iCopyHexdumpDlgEnd = iCopyHexdumpDlgEnd / iBytesPerLine * iBytesPerLine;//cut back to the line start
-//end
+		//end
 		// Number of lines to copy:
 		int linecount = (iCopyHexdumpDlgEnd - iCopyHexdumpDlgStart) / iBytesPerLine + 1;
 		// Req'd mem for lines:
 		// (Every line ended with CR+LF ('\r'+'\n'))
-//Pabs changed - "int" removed - see further up
+		//Pabs changed - "int" removed - see further up
 		buflen = linecount * (iGetCharsPerLine() + 2) + 1;
 		if (mem && buflen > memlen)
 			return 0;
-//end
+		//end
 		// Create hexdump.
 		char buf2[128];
-//Pabs changed - "char*" removed - see further up
+		//Pabs changed - "char*" removed - see further up
 		if (!mem)
 		{
 			pMem = new char[buflen];
 			if (!pMem)
 				return 0;
 		}
-//end
+		//end
 		memset(pMem, ' ', buflen);
 		// Write hexdump.
 		// a = first byte of first line of hexdump.
@@ -3189,7 +3208,7 @@ int HexEditorWindow::CMD_copy_hexdump(int iCopyHexdumpMode, int iCopyHexdumpType
 		//b = iCopyHexdumpDlgEnd;
 		// a = Offset of current line.
 		// k = Offset in text array.
-		for (int k = 0, a = iCopyHexdumpDlgStart; a <= iCopyHexdumpDlgEnd; a += iBytesPerLine, k += iCharsPerLine + 2)
+		for (int k = 0, a = iCopyHexdumpDlgStart; a <= iCopyHexdumpDlgEnd; a += iBytesPerLine , k += iCharsPerLine + 2)
 		{
 			// Write offset.
 			int m = sprintf(buf2, "%*.*llx", iMinOffsetLen, iMinOffsetLen, bPartialStats ? a + iPartialOffset : a);
@@ -3202,38 +3221,38 @@ int HexEditorWindow::CMD_copy_hexdump(int iCopyHexdumpMode, int iCopyHexdumpType
 			while (buf2[n] != '\0')
 				pMem[k + (l++)] = buf2[n++]; // Copy Offset. l = next empty place after spaces.
 			// Write bytes and chars.
-			for (int j = 0 ; j < iBytesPerLine ; j++)
+			for (int j = 0; j < iBytesPerLine; j++)
 			{
 				if (a + j > m_dataArray.GetUpperBound())
 				{
 					// Nonexistant byte.
-					pMem[k + l + j*3    ] = ' ';
-					pMem[k + l + j*3 + 1] = ' ';
-					pMem[k + l + j*3 + 2] = ' ';
+					pMem[k + l + j * 3] = ' ';
+					pMem[k + l + j * 3 + 1] = ' ';
+					pMem[k + l + j * 3 + 2] = ' ';
 					// Nonexistant char.
-					pMem[k + l + iBytesPerLine*3 + iCharSpace + j] = ' ';
+					pMem[k + l + iBytesPerLine * 3 + iCharSpace + j] = ' ';
 				}
 				else
 				{
 					// Write byte.
 					sprintf(buf2, "%2.2x ", m_dataArray[a + j]);
-					pMem[k + l + j*3    ] = buf2[0];
-					pMem[k + l + j*3 + 1] = buf2[1];
-					pMem[k + l + j*3 + 2] = buf2[2];
+					pMem[k + l + j * 3] = buf2[0];
+					pMem[k + l + j * 3 + 1] = buf2[1];
+					pMem[k + l + j * 3 + 2] = buf2[2];
 					// Write char.
-					if( iCharacterSet == OEM_FIXED_FONT && m_dataArray[a + j] != 0 )
-						pMem[k + l + iBytesPerLine*3 + iCharSpace + j] = m_dataArray[a + j];
-					else if( (m_dataArray[a + j] >= 32 && m_dataArray[a + j] <= 126) || (m_dataArray[a + j]>=160 && m_dataArray[a + j] <= 255) || (m_dataArray[a + j] >= 145 && m_dataArray[a + j] <= 146) )
-						pMem[k + l + iBytesPerLine*3 + iCharSpace + j] = m_dataArray[a + j];
+					if (iCharacterSet == OEM_FIXED_FONT && m_dataArray[a + j] != 0)
+						pMem[k + l + iBytesPerLine * 3 + iCharSpace + j] = m_dataArray[a + j];
+					else if ((m_dataArray[a + j] >= 32 && m_dataArray[a + j] <= 126) || (m_dataArray[a + j] >= 160 && m_dataArray[a + j] <= 255) || (m_dataArray[a + j] >= 145 && m_dataArray[a + j] <= 146))
+						pMem[k + l + iBytesPerLine * 3 + iCharSpace + j] = m_dataArray[a + j];
 					else
-						pMem[k + l + iBytesPerLine*3 + iCharSpace + j] = '.';
+						pMem[k + l + iBytesPerLine * 3 + iCharSpace + j] = '.';
 				}
 			}
 			pMem[k + iCharsPerLine] = '\r';
 			pMem[k + iCharsPerLine + 1] = '\n';
 		}
 		pMem[buflen - 1] = '\0';
-//Pabs changed - line insert
+		//Pabs changed - line insert
 	}
 	else if (iCopyHexdumpType == IDC_EXPORTDIGITS)
 	{
@@ -3249,7 +3268,7 @@ int HexEditorWindow::CMD_copy_hexdump(int iCopyHexdumpMode, int iCopyHexdumpType
 			if (!pMem)
 				return 0;
 		}
-		for (int i = 0 ; i < numchar ; ++i)
+		for (int i = 0; i < numchar; ++i)
 		{
 			sprintf(pMem + i * 2, "%2.2x", m_dataArray[iCopyHexdumpDlgStart + i]);
 		}
@@ -3271,8 +3290,8 @@ int HexEditorWindow::CMD_copy_hexdump(int iCopyHexdumpMode, int iCopyHexdumpType
 	if (iCopyHexdumpMode == 0)
 	{
 		// to file.
-		TCHAR szFileName[_MAX_PATH];
-		TCHAR szTitleName[_MAX_FNAME + _MAX_EXT];
+		TCHAR szFileName[_MAX_PATH ];
+		TCHAR szTitleName[_MAX_FNAME + _MAX_EXT ];
 		_tcscpy(szFileName, _T("hexdump.txt"));
 		HGLOBAL hg = NULL;
 		if (iCopyHexdumpType == IDC_EXPORTRTF)
@@ -3294,13 +3313,13 @@ int HexEditorWindow::CMD_copy_hexdump(int iCopyHexdumpMode, int iCopyHexdumpType
 		ofn.hwndOwner = pwnd->m_hWnd;
 		ofn.lpstrFilter = GetLangString(IDS_OPEN_ALL_FILES);
 		ofn.lpstrFile = szFileName;
-		ofn.nMaxFile = _MAX_PATH;
+		ofn.nMaxFile = _MAX_PATH ;
 		ofn.lpstrFileTitle = szTitleName;
-		ofn.nMaxFileTitle = _MAX_FNAME + _MAX_EXT;
+		ofn.nMaxFileTitle = _MAX_FNAME + _MAX_EXT ;
 		ofn.Flags = OFN_HIDEREADONLY | OFN_CREATEPROMPT | OFN_OVERWRITEPROMPT;
 		if (GetSaveFileName(&ofn))
 		{
-			int filehandle = _topen(szFileName, _O_RDWR|_O_CREAT|_O_TRUNC|_O_BINARY,_S_IREAD|_S_IWRITE);
+			int filehandle = _topen(szFileName, _O_RDWR | _O_CREAT | _O_TRUNC | _O_BINARY,_S_IREAD | _S_IWRITE);
 			if (filehandle != -1)
 			{
 				// Write file.
@@ -3309,11 +3328,11 @@ int HexEditorWindow::CMD_copy_hexdump(int iCopyHexdumpMode, int iCopyHexdumpType
 					MessageBox(pwnd, GetLangString(IDS_HDUMP_SAVED), MB_ICONINFORMATION);
 				}
 				else
-					MessageBox(pwnd, GetLangString(IDS_HDUMP_SAVE_FAIL), MB_ICONERROR);
+				MessageBox(pwnd, GetLangString(IDS_HDUMP_SAVE_FAIL), MB_ICONERROR);
 				_close(filehandle);
 			}
 			else
-				MessageBox(pwnd, GetLangString(IDS_HDUMP_SAVE_FAIL), MB_ICONERROR);
+			MessageBox(pwnd, GetLangString(IDS_HDUMP_SAVE_FAIL), MB_ICONERROR);
 		}//end
 		if (iCopyHexdumpType == IDC_EXPORTRTF)
 		{
@@ -3329,7 +3348,7 @@ int HexEditorWindow::CMD_copy_hexdump(int iCopyHexdumpMode, int iCopyHexdumpType
 		{
 			if (HGLOBAL hGlobal = GlobalAlloc(GHND, buflen))
 			{
-				if (char *pDest = reinterpret_cast<char *>(GlobalLock(hGlobal)))
+				if (char* pDest = reinterpret_cast<char *>(GlobalLock(hGlobal)))
 				{
 					memcpy(pDest, pMem, buflen);
 					GlobalUnlock(hGlobal);
@@ -3339,10 +3358,10 @@ int HexEditorWindow::CMD_copy_hexdump(int iCopyHexdumpMode, int iCopyHexdumpType
 				CloseClipboard();
 			}
 			else
-				MessageBox(pwnd, GetLangString(IDS_HDUMP_NO_MEM_CL), MB_ICONERROR);
+			MessageBox(pwnd, GetLangString(IDS_HDUMP_NO_MEM_CL), MB_ICONERROR);
 		}
 		else
-			MessageBox(pwnd, GetLangString(IDS_HDUMP_CL_FAIL), MB_ICONERROR);
+		MessageBox(pwnd, GetLangString(IDS_HDUMP_CL_FAIL), MB_ICONERROR);
 	}
 	else //if (iCopyHexdumpType == IDC_EXPORTRTF)
 	{
@@ -3354,7 +3373,7 @@ int HexEditorWindow::CMD_copy_hexdump(int iCopyHexdumpMode, int iCopyHexdumpType
 			CloseClipboard();
 		}
 		else
-			MessageBox(pwnd, GetLangString(IDS_HDUMP_CL_FAIL), MB_ICONERROR);
+		MessageBox(pwnd, GetLangString(IDS_HDUMP_CL_FAIL), MB_ICONERROR);
 		pMem = NULL;
 	}
 	delete [] pMem;
@@ -3419,19 +3438,19 @@ int HexEditorWindow::CMD_save_as()
 	TCHAR szFileName[MAX_PATH];
 	szFileName[0] = _T('\0');
 	if (Drive == 0)
-		_tcscpy(szFileName, filename);
+	_tcscpy(szFileName, filename);
 	OPENFILENAME ofn;
 	ZeroMemory(&ofn, sizeof ofn);
 	ofn.lStructSize = sizeof ofn;
 	ofn.hwndOwner = pwnd->m_hWnd;
 	ofn.lpstrFilter = GetLangString(IDS_OPEN_ALL_FILES);
 	ofn.lpstrFile = szFileName;
-	ofn.nMaxFile = _MAX_PATH;
+	ofn.nMaxFile = _MAX_PATH ;
 	ofn.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;
 	if (!GetSaveFileName(&ofn))
 		return 0;
 	WaitCursor w1;
-	int filehandle = _topen(szFileName, _O_RDWR|_O_CREAT|_O_TRUNC|_O_BINARY, _S_IREAD|_S_IWRITE);
+	int filehandle = _topen(szFileName, _O_RDWR | _O_CREAT | _O_TRUNC | _O_BINARY, _S_IREAD | _S_IWRITE);
 	if (filehandle == -1)
 	{
 		MessageBox(pwnd, GetLangString(IDS_FILE_SAVE_ERROR), MB_ICONERROR);
@@ -3458,6 +3477,7 @@ int HexEditorWindow::CMD_save_as()
 	set_wnd_title();
 	return done;
 }
+
 /**
  * @brief Save the file.
  * @return 1 if saving succeeded, 0 otherwise.
@@ -3470,7 +3490,7 @@ int HexEditorWindow::CMD_save()
 	if (bFileNeverSaved)
 		return CMD_save_as();
 
-//Pabs inserted
+	//Pabs inserted
 	if (bMakeBackups)
 	{//Assume the filename is valid & has a length
 		TCHAR newname[RTL_NUMBER_OF(filename) + 4];
@@ -3488,7 +3508,7 @@ int HexEditorWindow::CMD_save()
 	// File is partially loaded => must be saved partially or saved as.
 	if (bPartialOpen)
 	{
-		int filehandle = _topen(filename, _O_RDWR|_O_BINARY);
+		int filehandle = _topen(filename, _O_RDWR | _O_BINARY);
 		if (filehandle == -1)
 		{
 			MessageBox(pwnd, GetLangString(IDS_ERR_SAVE_PARTIAL), MB_ICONERROR);
@@ -3521,7 +3541,8 @@ int HexEditorWindow::CMD_save()
 					return 0;
 				}
 				i += n;
-			} while (i != e);
+			}
+			while (i != e);
 			if (nbl < iPartialOpenLen)
 			{//If the new file is bigger than the first _write will resize the file properly otherwise we need to specifically resize the file
 				if (_lseeki64(filehandle, iPartialFileLen + r, SEEK_SET) == -1 ||
@@ -3537,7 +3558,7 @@ int HexEditorWindow::CMD_save()
 		{
 			MessageBox(pwnd, GetLangString(IDS_ERR_SEEK_FILE), MB_ICONERROR);
 		}
-		else if (_write( filehandle, m_dataArray, nbl) == -1)
+		else if (_write(filehandle, m_dataArray, nbl) == -1)
 		{
 			MessageBox(pwnd, GetLangString(IDS_ERR_WRITE_FILE), MB_ICONERROR);
 		}
@@ -3552,7 +3573,7 @@ int HexEditorWindow::CMD_save()
 		return done;
 	}
 
-	int filehandle = _topen(filename, _O_RDWR|_O_CREAT|_O_TRUNC|_O_BINARY, _S_IREAD|_S_IWRITE);
+	int filehandle = _topen(filename, _O_RDWR | _O_CREAT | _O_TRUNC | _O_BINARY, _S_IREAD | _S_IWRITE);
 	if (filehandle == -1)
 	{
 		MessageBox(pwnd, GetLangString(IDS_FILE_SAVE_ERROR), MB_ICONERROR);
@@ -3588,7 +3609,7 @@ void HexEditorWindow::CMD_open()
 	ofn.hwndOwner = pwnd->m_hWnd;
 	ofn.lpstrFilter = GetLangString(IDS_OPEN_ALL_FILES);
 	ofn.lpstrFile = szFileName;
-	ofn.nMaxFile = _MAX_PATH;
+	ofn.nMaxFile = _MAX_PATH ;
 	ofn.Flags = OFN_HIDEREADONLY | OFN_CREATEPROMPT;
 	if (GetOpenFileName(&ofn))
 		load_file(szFileName);
@@ -3600,7 +3621,7 @@ void HexEditorWindow::adjust_view_for_selection()
 	if (bSelected)
 	{
 		int iCharStart = iMaxOffsetLen + iByteSpace + iBytesPerLine * 3 + iCharSpace;
-//Pabs changed to put selection in center of screen
+		//Pabs changed to put selection in center of screen
 		int iStartOfSelSetting = iStartOfSelection;
 		int iEndOfSelSetting = iEndOfSelection;
 		if (iStartOfSelSetting > iEndOfSelSetting)
@@ -3609,11 +3630,11 @@ void HexEditorWindow::adjust_view_for_selection()
 		int sosline = iStartOfSelSetting / iBytesPerLine;
 		int eosline = iEndOfSelSetting / iBytesPerLine;
 
-		int soscol,eoscol,maxcols;
+		int soscol, eoscol, maxcols;
 		if (iEnteringMode == BYTES)
 		{
-			soscol = iMaxOffsetLen + iByteSpace + ( iStartOfSelSetting % iBytesPerLine) * 3;
-			eoscol = iMaxOffsetLen + iByteSpace + ( iEndOfSelSetting % iBytesPerLine) * 3 + 2;
+			soscol = iMaxOffsetLen + iByteSpace + (iStartOfSelSetting % iBytesPerLine) * 3;
+			eoscol = iMaxOffsetLen + iByteSpace + (iEndOfSelSetting % iBytesPerLine) * 3 + 2;
 			maxcols = iBytesPerLine * 3;
 		}
 		else
@@ -3626,45 +3647,59 @@ void HexEditorWindow::adjust_view_for_selection()
 		int lines = eosline - sosline + 1;
 		int cols = ((eosline == sosline) ? eoscol - soscol + 1 : maxcols);
 
-		if( lines > cyBuffer ){
-			if( iVscrollPos <= (sosline+eosline-cyBuffer+1)/2 )
+		if (lines > cyBuffer)
+		{
+			if (iVscrollPos <= (sosline + eosline - cyBuffer + 1) / 2)
 				iVscrollPos = sosline;
-			else iVscrollPos = eosline-cyBuffer+1;
+			else iVscrollPos = eosline - cyBuffer + 1;
 		}
-		else iVscrollPos = sosline - (cyBuffer - (eosline-sosline) )/2;
+		else iVscrollPos = sosline - (cyBuffer - (eosline - sosline)) / 2;
 
 		int mincol, maxcol;
-		if(soscol>=eoscol){maxcol=soscol;mincol=eoscol;}
-		else{maxcol=eoscol;mincol=soscol;}
-
-		if( cols > cxBuffer && maxcol-mincol+1 > cxBuffer ){
-			if( abs(iHscrollPos-mincol) < abs(iHscrollPos+cxBuffer-1-maxcol) )
-				iHscrollPos = mincol-1;
-			else iHscrollPos = maxcol-cxBuffer+1;
+		if (soscol >= eoscol)
+		{
+			maxcol = soscol;
+			mincol = eoscol;
 		}
-		else{
-			if( maxcol-mincol+1 < cxBuffer && lines > 1){
-				if (iEnteringMode == BYTES){
+		else
+		{
+			maxcol = eoscol;
+			mincol = soscol;
+		}
+
+		if (cols > cxBuffer && maxcol - mincol + 1 > cxBuffer)
+		{
+			if (abs(iHscrollPos - mincol) < abs(iHscrollPos + cxBuffer - 1 - maxcol))
+				iHscrollPos = mincol - 1;
+			else iHscrollPos = maxcol - cxBuffer + 1;
+		}
+		else
+		{
+			if (maxcol - mincol + 1 < cxBuffer && lines > 1)
+			{
+				if (iEnteringMode == BYTES)
+				{
 					mincol = iMaxOffsetLen + iByteSpace;
-					maxcol = iMaxOffsetLen + iByteSpace + ( iBytesPerLine - 1 ) * 3 + 2;
+					maxcol = iMaxOffsetLen + iByteSpace + (iBytesPerLine - 1) * 3 + 2;
 				}
-				else{
+				else
+				{
 					mincol = iCharStart;
 					maxcol = iCharStart + iBytesPerLine;
 				}
 			}
-			iHscrollPos = mincol - (cxBuffer - (maxcol-mincol) )/2;
+			iHscrollPos = mincol - (cxBuffer - (maxcol - mincol)) / 2;
 		}
 
-		if( iHscrollPos > iHscrollMax - cxBuffer + 1 )
+		if (iHscrollPos > iHscrollMax - cxBuffer + 1)
 			iHscrollPos = iHscrollMax - cxBuffer + 1;
-		if( iHscrollPos < 0 ) iHscrollPos = 0;
-		if( iVscrollPos > iVscrollMax - cyBuffer + 1 )
+		if (iHscrollPos < 0) iHscrollPos = 0;
+		if (iVscrollPos > iVscrollMax - cyBuffer + 1)
 			iVscrollPos = iVscrollMax - cyBuffer + 1;
-		if( iVscrollPos < 0 ) iVscrollPos = 0;
+		if (iVscrollPos < 0) iVscrollPos = 0;
 		adjust_hscrollbar();
 		adjust_vscrollbar();
-//end
+		//end
 	}
 }
 
@@ -3676,7 +3711,7 @@ void HexEditorWindow::CMD_view_settings()
 
 //-------------------------------------------------------------------
 // Change the color indicated by pColor.
-void HexEditorWindow::CMD_color_settings(COLORREF *pColor)
+void HexEditorWindow::CMD_color_settings(COLORREF* pColor)
 {
 	CHOOSECOLOR cc;
 	COLORREF crCustColors[16];
@@ -3689,7 +3724,7 @@ void HexEditorWindow::CMD_color_settings(COLORREF *pColor)
 	cc.lCustData = 0L;
 	cc.lpfnHook;
 	cc.lpTemplateName = NULL;
-	if (ChooseColor (&cc))
+	if (ChooseColor(&cc))
 	{
 		*pColor = cc.rgbResult;
 		save_ini_data();
@@ -3703,7 +3738,7 @@ void HexEditorWindow::CMD_color_settings(COLORREF *pColor)
  * @todo Some error checking for reading values would be nice...
  * @todo Remove @p key after the Upgrade-feature and dialog have been removed.
  */
-void HexEditorWindow::read_ini_data(TCHAR *key)
+void HexEditorWindow::read_ini_data(TCHAR* key)
 {
 	// Is there any data for zhed in the registry?
 	HKEY key1;
@@ -3711,17 +3746,17 @@ void HexEditorWindow::read_ini_data(TCHAR *key)
 	TCHAR keyname[keyname_size] = {0};
 	LONG res;
 	if (key == 0)
-		_sntprintf(keyname, keyname_size - 1, _T("%s\\%d"), OptionsRegistrySettingsPath,
-				iInstCount);
+	_sntprintf(keyname, keyname_size - 1, _T("%s\\%d"), OptionsRegistrySettingsPath,
+	           iInstCount);
 	else
-		_sntprintf(keyname, keyname_size - 1, _T("%s\\%s\\%d"), OptionsRegistrySettingsPath, key,
-				iInstCount);
+	_sntprintf(keyname, keyname_size - 1, _T("%s\\%s\\%d"), OptionsRegistrySettingsPath, key,
+	           iInstCount);
 
 	res = RegOpenKeyEx(HKEY_CURRENT_USER, keyname, 0, KEY_ALL_ACCESS, &key1);
 	if (res == ERROR_SUCCESS)
 	{
 		// There is data: read it.
-		DWORD datasize = sizeof( int );
+		DWORD datasize = sizeof( int);
 		LONG res;
 		res = RegQueryValueEx(key1, _T("iTextColorValue"), NULL, NULL, (BYTE*) &iTextColorValue, &datasize);
 		res = RegQueryValueEx(key1, _T("iBkColorValue"), NULL, NULL, (BYTE*) &iBkColorValue, &datasize);
@@ -3738,7 +3773,7 @@ void HexEditorWindow::read_ini_data(TCHAR *key)
 		res = RegQueryValueEx(key1, _T("iFontSize"), NULL, NULL, (BYTE*) &iFontSize, &datasize);
 		res = RegQueryValueEx(key1, _T("bOpenReadOnly"), NULL, NULL, (BYTE*) &bOpenReadOnly, &datasize);
 
-//Pabs inserted
+		//Pabs inserted
 		res = RegQueryValueEx(key1, _T("bMakeBackups"), NULL, NULL, (BYTE*) &bMakeBackups, &datasize);
 		res = RegQueryValueEx(key1, _T("bAutoOffsetLen"), NULL, NULL, (BYTE*) &bAutoOffsetLen, &datasize);
 		res = RegQueryValueEx(key1, _T("enable_drop"), NULL, NULL, (BYTE*) &enable_drop, &datasize);
@@ -3753,7 +3788,7 @@ void HexEditorWindow::read_ini_data(TCHAR *key)
 		res = RegQueryValueEx(key1, _T("output_CF_TEXT"), NULL, NULL, (BYTE*) &output_CF_TEXT, &datasize);
 		res = RegQueryValueEx(key1, _T("output_text_special"), NULL, NULL, (BYTE*) &output_text_special, &datasize);
 		res = RegQueryValueEx(key1, _T("output_text_hexdump_display"), NULL, NULL, (BYTE*) &output_text_hexdump_display, &datasize);
-//end
+		//end
 		res = RegQueryValueEx(key1, _T("always_pick_move_copy"), NULL, NULL, (BYTE*) &always_pick_move_copy, &datasize);
 
 		LCID lcid = 0;
@@ -3771,7 +3806,7 @@ void HexEditorWindow::read_ini_data(TCHAR *key)
 
 		res = RegQueryValueEx(key1, _T("iMRU_count"), NULL, NULL, (BYTE*) &iMRU_count, &datasize);
 		int i;
-		for (i = 0 ; i < MRUMAX ; i++)
+		for (i = 0; i < MRUMAX; i++)
 		{
 			TCHAR fname[64];
 			_stprintf(fname, _T("MRU_File%d"), i + 1);
@@ -3820,7 +3855,7 @@ void HexEditorWindow::save_ini_data()
 		RegSetValueEx(key1, _T("iFontSize"), 0, REG_DWORD, (CONST BYTE*) &iFontSize, sizeof(int));
 		RegSetValueEx(key1, _T("bOpenReadOnly"), 0, REG_DWORD, (CONST BYTE*) &bOpenReadOnly, sizeof(int));
 
-//Pabs inserted
+		//Pabs inserted
 		RegSetValueEx(key1, _T("bMakeBackups"), 0, REG_DWORD, (CONST BYTE*) &bMakeBackups, sizeof(int));
 		RegSetValueEx(key1, _T("bAutoOffsetLen"), 0, REG_DWORD, (CONST BYTE*) &bAutoOffsetLen, sizeof(int));
 		RegSetValueEx(key1, _T("enable_drop"), 0, REG_DWORD, (CONST BYTE*) &enable_drop, sizeof(int));
@@ -3836,12 +3871,12 @@ void HexEditorWindow::save_ini_data()
 		RegSetValueEx(key1, _T("output_text_special"), 0, REG_DWORD, (CONST BYTE*) &output_text_special, sizeof(int));
 		RegSetValueEx(key1, _T("output_text_hexdump_display"), 0, REG_DWORD, (CONST BYTE*) &output_text_hexdump_display, sizeof(int));
 		RegSetValueEx(key1, _T("output_CF_RTF"), 0, REG_DWORD, (CONST BYTE*) &output_CF_RTF, sizeof(int));
-//end
+		//end
 		LCID lcid = MAKELCID(langArray.m_langid, 0);
 		RegSetValueEx(key1, _T("locale"), 0, REG_DWORD, (CONST BYTE*) &lcid, sizeof lcid);
 
 		SHSetValue(key1, 0, _T("TexteditorName"), REG_SZ, TexteditorName,
-			static_cast<DWORD>(_tcslen(TexteditorName)) * sizeof(TCHAR));
+		           static_cast<DWORD>(_tcslen(TexteditorName)) * sizeof(TCHAR));
 
 		RegSetValueEx(key1, _T("iWindowShowCmd"), 0, REG_DWORD, (CONST BYTE*) &iWindowShowCmd, sizeof(int));
 		RegSetValueEx(key1, _T("iWindowX"), 0, REG_DWORD, (CONST BYTE*) &iWindowX, sizeof(int));
@@ -3856,7 +3891,7 @@ void HexEditorWindow::save_ini_data()
 			TCHAR fname[64];
 			_stprintf(fname, _T("MRU_File%d"), i + 1);
 			RegSetValueEx(key1, fname, 0, REG_SZ, (CONST BYTE*) strMRU[i],
-				static_cast<DWORD>(_tcslen(strMRU[i]) + 1) * sizeof(TCHAR));
+			              static_cast<DWORD>(_tcslen(strMRU[i]) + 1) * sizeof(TCHAR));
 		}
 		// Close registry.
 		RegCloseKey(key1);
@@ -3894,7 +3929,7 @@ void HexEditorWindow::CMD_zoom(int iAmount)
 		iFontZoom = 0;
 	if (iFontZoom < 2 - iFontSize)
 		iFontZoom = 2 - iFontSize;
-	HWindow *pwndFocus = HWindow::GetFocus();
+	HWindow* pwndFocus = HWindow::GetFocus();
 	if (pwnd == pwndFocus)
 		kill_focus();
 	resize_window();
@@ -3949,34 +3984,34 @@ void HexEditorWindow::make_font()
 {
 	if (pFont)
 		pFont->DeleteObject();
-	HSurface *pdc = pwnd->GetDC();
+	HSurface* pdc = pwnd->GetDC();
 	int nHeight = -MulDiv(iFontSize + iFontZoom, pdc->GetDeviceCaps(LOGPIXELSY), 72);
 	pwnd->ReleaseDC(pdc);
 	int cset = iCharacterSet == ANSI_FIXED_FONT ? ANSI_CHARSET : OEM_CHARSET;
 	static const TCHAR facename[] = _T("Lucida Console");
 	pFont = HFont::Create(nHeight, 0, 0, 0, 0, 0, 0, 0, cset, OUT_DEFAULT_PRECIS,
-		CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, FIXED_PITCH | FF_DONTCARE, facename);
+	                      CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, FIXED_PITCH | FF_DONTCARE, facename);
 }
 
 //-------------------------------------------------------------------
 void HexEditorWindow::CMD_properties()
 {
 	TCHAR buf[1000];
-	TCHAR *pc;
+	TCHAR* pc;
 	_stprintf(buf, GetLangString(IDS_FPROP_NAME));
 	GetFullPathName(filename, 500, buf + _tcslen(buf), &pc);
 	if (bPartialOpen)
 	{
 		_stprintf(buf + _tcslen(buf), GetLangString(IDS_FPROP_PARTIAL_OPEN),
-			iPartialOffset, iPartialOffset, m_dataArray.GetLength(), m_dataArray.GetLength()/1024);
+		          iPartialOffset, iPartialOffset, m_dataArray.GetLength(), m_dataArray.GetLength() / 1024);
 	}
 	else
 	{
 		_stprintf(buf + _tcslen(buf), GetLangString(IDS_FPROP_FSIZE),
-				m_dataArray.GetLength(), m_dataArray.GetLength()/1024);
+		          m_dataArray.GetLength(), m_dataArray.GetLength() / 1024);
 	}
 	_stprintf(buf + _tcslen(buf), GetLangString(IDS_FPROP_HDUMP_LINES),
-			iNumlines);
+	          iNumlines);
 	MessageCopyBox(pwnd, buf, MB_ICONINFORMATION);
 }
 
@@ -3996,7 +4031,7 @@ void HexEditorWindow::CMD_binarymode()
 //Pabs added stuff for OLE drag-drop
 void HexEditorWindow::timer(WPARAM w, LPARAM)
 {
-	switch(w)
+	switch (w)
 	{
 	case MOUSE_OP_DELAY_TIMER_ID:
 		start_mouse_operation();
@@ -4079,10 +4114,10 @@ void HexEditorWindow::start_mouse_operation()
 		//Stick the bit[s] of data in the data object
 		if (output_CF_BINARYDATA)
 		{
-			sm.hGlobal =  GlobalAlloc(GHND|GMEM_DDESHARE, sizeof(UINT) + iEndOfSelSetting - iStartOfSelSetting + 1);
+			sm.hGlobal = GlobalAlloc(GHND | GMEM_DDESHARE, sizeof(UINT) + iEndOfSelSetting - iStartOfSelSetting + 1);
 			if (sm.hGlobal)
 			{
-				if (BYTE *p = (BYTE *)GlobalLock(sm.hGlobal))
+				if (BYTE* p = (BYTE *)GlobalLock(sm.hGlobal))
 				{
 					*(UINT*)p = iEndOfSelSetting - iStartOfSelSetting + 1;
 					memcpy(p + sizeof(UINT), &m_dataArray[iStartOfSelSetting], iEndOfSelSetting - iStartOfSelSetting + 1);
@@ -4106,14 +4141,14 @@ void HexEditorWindow::start_mouse_operation()
 			{
 				//The special syntax
 				destlen = Text2BinTranslator::iBytes2BytecodeDestLen(
-						&m_dataArray[iStartOfSelSetting],
-						iEndOfSelSetting-iStartOfSelSetting + 1);
+					&m_dataArray[iStartOfSelSetting],
+					iEndOfSelSetting - iStartOfSelSetting + 1);
 				sm.hGlobal = GlobalAlloc(GHND | GMEM_DDESHARE, destlen);
 				if (sm.hGlobal)
 				{
-					if (char *p = (char *)GlobalLock(sm.hGlobal))
+					if (char* p = (char *)GlobalLock(sm.hGlobal))
 					{
-						Text2BinTranslator::iTranslateBytesToBC(p, &m_dataArray[iStartOfSelSetting], iEndOfSelSetting-iStartOfSelSetting+1);
+						Text2BinTranslator::iTranslateBytesToBC(p, &m_dataArray[iStartOfSelSetting], iEndOfSelSetting - iStartOfSelSetting + 1);
 						madedata = true;
 					}
 					GlobalUnlock(sm.hGlobal);
@@ -4130,7 +4165,7 @@ void HexEditorWindow::start_mouse_operation()
 					iCopyHexdumpType = IDC_EXPORTDISPLAY;
 					iCopyHexdumpDlgStart = iStartOfSelSetting / iBytesPerLine * iBytesPerLine;//cut back to the line start
 					iCopyHexdumpDlgEnd = iEndOfSelSetting / iBytesPerLine * iBytesPerLine;//cut back to the line start
-					destlen = ((iCopyHexdumpDlgEnd - iCopyHexdumpDlgStart) / iBytesPerLine + 1) * (iGetCharsPerLine()+2) + 1;
+					destlen = ((iCopyHexdumpDlgEnd - iCopyHexdumpDlgStart) / iBytesPerLine + 1) * (iGetCharsPerLine() + 2) + 1;
 				}
 				else /*Just output hex digits*/
 				{
@@ -4139,10 +4174,10 @@ void HexEditorWindow::start_mouse_operation()
 					iCopyHexdumpDlgEnd = iEndOfSelSetting;
 					destlen = (iEndOfSelSetting - iStartOfSelSetting) * 2 + 3;
 				}
-				sm.hGlobal = GlobalAlloc (GHND|GMEM_DDESHARE, destlen);
+				sm.hGlobal = GlobalAlloc(GHND | GMEM_DDESHARE, destlen);
 				if (sm.hGlobal)
 				{
-					if (char *p = (char *)GlobalLock(sm.hGlobal))
+					if (char* p = (char *)GlobalLock(sm.hGlobal))
 					{
 						if (CMD_copy_hexdump(0, iCopyHexdumpType, iCopyHexdumpDlgStart, iCopyHexdumpDlgEnd, p, destlen))
 							madedata = true;
@@ -4174,7 +4209,7 @@ void HexEditorWindow::start_mouse_operation()
 				fe.lindex = -1;
 				fe.ptd = NULL;
 				fe.tymed = TYMED_HGLOBAL;
-				dataobj.SetData( &fe, &sm, TRUE );
+				dataobj.SetData(&fe, &sm, TRUE);
 			}
 		}
 		dataobj.DisableSetData();
@@ -4198,13 +4233,13 @@ void HexEditorWindow::start_mouse_operation()
 		if (lastbyte == -1)
 			return;
 		SetCursor(LoadCursor(NULL, IDC_IBEAM));
-		if( old_pos >= lastbyte+1 )
+		if (old_pos >= lastbyte + 1)
 			old_pos = lastbyte;
-		else if( old_pos < 0 )
+		else if (old_pos < 0)
 			old_pos = 0;
-		if( lbd_pos >= lastbyte+1 )
+		if (lbd_pos >= lastbyte + 1)
 			lbd_pos = lastbyte;
-		else if( lbd_pos < 0 )
+		else if (lbd_pos < 0)
 			lbd_pos = 0;
 		iStartOfSelection = lbd_pos;
 		iEndOfSelection = old_pos;
@@ -4216,6 +4251,7 @@ void HexEditorWindow::start_mouse_operation()
 		bPullScrolling = TRUE;
 	}*/
 }
+
 //end
 //-------------------------------------------------------------------
 void HexEditorWindow::CMD_select_block()
@@ -4235,7 +4271,7 @@ void HexEditorWindow::update_MRU()
 		else
 			--i;
 	while (int j = i)
-		_tcscpy(strMRU[j], strMRU[--i]);
+	_tcscpy(strMRU[j], strMRU[--i]);
 	_tcscpy(strMRU[0], filename); // Put chosen name at top.
 	save_ini_data();
 }
@@ -4261,7 +4297,7 @@ void HexEditorWindow::make_MRU_list(HMENU menu)
 	if (iMRU_count > 0)
 	{
 		InsertMenu(menu, ++j, MF_SEPARATOR | MF_BYPOSITION, 0, 0);
-		for (int i = 0 ; i < iMRU_count ; i++)
+		for (int i = 0; i < iMRU_count; i++)
 		{
 			TCHAR buf[MAX_PATH + 1 + 30];
 			_stprintf(buf, _T("&%d %s"), i + 1, strMRU[i]);
@@ -4286,8 +4322,8 @@ void HexEditorWindow::CMD_MRU_selected(int i)
 	{
 		MessageBox(pwnd, GetLangString(IDS_MRU_REMOVING), MB_ICONERROR);
 		--iMRU_count;
-		for ( ; i < iMRU_count ; i++)
-			_tcscpy(strMRU[i], strMRU[i + 1]);
+		for (; i < iMRU_count; i++)
+		_tcscpy(strMRU[i], strMRU[i + 1]);
 		save_ini_data();
 	}
 }
@@ -4314,22 +4350,21 @@ void HexEditorWindow::CMD_add_bookmark()
  */
 void HexEditorWindow::make_bookmark_list(HMENU menu)
 {
-	do
-		;
+	do;
 	while (RemoveMenu(menu, 3, MF_BYPOSITION));
 
 	if (iBmkCount > 0)
 	{
 		AppendMenu(menu, MF_SEPARATOR, 0, 0);
 		TCHAR buf[INFOTIPSIZE];
-		for (int i = 0 ; i < iBmkCount ; i++)
+		for (int i = 0; i < iBmkCount; i++)
 		{
 			if (pbmkList[i].name.length())
-				_stprintf(buf, _T("&%d %s (0x%x)"), i + 1, pbmkList[i].name.c_str(), pbmkList[i].offset);
+			_stprintf(buf, _T("&%d %s (0x%x)"), i + 1, pbmkList[i].name.c_str(), pbmkList[i].offset);
 			else
-				_stprintf(buf, _T("&%d 0x%x"), i + 1, pbmkList[i].offset);
+			_stprintf(buf, _T("&%d 0x%x"), i + 1, pbmkList[i].offset);
 			AppendMenu(menu, pbmkList[i].offset <= m_dataArray.GetLength() ?
-				MF_ENABLED : MF_GRAYED, IDM_BOOKMARK1 + i, buf);
+				                 MF_ENABLED : MF_GRAYED, IDM_BOOKMARK1 + i, buf);
 		}
 	}
 }
@@ -4368,7 +4403,7 @@ void HexEditorWindow::CMD_remove_bkm()
 void HexEditorWindow::CMD_clear_all_bmk()
 {
 	int response = MessageBox(pwnd,
-		GetLangString(IDS_BMK_REMOVE_ALL), MB_YESNO | MB_ICONWARNING);
+	                          GetLangString(IDS_BMK_REMOVE_ALL), MB_YESNO | MB_ICONWARNING);
 	if (response != IDYES)
 		return;
 	while (iBmkCount)
@@ -4385,7 +4420,7 @@ void HexEditorWindow::CMD_open_partially()
 {
 	if (!close())
 		return;
-	TCHAR szFileName[_MAX_PATH];
+	TCHAR szFileName[_MAX_PATH ];
 	szFileName[0] = '\0';
 	OPENFILENAME ofn;
 	ZeroMemory(&ofn, sizeof ofn);
@@ -4393,11 +4428,11 @@ void HexEditorWindow::CMD_open_partially()
 	ofn.hwndOwner = pwnd->m_hWnd;
 	ofn.lpstrFilter = GetLangString(IDS_OPEN_ALL_FILES);
 	ofn.lpstrFile = szFileName;
-	ofn.nMaxFile = _MAX_PATH;
+	ofn.nMaxFile = _MAX_PATH ;
 	ofn.Flags = OFN_HIDEREADONLY | OFN_CREATEPROMPT;
 	if (!GetOpenFileName(&ofn))
 		return;
-	OpenPartiallyDlg::filehandle = _topen(szFileName, _O_RDONLY|_O_BINARY);
+	OpenPartiallyDlg::filehandle = _topen(szFileName, _O_RDONLY | _O_BINARY);
 	if (OpenPartiallyDlg::filehandle == -1)
 	{
 		TCHAR buf[500];
@@ -4438,9 +4473,9 @@ INT_PTR CALLBACK MultiDropDlgProc(HWND h, UINT m, WPARAM w, LPARAM l)
 			SetWindowLongPtr(hwndList, GWL_STYLE, GetWindowLongPtr(hwndList,GWL_STYLE) & ~LBS_SORT | WS_HSCROLL);
 
 			TCHAR file[_MAX_PATH + 1];
-			UINT n = DragQueryFile((HDROP)l, 0xFFFFFFFF, NULL, 0 );
-			SendMessage (hwndList, LB_INITSTORAGE, n, _MAX_PATH+1);
-			for (UINT i = 0 ; i < n ; i++)
+			UINT n = DragQueryFile((HDROP)l, 0xFFFFFFFF, NULL, 0);
+			SendMessage(hwndList, LB_INITSTORAGE, n, _MAX_PATH + 1);
+			for (UINT i = 0; i < n; i++)
 			{
 				DragQueryFile((HDROP)l, i, file, _MAX_PATH + 1);
 				SendMessage(hwndList, LB_INSERTSTRING, i, (LPARAM)file);
@@ -4462,6 +4497,7 @@ INT_PTR CALLBACK MultiDropDlgProc(HWND h, UINT m, WPARAM w, LPARAM l)
 	}
 	return FALSE;
 }
+
 //end
 
 /**
@@ -4469,8 +4505,8 @@ INT_PTR CALLBACK MultiDropDlgProc(HWND h, UINT m, WPARAM w, LPARAM l)
  */
 void HexEditorWindow::dropfiles(HDROP hDrop)
 {
-	TCHAR lpszFile[_MAX_PATH];
-	UINT numfiles = DragQueryFile(hDrop, 0xFFFFFFFF, NULL, 0 );
+	TCHAR lpszFile[_MAX_PATH ];
+	UINT numfiles = DragQueryFile(hDrop, 0xFFFFFFFF, NULL, 0);
 	UINT i = 0;
 	if (numfiles > 1)
 	{
@@ -4489,15 +4525,15 @@ void HexEditorWindow::dropfiles(HDROP hDrop)
 	if (!close())
 		return;
 
-	TCHAR lpszTarget[_MAX_PATH] = {0};
+	TCHAR lpszTarget[_MAX_PATH ] = {0};
 	// Is this a link file?
 	HRESULT hres = ResolveIt(lpszFile, lpszTarget);
-	TCHAR *lpszFileToOpen = lpszFile;
+	TCHAR* lpszFileToOpen = lpszFile;
 	if (SUCCEEDED(hres) && _tcslen(lpszTarget) && _tcscmp(lpszFile, lpszTarget) != 0)
 	{
 		// Trying to open a link file: decision by user required.
 		int ret = MessageBox(pwnd,
-			GetLangString(IDS_OPEN_SHORTCUT), MB_YESNOCANCEL | MB_ICONWARNING);
+		                     GetLangString(IDS_OPEN_SHORTCUT), MB_YESNOCANCEL | MB_ICONWARNING);
 		switch (ret)
 		{
 		case IDYES:
@@ -4519,7 +4555,7 @@ void HexEditorWindow::CMD_apply_template()
 		return;
 	}
 	// Get name of template file.
-	TCHAR szTemplateName[_MAX_PATH];
+	TCHAR szTemplateName[_MAX_PATH ];
 	szTemplateName[0] = '\0';
 	OPENFILENAME ofn;
 	ZeroMemory(&ofn, sizeof ofn);
@@ -4527,7 +4563,7 @@ void HexEditorWindow::CMD_apply_template()
 	ofn.hwndOwner = pwnd->m_hWnd;
 	ofn.lpstrFilter = GetLangString(IDS_TPL_FILE_PATTERN);
 	ofn.lpstrFile = szTemplateName;
-	ofn.nMaxFile = _MAX_PATH;
+	ofn.nMaxFile = _MAX_PATH ;
 	ofn.lpstrTitle = GetLangString(IDS_TPL_CHOOSE_FILE);
 	ofn.Flags = OFN_HIDEREADONLY | OFN_CREATEPROMPT;
 	if (GetOpenFileName(&ofn))
@@ -4538,7 +4574,7 @@ void HexEditorWindow::CMD_apply_template()
 }
 
 //-------------------------------------------------------------------
-void HexEditorWindow::apply_template(TCHAR *pcTemplate)
+void HexEditorWindow::apply_template(TCHAR* pcTemplate)
 {
 	Template tmpl(m_dataArray);
 	tmpl.SetOriginalFilename(filename);
@@ -4680,10 +4716,10 @@ void HexEditorWindow::OnContextMenu(LPARAM lParam)
 			resize_window();
 		}
 	}
-	else if (HMenu *pMenu = reinterpret_cast<HMenu *>(load_menu(IDR_CONTEXTMENU)))
+	else if (HMenu* pMenu = reinterpret_cast<HMenu *>(load_menu(IDR_CONTEXTMENU)))
 	{
 		// You could use other menu indices based on context... if you like
-		if (HMenu *pSubMenu = pMenu->GetSubMenu(Drive ? 1 : 0))
+		if (HMenu* pSubMenu = pMenu->GetSubMenu(Drive ? 1 : 0))
 		{
 			int i = pSubMenu->GetMenuItemCount();
 			while (i)
@@ -4691,7 +4727,7 @@ void HexEditorWindow::OnContextMenu(LPARAM lParam)
 				if (UINT id = pSubMenu->GetMenuItemID(--i))
 				{
 					pSubMenu->EnableMenuItem(i, queryCommandEnabled(id) ?
-						MF_ENABLED | MF_BYPOSITION : MF_GRAYED | MF_BYPOSITION);
+						                            MF_ENABLED | MF_BYPOSITION : MF_GRAYED | MF_BYPOSITION);
 				}
 			}
 			pSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_RIGHTBUTTON, p.x, p.y, pwnd);
@@ -4740,17 +4776,17 @@ void HexEditorWindow::CMD_DriveGotoLastTrack()
 void HexEditorWindow::RefreshCurrentTrack()
 {
 	if (Drive->ReadAbsolute(Track.GetObjectMemory(), Track.GetObjectSize(),
-			CurrentSectorNumber + SelectedPartitionInfo->m_StartingSector))
+	                        CurrentSectorNumber + SelectedPartitionInfo->m_StartingSector))
 	{
 		ULONG BytesPerSector = Track.GetObjectSize();
 		m_dataArray.ClearAll();
 		if (m_dataArray.SetSize(BytesPerSector))
 		{
-			m_dataArray.SetUpperBound(BytesPerSector-1);
+			m_dataArray.SetUpperBound(BytesPerSector - 1);
 			CopyMemory(m_dataArray, Track.GetObjectMemory(), BytesPerSector);
 			bReadOnly = TRUE;
 			_stprintf(filename, GetLangString(IDS_DRIVES_SECTOR),
-					(LPCSTR) SelectedPartitionInfo->GetNameAsString(), CurrentSectorNumber);
+			          (LPCSTR) SelectedPartitionInfo->GetNameAsString(), CurrentSectorNumber);
 			bFileNeverSaved = false;
 			iVscrollMax = 0;
 			iVscrollPos = 0;
@@ -4816,10 +4852,10 @@ void HexEditorWindow::CMD_findnext()
 
 		// Translate the selection into bytecode and write it into the edit box buffer.
 		int destLen = Text2BinTranslator::iBytes2BytecodeDestLen(&m_dataArray[sel_start], select_len);
-		char *tmpBuf = new char[destLen + 1];
+		char* tmpBuf = new char[destLen + 1];
 		ZeroMemory(tmpBuf, destLen + 1);
 		Text2BinTranslator::iTranslateBytesToBC(tmpBuf,
-				&m_dataArray[sel_start], select_len);
+		                                        &m_dataArray[sel_start], select_len);
 		m_pFindCtxt->SetText(tmpBuf);
 		delete [] tmpBuf;
 	}
@@ -4828,16 +4864,16 @@ void HexEditorWindow::CMD_findnext()
 	if (m_pFindCtxt->HasText())
 	{
 		// There is a findstring. Create its translation.
-		BYTE *pcFindstring;
+		BYTE* pcFindstring;
 		int srclen = static_cast<int>(strlen(m_pFindCtxt->GetText()));
 		if (int destlen = create_bc_translation(&pcFindstring,
-			m_pFindCtxt->GetText(), srclen, iCharacterSet, iBinaryMode))
+		                                        m_pFindCtxt->GetText(), srclen, iCharacterSet, iBinaryMode))
 		{
 			SetCursor(LoadCursor(NULL, IDC_WAIT));
 			int i = findutils_FindBytes(&m_dataArray[iCurByte + 1],
-				m_dataArray.GetLength() - iCurByte - 1,
-				pcFindstring, destlen, 1,
-				m_pFindCtxt->m_bMatchCase);
+			                            m_dataArray.GetLength() - iCurByte - 1,
+			                            pcFindstring, destlen, 1,
+			                            m_pFindCtxt->m_bMatchCase);
 			SetCursor(LoadCursor(NULL, IDC_ARROW));
 			if (i != -1)
 			{
@@ -4877,7 +4913,7 @@ void HexEditorWindow::CMD_findprev()
 	{
 		// Get start/end offset and length of selection.
 		int sel_start, select_len;
-		if( iEndOfSelection < iStartOfSelection )
+		if (iEndOfSelection < iStartOfSelection)
 		{
 			sel_start = iEndOfSelection;
 			select_len = iStartOfSelection - iEndOfSelection + 1;
@@ -4890,7 +4926,7 @@ void HexEditorWindow::CMD_findprev()
 
 		// Translate the selection into bytecode and write it into the edit box buffer.
 		int destLen = Text2BinTranslator::iBytes2BytecodeDestLen(&m_dataArray[sel_start], select_len);
-		char *tmpBuf = new char[destLen + 1];
+		char* tmpBuf = new char[destLen + 1];
 		ZeroMemory(tmpBuf, destLen + 1);
 		Text2BinTranslator::iTranslateBytesToBC(tmpBuf, &m_dataArray[sel_start], select_len);
 		m_pFindCtxt->SetText(tmpBuf);
@@ -4900,10 +4936,10 @@ void HexEditorWindow::CMD_findprev()
 	if (m_pFindCtxt->HasText())
 	{
 		// There is a findstring. Create its translation.
-		BYTE *pcFindstring;
+		BYTE* pcFindstring;
 		int srclen = static_cast<int>(strlen(m_pFindCtxt->GetText()));
 		if (int destlen = create_bc_translation(&pcFindstring,
-			m_pFindCtxt->GetText(), srclen, iCharacterSet, iBinaryMode))
+		                                        m_pFindCtxt->GetText(), srclen, iCharacterSet, iBinaryMode))
 		{
 			SetCursor(LoadCursor(NULL, IDC_WAIT));
 			// Search the array starting at index 0 to the current byte,
@@ -4912,8 +4948,8 @@ void HexEditorWindow::CMD_findprev()
 			// and you choose "find previous" you usually want to find the beginning
 			// of the findstring in the file.
 			int i = findutils_FindBytes(&m_dataArray[0],
-				min(iCurByte + (destlen - 1), m_dataArray.GetLength()),
-				pcFindstring, destlen, -1, m_pFindCtxt->m_bMatchCase);
+			                            min(iCurByte + (destlen - 1), m_dataArray.GetLength()),
+			                            pcFindstring, destlen, -1, m_pFindCtxt->m_bMatchCase);
 			SetCursor(LoadCursor(NULL, IDC_ARROW));
 			if (i != -1)
 			{
@@ -4978,7 +5014,7 @@ LRESULT HexEditorWindow::OnWndMsg(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lP
 		break;
 
 	case WM_GETDLGCODE:
-		return DLGC_WANTARROWS | DLGC_WANTTAB | DLGC_WANTCHARS;
+		return DLGC_WANTARROWS | DLGC_WANTTAB | DLGC_WANTCHARS ;
 
 	case WM_SETFOCUS:
 		set_focus();
@@ -4996,7 +5032,7 @@ LRESULT HexEditorWindow::OnWndMsg(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lP
 		lbuttonup(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 		break;
 
-	// GK20AUG2K
+		// GK20AUG2K
 	case WM_CONTEXTMENU:
 		OnContextMenu(lParam);
 		break;
@@ -5061,7 +5097,7 @@ LRESULT HexEditorWindow::OnWndMsg(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lP
 	return DefWindowProc(hwnd, iMsg, wParam, lParam);
 }
 
-void HexEditorWindow::OnHelp(HWindow *pWnd)
+void HexEditorWindow::OnHelp(HWindow* pWnd)
 {
 	ShowHtmlHelp(HELP_CONTENTS, 0, pWnd);
 }
@@ -5078,11 +5114,11 @@ BOOL HexEditorWindow::select_next_diff(BOOL bFromStart)
 {
 	BOOL bDone = FALSE;
 	int length = get_length();
-	BYTE *buffer = get_buffer(length);
+	BYTE* buffer = get_buffer(length);
 	int sibling1_length = ary_sibling[0]->get_length();
-	BYTE *sibling1_buffer = ary_sibling[0]->get_buffer(sibling1_length);
+	BYTE* sibling1_buffer = ary_sibling[0]->get_buffer(sibling1_length);
 	int sibling2_length = ary_sibling[1]->get_length();
-	BYTE *sibling2_buffer = ary_sibling[1]->get_buffer(sibling2_length);
+	BYTE* sibling2_buffer = ary_sibling[1]->get_buffer(sibling2_length);
 	int i = bFromStart ? 0 : bSelected ? iGetEndOfSelection() + 1 : iCurByte;
 	if (length > sibling1_length)
 		length = sibling1_length;
@@ -5111,11 +5147,11 @@ BOOL HexEditorWindow::select_prev_diff(BOOL bFromEnd)
 {
 	BOOL bDone = FALSE;
 	int length = get_length();
-	BYTE *buffer = get_buffer(length);
+	BYTE* buffer = get_buffer(length);
 	int sibling1_length = ary_sibling[0]->get_length();
-	BYTE *sibling1_buffer = ary_sibling[0]->get_buffer(sibling1_length);
+	BYTE* sibling1_buffer = ary_sibling[0]->get_buffer(sibling1_length);
 	int sibling2_length = ary_sibling[1]->get_length();
-	BYTE *sibling2_buffer = ary_sibling[1]->get_buffer(sibling2_length);
+	BYTE* sibling2_buffer = ary_sibling[1]->get_buffer(sibling2_length);
 	int i = bFromEnd ? length : iGetStartOfSelection();
 	if (i > sibling1_length)
 		i = sibling1_length;
@@ -5124,7 +5160,8 @@ BOOL HexEditorWindow::select_prev_diff(BOOL bFromEnd)
 	do
 	{
 		--i;
-	} while (i >= 0 && buffer[i] == sibling1_buffer[i] && buffer[i] == sibling2_buffer[i]);
+	}
+	while (i >= 0 && buffer[i] == sibling1_buffer[i] && buffer[i] == sibling2_buffer[i]);
 	int j = i;
 	while (j >= 0 && (buffer[j] != sibling1_buffer[j] || buffer[j] != sibling2_buffer[j]))
 		--j;
@@ -5147,17 +5184,17 @@ void HexEditorWindow::synch_sibling(BOOL bSynchSelection)
 	{
 		if (ary_sibling[i] != this)
 		{
-			Status *sibling_status = ary_sibling[i]->get_status();
-			Settings *sibling_settings = ary_sibling[i]->get_settings();
+			Status* sibling_status = ary_sibling[i]->get_status();
+			Settings* sibling_settings = ary_sibling[i]->get_settings();
 
 			int sibling_length = ary_sibling[i]->get_length();
 
 			int iMin = sibling_status->bSelected ?
-				min(sibling_status->iStartOfSelection, sibling_status->iEndOfSelection) :
-				sibling_status->iCurByte;
+				           min(sibling_status->iStartOfSelection, sibling_status->iEndOfSelection) :
+				           sibling_status->iCurByte;
 			int iMax = sibling_status->bSelected ?
-				max(sibling_status->iStartOfSelection, sibling_status->iEndOfSelection) :
-				sibling_status->iCurByte;
+				           max(sibling_status->iStartOfSelection, sibling_status->iEndOfSelection) :
+				           sibling_status->iCurByte;
 
 			sibling_status->iEnteringMode = iEnteringMode;
 			sibling_status->iCurByte = iCurByte < sibling_length ? iCurByte : sibling_length;
@@ -5178,11 +5215,11 @@ void HexEditorWindow::synch_sibling(BOOL bSynchSelection)
 				if (sibling_status->iEndOfSelection >= sibling_length)
 					sibling_status->iEndOfSelection = sibling_length - 1;
 				int iMinNew = sibling_status->bSelected ?
-					min(sibling_status->iStartOfSelection, sibling_status->iEndOfSelection) :
-					sibling_status->iCurByte;
+					              min(sibling_status->iStartOfSelection, sibling_status->iEndOfSelection) :
+					              sibling_status->iCurByte;
 				int iMaxNew = sibling_status->bSelected ?
-					max(sibling_status->iStartOfSelection, sibling_status->iEndOfSelection) :
-					sibling_status->iCurByte;
+					              max(sibling_status->iStartOfSelection, sibling_status->iEndOfSelection) :
+					              sibling_status->iCurByte;
 				if (iMin > iMinNew)
 					iMin = iMinNew;
 				if (iMax < iMaxNew)
@@ -5202,7 +5239,7 @@ void HexEditorWindow::CMD_revert()
 	}
 	if (bPartialOpen)
 	{
-		int filehandle = _topen(filename, _O_RDONLY|_O_BINARY);
+		int filehandle = _topen(filename, _O_RDONLY | _O_BINARY);
 		if (filehandle != -1)
 		{
 			_lseeki64(filehandle, iPartialOffset, 0);
@@ -5212,7 +5249,7 @@ void HexEditorWindow::CMD_revert()
 				{
 					bReadOnly = bOpenReadOnly || -1 == _taccess(filename, 02);
 					iVscrollMax = iVscrollPos = iHscrollMax = iHscrollPos =
-					iVscrollPos = iCurByte = iCurNibble = 0;
+						iVscrollPos = iCurByte = iCurNibble = 0;
 					clear_undorecords();
 					bFilestatusChanged = true;
 					bFileNeverSaved = false;
@@ -5250,15 +5287,15 @@ void HexEditorWindow::CMD_deletefile()
 	while (i < iMRU_count && _tcscmp(strMRU[i], filename) != 0)
 		++i;
 	--iMRU_count;
-	for ( ; i < iMRU_count ; i++)
-		_tcscpy(strMRU[i], strMRU[i + 1]);
+	for (; i < iMRU_count; i++)
+	_tcscpy(strMRU[i], strMRU[i + 1]);
 	save_ini_data();
 	reset();
 }
 
 void HexEditorWindow::CMD_insertfile()
 {
-	TCHAR szFileName[_MAX_PATH];
+	TCHAR szFileName[_MAX_PATH ];
 	szFileName[0] = '\0';
 	OPENFILENAME ofn;
 	ZeroMemory(&ofn, sizeof ofn);
@@ -5266,7 +5303,7 @@ void HexEditorWindow::CMD_insertfile()
 	ofn.hwndOwner = pwnd->m_hWnd;
 	ofn.lpstrFilter = GetLangString(IDS_OPEN_ALL_FILES);
 	ofn.lpstrFile = szFileName;
-	ofn.nMaxFile = _MAX_PATH;
+	ofn.nMaxFile = _MAX_PATH ;
 	ofn.Flags = OFN_HIDEREADONLY | OFN_CREATEPROMPT;
 	if (!GetOpenFileName(&ofn))
 		return;
@@ -5281,7 +5318,7 @@ void HexEditorWindow::CMD_insertfile()
 	int inslen = _filelength(fhandle);
 	if (inslen != -1)
 	{
-		int rs,re,rl;//Remove start, end, len
+		int rs, re, rl;//Remove start, end, len
 		if (bSelected)
 		{
 			rs = iGetStartOfSelection();
@@ -5302,8 +5339,8 @@ void HexEditorWindow::CMD_insertfile()
 			SimpleArray<BYTE> olddata;
 			if (bSelected)
 				olddata.AppendArray(&m_dataArray[rs], re - rs + 1);
-			BYTE *src = &m_dataArray[rs + rl];
-			BYTE *dst = &m_dataArray[rs + inslen];
+			BYTE* src = &m_dataArray[rs + rl];
+			BYTE* dst = &m_dataArray[rs + inslen];
 			int count = ol - (rs + rl);
 			if (inslen > rl) // bigger
 				memmove(dst, src, count);
@@ -5332,7 +5369,7 @@ void HexEditorWindow::CMD_insertfile()
 				if (inslen)
 				{
 					iStartOfSelection = rs;
-					iEndOfSelection = rs+inslen-1;
+					iEndOfSelection = rs + inslen - 1;
 				}
 				else if (bSelected)
 				{
@@ -5362,7 +5399,7 @@ void HexEditorWindow::CMD_insertfile()
 
 void HexEditorWindow::CMD_saveselas()
 {
-	TCHAR szFileName[_MAX_PATH];
+	TCHAR szFileName[_MAX_PATH ];
 	szFileName[0] = '\0';
 	OPENFILENAME ofn;
 	ZeroMemory(&ofn, sizeof ofn);
@@ -5370,13 +5407,13 @@ void HexEditorWindow::CMD_saveselas()
 	ofn.hwndOwner = pwnd->m_hWnd;
 	ofn.lpstrFilter = GetLangString(IDS_OPEN_ALL_FILES);
 	ofn.lpstrFile = szFileName;
-	ofn.nMaxFile = _MAX_PATH;
+	ofn.nMaxFile = _MAX_PATH ;
 	ofn.Flags = OFN_HIDEREADONLY | OFN_CREATEPROMPT;
 	if (GetSaveFileName(&ofn))
 	{
 		LPCTSTR complain = GetLangString(IDS_FILE_SAVE_ERROR);
 		int filehandle = _topen(szFileName, _O_RDWR | _O_CREAT |
-				_O_TRUNC | _O_BINARY, _S_IREAD | _S_IWRITE);
+		                        _O_TRUNC | _O_BINARY, _S_IREAD | _S_IWRITE);
 		if (filehandle != -1)
 		{
 			WaitCursor wc;
@@ -5417,7 +5454,7 @@ int HexEditorWindow::iGetEndOfSelection()
 	return bSelected ? max(iStartOfSelection, iEndOfSelection) : iCurByte;
 }
 
-bool HexEditorWindow::load_hexfile(hexfile_stream &hexin)
+bool HexEditorWindow::load_hexfile(hexfile_stream& hexin)
 {
 	WaitCursor wc;
 	//Variables used below & their functions
@@ -5445,8 +5482,8 @@ bool HexEditorWindow::load_hexfile(hexfile_stream &hexin)
 	TCHAR msg[150];
 	_tcscpy(msg, GetLangString(IDS_HEXF_OPEN_FORMAT1));
 	_tcscat(msg, typ ?
-		GetLangString(IDS_HEXF_OPEN_FORMAT2) :
-		GetLangString(IDS_HEXF_OPEN_FORMAT3));
+		             GetLangString(IDS_HEXF_OPEN_FORMAT2) :
+		             GetLangString(IDS_HEXF_OPEN_FORMAT3));
 
 	switch (MessageBox(pwnd, msg, MB_YESNOCANCEL))
 	{
@@ -5495,7 +5532,7 @@ void HexEditorWindow::CMD_open_hexdump()
 	if (hClipMemory)
 	{
 		//Import from clipboard
-		if (char *hexin = (char *)GlobalLock(hClipMemory))
+		if (char* hexin = (char *)GlobalLock(hClipMemory))
 		{
 			done = load_hexfile(chexfile_stream(hexin));
 			GlobalUnlock(hClipMemory);
@@ -5510,7 +5547,7 @@ void HexEditorWindow::CMD_open_hexdump()
 	{
 		//Import from file
 		//Initialize the struct
-		TCHAR szFileName[_MAX_PATH];
+		TCHAR szFileName[_MAX_PATH ];
 		szFileName[0] = '\0';
 		OPENFILENAME ofn;
 		ZeroMemory(&ofn, sizeof ofn);
@@ -5518,12 +5555,12 @@ void HexEditorWindow::CMD_open_hexdump()
 		ofn.hwndOwner = pwnd->m_hWnd;
 		ofn.lpstrFilter = GetLangString(IDS_HDUMP_FILE_PATTERN);
 		ofn.lpstrFile = szFileName;
-		ofn.nMaxFile = _MAX_PATH;
+		ofn.nMaxFile = _MAX_PATH ;
 		ofn.Flags = OFN_HIDEREADONLY | OFN_CREATEPROMPT;
 		if (!GetOpenFileName(&ofn))
 			return;
 		//Set up variables for the function
-		FILE *f = _tfopen(szFileName, _T("rb"));
+		FILE* f = _tfopen(szFileName, _T("rb"));
 		if (f == 0)
 		{
 			MessageBox(pwnd, GetLangString(IDS_ERR_CANNOT_GET_TEXT), MB_ICONERROR);
@@ -5570,7 +5607,7 @@ void HexEditorWindow::status_bar_click(bool left)
 	int i, n = -1;
 	pwndStatusBar->ScreenToClient(&p);
 	int np = pwndStatusBar->GetParts();
-	for (i = 0 ; i < np ; i++)
+	for (i = 0; i < np; i++)
 	{
 		pwndStatusBar->GetPartRect(i, &rt);
 		if (PtInRect(&rt, p))
@@ -5584,8 +5621,8 @@ void HexEditorWindow::status_bar_click(bool left)
 	int r, len, cn;
 	String text;
 	SIZE s;
-	HGdiObj *fon[2];
-	HSurface *pdc;
+	HGdiObj* fon[2];
+	HSurface* pdc;
 
 	//Which rect are we in?
 	if (n == 0 || n == 1)
@@ -5604,7 +5641,7 @@ void HexEditorWindow::status_bar_click(bool left)
 	}
 
 	//Do the requested function
-	switch(n)
+	switch (n)
 	{
 	case 0:
 		{
@@ -5668,8 +5705,8 @@ void HexEditorWindow::status_bar_click(bool left)
 			//offset, bits, space, un/signed, values
 
 			//Find the start of the un/signed bit
-			TCHAR *st = text.pointer();
-			for (i = 0 ; i < len ; i++)
+			TCHAR* st = text.pointer();
+			for (i = 0; i < len; i++)
 			{
 				if (st[i] == '\t' && st[i + 1] == '\t')
 				{
@@ -5730,7 +5767,7 @@ void HexEditorWindow::status_bar_click(bool left)
 					EnterDecimalValueDlg::iDecValDlgSize = 1;
 					//Start from where the above loop stopped
 					//If clicked this character stop
-					for ( ; i < len && cn != i ; i++)
+					for (; i < len && cn != i; i++)
 						if (st[i] == ',')
 							EnterDecimalValueDlg::iDecValDlgSize <<= 1;
 					//Enter decimal value
@@ -5769,7 +5806,7 @@ void HexEditorWindow::status_bar_click(bool left)
 				{
 					//We're in the left aligned stuff
 					//Find the end of the offset
-					for (i = 0; i < len && !(st[i] == ' ' && st[i + 1] == ' ' && st[i + 2] == ' ') ; i++);
+					for (i = 0; i < len && !(st[i] == ' ' && st[i + 1] == ' ' && st[i + 2] == ' '); i++);
 
 					//Find if we're in the offset
 					if (cn <= i + 1)
@@ -5804,7 +5841,7 @@ void HexEditorWindow::status_bar_click(bool left)
 							pdc->GetTextExtent(text.c_str(), len, &s);
 							r = rt.left + s.cx;
 							//Flip the equivalent of a "bit"
-							for (i = 0 ; i < 7 ; i++)
+							for (i = 0; i < 7; i++)
 							{
 								pdc->GetTextExtent(st, i + 1, &s);
 								if (p.x <= r + s.cx + 1)
@@ -5813,7 +5850,7 @@ void HexEditorWindow::status_bar_click(bool left)
 							st[i] ^= '0' ^ '1';
 							//Assemble all the "bits"
 							BYTE c = 0x00;
-							for (i = 0 ; i < 8 ; i++)
+							for (i = 0; i < 8; i++)
 							{
 								c <<= 1;
 								if (st[i] == '1')
@@ -5825,7 +5862,6 @@ void HexEditorWindow::status_bar_click(bool left)
 							//Redraw the data & status bar etc
 							bFilestatusChanged = true;
 							repaint(iCurByte / iBytesPerLine);
-
 						}//In actual bits
 					}//In bits section
 				}//In the left aligned stuff
@@ -5850,7 +5886,7 @@ void HexEditorWindow::status_bar_click(bool left)
 				pdc->GetTextExtentExPoint(text.c_str(), len, r, &cn, NULL, &s);
 				//Find the part that the user clicked in.
 				//If pos is in this character stop
-				for (i = 0 ; i < len && i != cn ; i++)
+				for (i = 0; i < len && i != cn; i++)
 				{
 					//Increment the part
 					if (text[i] == '/')
@@ -5894,7 +5930,7 @@ void HexEditorWindow::status_bar_click(bool left)
 						if (bReadOnly)
 						{
 							bReadOnly = FALSE;
-							bInsertMode= false;
+							bInsertMode = false;
 						}
 						else if (bInsertMode)
 							bReadOnly = TRUE;
@@ -5934,7 +5970,6 @@ void HexEditorWindow::status_bar_click(bool left)
 		#define OPF_PATHNAME 0x02
 		WINSHELLAPI BOOL WINAPI SHObjectProperties(HWND hwndOwner,UINT uFlags,LPCSTR lpstrName,LPCSTR lpstrParameters);*/
 		break;
-		
 	}//switch( which part )
 
 	if (n == 0 || n == 1)
@@ -5956,16 +5991,16 @@ void HexEditorWindow::CMD_adopt_colours()
 		iBkColorValue = GetSysColor(COLOR_WINDOW);
 		iSelTextColorValue = GetSysColor(COLOR_HIGHLIGHTTEXT);
 		iSelBkColorValue = GetSysColor(COLOR_HIGHLIGHT);
-//		What should these be?
-//		iSepColorValue = RGB( 192, 192, 192 );
-//		iBmkColor = RGB( 255, 0, 0 );
+		//		What should these be?
+		//		iSepColorValue = RGB( 192, 192, 192 );
+		//		iBmkColor = RGB( 255, 0, 0 );
 		save_ini_data();
 		repaint();
 	}
 }
 
 //Reverse the bytes between (and including) a & b
-void reverse_bytes(BYTE *a, BYTE *b)
+void reverse_bytes(BYTE* a, BYTE* b)
 {
 	while (a < b)
 	{
@@ -6142,7 +6177,7 @@ int HexEditorWindow::CMD_setselection(int iSelStart, int iSelEnd) // Mike Funduc
 	return 0;
 }
 
-HGLOBAL HexEditorWindow::RTF_hexdump(int start, int end, SIZE_T *plen)
+HGLOBAL HexEditorWindow::RTF_hexdump(int start, int end, SIZE_T* plen)
 {
 	/*
 	Similar to ostrstream, but homegrown & uses GlobalRealloc & GlobalFree
@@ -6153,137 +6188,146 @@ HGLOBAL HexEditorWindow::RTF_hexdump(int start, int end, SIZE_T *plen)
 	*/
 	HGlobalStream s;//(1024);//That number is the chunk size to use when reallocating
 	s <<
-	//The whole of the RTF output code is formatted according to the structure of RTF
-	"{\\rtf1\n"
+		//The whole of the RTF output code is formatted according to the structure of RTF
+		"{\\rtf1\n"
 		"\\ansi\n"
 		"\\deff0\n"
 		"{\\fonttbl\n"
-			"{\\f0 ";
-				//Get the charactersitics of the display font
-				BYTE PitchAndFamily, CharSet;
-				char *FaceName = NULL;
+		"{\\f0 ";
+	//Get the charactersitics of the display font
+	BYTE PitchAndFamily, CharSet;
+	char* FaceName = NULL;
 
-				HSurface *pdc = pwnd->GetDC();
-				HGdiObj *pFontOld = pdc->SelectObject(pFont);
-				OUTLINETEXTMETRICA *otm = NULL;
-				if (UINT cbData = pdc->GetOutlineTextMetricsA(0, NULL))
-				{
-					otm = (OUTLINETEXTMETRICA *)malloc(cbData);
-					if (otm)
-					{
-						ZeroMemory(otm, cbData);
-						pdc->GetOutlineTextMetricsA(cbData, otm);
-					}
-				}
-				pdc->SelectObject(pFontOld);
-				pwnd->ReleaseDC(pdc);
+	HSurface* pdc = pwnd->GetDC();
+	HGdiObj* pFontOld = pdc->SelectObject(pFont);
+	OUTLINETEXTMETRICA* otm = NULL;
+	if (UINT cbData = pdc->GetOutlineTextMetricsA(0, NULL))
+	{
+		otm = (OUTLINETEXTMETRICA *)malloc(cbData);
+		if (otm)
+		{
+			ZeroMemory(otm, cbData);
+			pdc->GetOutlineTextMetricsA(cbData, otm);
+		}
+	}
+	pdc->SelectObject(pFontOld);
+	pwnd->ReleaseDC(pdc);
 
-				if (otm)
-				{
-					FaceName = (char*)otm + (UINT)otm->otmpFaceName;
-					PitchAndFamily = otm->otmTextMetrics.tmPitchAndFamily;
-					CharSet = otm->otmTextMetrics.tmCharSet;
-				}
-				else
-				{
-					LOGFONT lf;
-					pFont->GetLogFont(&lf);
-					PitchAndFamily = lf.lfPitchAndFamily;
-					CharSet = lf.lfCharSet;
-					if (UINT cbData = pdc->GetTextFaceA(0, NULL))
-					{
-						FaceName = (char*)malloc(cbData);
-						if (FaceName)
-							pdc->GetTextFaceA(cbData, FaceName);
-					}
-				}
+	if (otm)
+	{
+		FaceName = (char*)otm + (UINT)otm->otmpFaceName;
+		PitchAndFamily = otm->otmTextMetrics.tmPitchAndFamily;
+		CharSet = otm->otmTextMetrics.tmCharSet;
+	}
+	else
+	{
+		LOGFONT lf;
+		pFont->GetLogFont(&lf);
+		PitchAndFamily = lf.lfPitchAndFamily;
+		CharSet = lf.lfCharSet;
+		if (UINT cbData = pdc->GetTextFaceA(0, NULL))
+		{
+			FaceName = (char*)malloc(cbData);
+			if (FaceName)
+				pdc->GetTextFaceA(cbData, FaceName);
+		}
+	}
 
-				//Output the font family,
-				switch (PitchAndFamily & /* bits 4-7<<4 */ 0xf0)
-				{
-					case FF_DECORATIVE: s << "\\fdecor "; break;
-					case FF_DONTCARE:
-					case FF_MODERN: s << "\\fmodern "; break;
-					case FF_ROMAN: s << "\\froman "; break;
-					case FF_SCRIPT: s << "\\fscript "; break;
-					case FF_SWISS: s << "\\fswiss "; break;
-					default: s << "\\fnil "; break;
-					/*These have no equivalents in Win32 (or maybe it is my ancient M$DN library)
-					case FF_TECH: s << "\\ftech "; break;
-					case FF_BIDI: s << "\\fbidi "; break;
-					*/
-				}
-				/*The following have no equivalents in Win32 (or maybe it is my ancient M$DN library)
-				#define RTF_FCHARSET_INVALID 3
-				#define RTF_FCHARSET_VIETNAMESE 163
-				#define RTF_FCHARSET_ARABIC_TRADITIONAL 179
-				#define RTF_FCHARSET_ARABIC_USER 180
-				#define RTF_FCHARSET_HEBREW_USER 181
-				#define RTF_FCHARSET_PC_437 254
-				*/
-				s <<
-				//the character set,
-				"\\fcharset" << (DWORD)CharSet << " " <<
-				//the pitch type,
-				"\\fprq" << (DWORD)(PitchAndFamily&0x3) << " ";
-				if (otm)
-				{
-					s << "{\\*\\panose " <<
-						hex << (otm->otmPanoseNumber.bFamilyType) <<
-						hex << (otm->otmPanoseNumber.bSerifStyle) <<
-						hex << (otm->otmPanoseNumber.bWeight) <<
-						hex << (otm->otmPanoseNumber.bProportion) <<
-						hex << (otm->otmPanoseNumber.bContrast) <<
-						hex << (otm->otmPanoseNumber.bStrokeVariation) <<
-						hex << (otm->otmPanoseNumber.bArmStyle) <<
-						hex << (otm->otmPanoseNumber.bLetterform) <<
-						hex << (otm->otmPanoseNumber.bMidline) <<
-						hex << (otm->otmPanoseNumber.bXHeight) <<
-					"}";
-				}
-				//and the name of the font
-				if (FaceName && FaceName[0])
-					s << escapefilter << FaceName;
-				if (otm)
-					free(otm);
-				else if(FaceName)
-					free(FaceName);
-				s <<
+	//Output the font family,
+	switch (PitchAndFamily & /* bits 4-7<<4 */ 0xf0)
+	{
+	case FF_DECORATIVE: s << "\\fdecor ";
+		break;
+	case FF_DONTCARE:
+	case FF_MODERN: s << "\\fmodern ";
+		break;
+	case FF_ROMAN: s << "\\froman ";
+		break;
+	case FF_SCRIPT: s << "\\fscript ";
+		break;
+	case FF_SWISS: s << "\\fswiss ";
+		break;
+	default: s << "\\fnil ";
+		break;
+		/*These have no equivalents in Win32 (or maybe it is my ancient M$DN library)
+		case FF_TECH: s << "\\ftech "; break;
+		case FF_BIDI: s << "\\fbidi "; break;
+		*/
+	}
+	/*The following have no equivalents in Win32 (or maybe it is my ancient M$DN library)
+	#define RTF_FCHARSET_INVALID 3
+	#define RTF_FCHARSET_VIETNAMESE 163
+	#define RTF_FCHARSET_ARABIC_TRADITIONAL 179
+	#define RTF_FCHARSET_ARABIC_USER 180
+	#define RTF_FCHARSET_HEBREW_USER 181
+	#define RTF_FCHARSET_PC_437 254
+	*/
+	s <<
+		//the character set,
+		"\\fcharset" << (DWORD)CharSet << " " <<
+		//the pitch type,
+		"\\fprq" << (DWORD)(PitchAndFamily & 0x3) << " ";
+	if (otm)
+	{
+		s << "{\\*\\panose " <<
+			hex << (otm->otmPanoseNumber.bFamilyType) <<
+			hex << (otm->otmPanoseNumber.bSerifStyle) <<
+			hex << (otm->otmPanoseNumber.bWeight) <<
+			hex << (otm->otmPanoseNumber.bProportion) <<
+			hex << (otm->otmPanoseNumber.bContrast) <<
+			hex << (otm->otmPanoseNumber.bStrokeVariation) <<
+			hex << (otm->otmPanoseNumber.bArmStyle) <<
+			hex << (otm->otmPanoseNumber.bLetterform) <<
+			hex << (otm->otmPanoseNumber.bMidline) <<
+			hex << (otm->otmPanoseNumber.bXHeight) <<
+			"}";
+	}
+	//and the name of the font
+	if (FaceName && FaceName[0])
+		s << escapefilter << FaceName;
+	if (otm)
+		free(otm);
+	else if (FaceName)
+		free(FaceName);
+	s <<
 
-				/*Possible future stuff
-				Embedded font data
-				but why bother?
-				since RTF sux anyway*/
+		/*Possible future stuff
+		Embedded font data
+		but why bother?
+		since RTF sux anyway*/
 
-			"}\n" // \f0
+		"}\n" // \f0
 
-			//Font for information paragraphs
-			"{\\f1 "
-				"\\froman \\fcharset0 \\fprq2 Times New Roman"
-			"}\n" // \f1
+		//Font for information paragraphs
+		"{\\f1 "
+		"\\froman \\fcharset0 \\fprq2 Times New Roman"
+		"}\n" // \f1
 
 		"}\n" // \fonttbl
 
 		"{\\colortbl\n" //The colour table is referenced by the document to change colours for various things
-			/*Back colour*/"\\red" << (DWORD)GetRValue(iBkColorValue) << " \\green" << (DWORD)GetGValue(iBkColorValue) << " \\blue" << (DWORD)GetBValue(iBkColorValue) << ";\n"
-			/*Text colour*/"\\red" << (DWORD)GetRValue(iTextColorValue) << " \\green" << (DWORD)GetGValue(iTextColorValue) << " \\blue" << (DWORD)GetBValue(iTextColorValue) << ";\n";
-			if (bSelected)
-			{
-				s << //Regular selection colours
-				/*Sel bck col*/"\\red" << (DWORD)GetRValue(iSelBkColorValue) << " \\green" << (DWORD)GetGValue(iSelBkColorValue) << " \\blue" << (DWORD)GetBValue(iSelBkColorValue) << ";\n"
-				/*Sel txt col*/"\\red" << (DWORD)GetRValue(iSelTextColorValue) << " \\green" << (DWORD)GetGValue(iSelTextColorValue) << " \\blue" << (DWORD)GetBValue(iSelTextColorValue) << ";\n";
-			}
-			else
-			{ //Caret is the text colour inverted
-				//Wish I could do iBkColorValueTmp = InvertColour(iBkColorValue)
-				iBkColorValue=~iBkColorValue;iTextColorValue=~iTextColorValue; s <<
-				/*Car bck col*/"\\red" << (DWORD)GetRValue(iBkColorValue) << " \\green" << (DWORD)GetGValue(iBkColorValue) << " \\blue" << (DWORD)GetBValue(iBkColorValue) << ";\n"
-				/*Car txt col*/"\\red" << (DWORD)GetRValue(iTextColorValue) << " \\green" << (DWORD)GetGValue(iTextColorValue) << " \\blue" << (DWORD)GetBValue(iTextColorValue) << ";\n";
-				iBkColorValue=~iBkColorValue;iTextColorValue=~iTextColorValue;
-			}
-			s <<
-			/*Bookmarks  */"\\red" << (DWORD)GetRValue(iBmkColor) << " \\green" << (DWORD)GetGValue(iBmkColor) << " \\blue" << (DWORD)GetBValue(iBmkColor) << ";\n"
-			//Separators */iSepColorValue is not needed because drawing objects specify their own colours (stupid eh?)
+		/*Back colour*/"\\red" << (DWORD)GetRValue(iBkColorValue) << " \\green" << (DWORD)GetGValue(iBkColorValue) << " \\blue" << (DWORD)GetBValue(iBkColorValue) << ";\n"
+		/*Text colour*/"\\red" << (DWORD)GetRValue(iTextColorValue) << " \\green" << (DWORD)GetGValue(iTextColorValue) << " \\blue" << (DWORD)GetBValue(iTextColorValue) << ";\n";
+	if (bSelected)
+	{
+		s << //Regular selection colours
+			/*Sel bck col*/"\\red" << (DWORD)GetRValue(iSelBkColorValue) << " \\green" << (DWORD)GetGValue(iSelBkColorValue) << " \\blue" << (DWORD)GetBValue(iSelBkColorValue) << ";\n"
+			/*Sel txt col*/"\\red" << (DWORD)GetRValue(iSelTextColorValue) << " \\green" << (DWORD)GetGValue(iSelTextColorValue) << " \\blue" << (DWORD)GetBValue(iSelTextColorValue) << ";\n";
+	}
+	else
+	{ //Caret is the text colour inverted
+		//Wish I could do iBkColorValueTmp = InvertColour(iBkColorValue)
+		iBkColorValue = ~iBkColorValue;
+		iTextColorValue = ~iTextColorValue;
+		s <<
+			/*Car bck col*/"\\red" << (DWORD)GetRValue(iBkColorValue) << " \\green" << (DWORD)GetGValue(iBkColorValue) << " \\blue" << (DWORD)GetBValue(iBkColorValue) << ";\n"
+			/*Car txt col*/"\\red" << (DWORD)GetRValue(iTextColorValue) << " \\green" << (DWORD)GetGValue(iTextColorValue) << " \\blue" << (DWORD)GetBValue(iTextColorValue) << ";\n";
+		iBkColorValue = ~iBkColorValue;
+		iTextColorValue = ~iTextColorValue;
+	}
+	s <<
+		/*Bookmarks  */"\\red" << (DWORD)GetRValue(iBmkColor) << " \\green" << (DWORD)GetGValue(iBmkColor) << " \\blue" << (DWORD)GetBValue(iBmkColor) << ";\n"
+		//Separators */iSepColorValue is not needed because drawing objects specify their own colours (stupid eh?)
 		"}\n" // \colortbl
 
 		//This is new for RTF 1.7, but it should be ignored by older readers so who cares (older than M$ Word XP = Word 2002??)
@@ -6291,35 +6335,35 @@ HGLOBAL HexEditorWindow::RTF_hexdump(int start, int end, SIZE_T *plen)
 
 		//Metadata here too?
 		"{\\info\n"
-			//Put the filename in the title
-			"{\\title " << escapefilter << static_cast<T2A>(filename) << "}\n"
-			//...
+		//Put the filename in the title
+		"{\\title " << escapefilter << static_cast<T2A>(filename) << "}\n"
+		//...
 		"}\n"; // \info
 
-		//Document formatting properties
-			//Sot sure if this will have any effect
-			if (bMakeBackups)
-				s << "\\makebackup ";
-			s <<
-			//Turn off spelling & grammar checking in our hexdump
-			"\\deflang1024 \\deflangfe1024 \\noproof "
-			//Indicate that this document was created from text
-			"\\fromtext "
-			/*We use the 'Web/Online Layout View' at 100% cause it is good
-			for drawing our vertical lines & offers minimal visual fluff*/
-			"\\viewkind5 \\viewscale100"
-			//...
+	//Document formatting properties
+	//Sot sure if this will have any effect
+	if (bMakeBackups)
+		s << "\\makebackup ";
+	s <<
+		//Turn off spelling & grammar checking in our hexdump
+		"\\deflang1024 \\deflangfe1024 \\noproof "
+		//Indicate that this document was created from text
+		"\\fromtext "
+		/*We use the 'Web/Online Layout View' at 100% cause it is good
+		for drawing our vertical lines & offers minimal visual fluff*/
+		"\\viewkind5 \\viewscale100"
+		//...
 		"\n" // DFPs
 
 		//Section formatting properties
-			//...
+		//...
 		//"\n"  SFPs - none yet - uncomment "\n" when we get some
 
 		"{\n" //Paragraph specifying title
-			//Times New Roman 20 pt
-			"\\f1 \\fs40\n" <<
-			//Print the file name
-			escapefilter << static_cast<T2A>(filename) <<
+		//Times New Roman 20 pt
+		"\\f1 \\fs40\n" <<
+		//Print the file name
+		escapefilter << static_cast<T2A>(filename) <<
 		"\\par\n}\n" // title para
 
 		/*Nothing to put here yet
@@ -6329,84 +6373,85 @@ HGLOBAL HexEditorWindow::RTF_hexdump(int start, int end, SIZE_T *plen)
 		*/
 
 		//Paragraph formatting properties
-			//...
+		//...
 		//"\n"  PFPs - none yet - uncomment "\n" when we get some
 
 		//Character formatting properties
-			//Font 0 (hFont), font size, back colour 0 (iBkColorValue), iBkColorValue(Word2000 sux) text colour 1 (iTextColorValue)
-			"\\f0 \\fs" << (DWORD)iFontSize * 2 << "\\cb0 \\chcbpat0 \\cf1"
-			//...
+		//Font 0 (hFont), font size, back colour 0 (iBkColorValue), iBkColorValue(Word2000 sux) text colour 1 (iTextColorValue)
+		"\\f0 \\fs" << (DWORD)iFontSize * 2 << "\\cb0 \\chcbpat0 \\cf1"
+		//...
 		"\n"; // CFPs
 
 
-		/*Warning M$ Word 2000 (& probably all of them (versions of M$ Word)) will:
-			For arbitrary byte values:
-				convert them into underscores (generally the control characters)
-				convert them to \'hh where hh is the hex value of the byte (above 0x80)
-				convert them to \tab \lquote \rquote \bullet \endash \emdash \~
-				insert a unicode character (eg \u129) before the actual character
-			For bookmarks:
-				replace non-alphanumerics with underscores
-				place "BM" in front of bookmarks that begin with a number
-				hide bookmarks beginning with underscores
-					can still view them with "Hidden bookmarks" checked
-			For the lines:
-				convert them into the newer shp format
-		*/
+	/*Warning M$ Word 2000 (& probably all of them (versions of M$ Word)) will:
+		For arbitrary byte values:
+			convert them into underscores (generally the control characters)
+			convert them to \'hh where hh is the hex value of the byte (above 0x80)
+			convert them to \tab \lquote \rquote \bullet \endash \emdash \~
+			insert a unicode character (eg \u129) before the actual character
+		For bookmarks:
+			replace non-alphanumerics with underscores
+			place "BM" in front of bookmarks that begin with a number
+			hide bookmarks beginning with underscores
+				can still view them with "Hidden bookmarks" checked
+		For the lines:
+			convert them into the newer shp format
+	*/
 
 
-		//The actual data, complete with highlighted selection & bookmarks (highlight & real ones)
-		int iStartOfSelSetting;
-		int iEndOfSelSetting;
-		if (bSelected)
+	//The actual data, complete with highlighted selection & bookmarks (highlight & real ones)
+	int iStartOfSelSetting;
+	int iEndOfSelSetting;
+	if (bSelected)
+	{
+		iStartOfSelSetting = iStartOfSelection;
+		iEndOfSelSetting = iEndOfSelection;
+		if (iEndOfSelSetting < iStartOfSelSetting)
+			swap(iEndOfSelSetting, iStartOfSelSetting);
+	}
+	else
+	{
+		iStartOfSelSetting = iEndOfSelSetting = iCurByte;
+	}
+	int endoffile = m_dataArray.GetUpperBound() + 1;
+	if (start > endoffile)
+		start = endoffile;
+	if (end > endoffile)
+		end = endoffile;
+	start = start / iBytesPerLine * iBytesPerLine;//cut back to the line start
+	end = end / iBytesPerLine * iBytesPerLine;//cut back to the line start
+	int i = 0;
+	BYTE c;
+	//This bit needs to be optimized
+	bool highlights_in_this_line;
+	for (int l = start; l <= end; l += iBytesPerLine)
+	{
+		s.precision = iMinOffsetLen;
+		//Offsets
+		i = 0;
+		i -= static_cast<int>(s.m_dwLen);
+		s << hex << (DWORD)l;
+		i += static_cast<int>(s.m_dwLen);
+		//Bytespace
+		for (; i < iMaxOffsetLen + iByteSpace; i++)
+			s << "\\~";
+
+		highlights_in_this_line = false;
+
+		/*Wish I could do this in C++ - the alias would expire like a local variable
+		alias sos iStartOfSelSetting, eos iEndOfSelSetting, bpl iBytesPerLine;*/
+
+		int bi;
+		//If the current line has any part selected
+		if (iStartOfSelSetting <= l && iEndOfSelSetting >= l ||
+			iStartOfSelSetting >= l && iEndOfSelSetting < l + iBytesPerLine ||
+			iStartOfSelSetting < l + iBytesPerLine && iEndOfSelSetting >= l + iBytesPerLine)
 		{
-			iStartOfSelSetting = iStartOfSelection;
-			iEndOfSelSetting = iEndOfSelection;
-			if (iEndOfSelSetting < iStartOfSelSetting)
-				swap(iEndOfSelSetting, iStartOfSelSetting);
+			highlights_in_this_line = true;
 		}
+		//If the current line contains a bookmark
 		else
-		{
-			iStartOfSelSetting = iEndOfSelSetting = iCurByte;
-		}
-		int endoffile = m_dataArray.GetUpperBound() + 1;
-		if (start > endoffile)
-			start = endoffile;
-		if (end > endoffile)
-			end = endoffile;
-		start = start / iBytesPerLine * iBytesPerLine;//cut back to the line start
-		end = end / iBytesPerLine * iBytesPerLine;//cut back to the line start
-		int i = 0;
-		BYTE c;
-		//This bit needs to be optimized
-		bool highlights_in_this_line;
-		for (int l = start ; l <= end; l += iBytesPerLine)
-		{
-			s.precision = iMinOffsetLen;
-			//Offsets
-			i = 0;
-			i -= static_cast<int>(s.m_dwLen);
-			s << hex << (DWORD)l;
-			i += static_cast<int>(s.m_dwLen);
-			//Bytespace
-			for ( ; i < iMaxOffsetLen + iByteSpace; i++)
-				s << "\\~";
-
-			highlights_in_this_line = false;
-
-			/*Wish I could do this in C++ - the alias would expire like a local variable
-			alias sos iStartOfSelSetting, eos iEndOfSelSetting, bpl iBytesPerLine;*/
-
-			int bi;
-			//If the current line has any part selected
-			if (iStartOfSelSetting <= l && iEndOfSelSetting >= l ||
-				iStartOfSelSetting >= l && iEndOfSelSetting < l + iBytesPerLine ||
-				iStartOfSelSetting < l + iBytesPerLine && iEndOfSelSetting >= l + iBytesPerLine)
-			{
-				highlights_in_this_line = true;
-			}
-			//If the current line contains a bookmark
-			else for (bi = 0 ; bi < iBmkCount ; bi++)
+			for (bi = 0; bi < iBmkCount; bi++)
 			{
 				int offset = pbmkList[bi].offset;
 				if (offset >= l && offset < l + iBytesPerLine)
@@ -6416,183 +6461,158 @@ HGLOBAL HexEditorWindow::RTF_hexdump(int start, int end, SIZE_T *plen)
 				}
 			}
 
-			//With highlights
-			if (highlights_in_this_line)
+		//With highlights
+		if (highlights_in_this_line)
+		{
+			int sosl = max(iStartOfSelSetting, l);
+			int eosl = min(iEndOfSelSetting, l + iBytesPerLine - 1);
+			//Bytes
+			for (i = l; i < l + iBytesPerLine; i++)
 			{
-				int sosl = max(iStartOfSelSetting, l);
-				int eosl = min(iEndOfSelSetting, l + iBytesPerLine - 1);
-				//Bytes
-				for (i = l; i < l + iBytesPerLine; i++)
+				if (i == sosl)
+					s << "{\\cb2 \\chcbpat2 \\cf3 "; // iSelBkColorValue, iSelBkColorValue (Word2000 sux), iSelTextColorValue
+				for (bi = 0; bi < iBmkCount; bi++)
+					if (pbmkList[bi].offset == i)
+						break;
+				if (bi < iBmkCount)
 				{
-					if (i == sosl)
-						s << "{\\cb2 \\chcbpat2 \\cf3 "; // iSelBkColorValue, iSelBkColorValue (Word2000 sux), iSelTextColorValue
-					for (bi = 0; bi < iBmkCount; bi++)
-						if (pbmkList[bi].offset == i)
-							break;
-					if (bi < iBmkCount)
+					if (iEnteringMode == BYTES)
 					{
-						if (iEnteringMode == BYTES)
-						{
-							s << "{\\*\\bkmkstart ";
-							if (pbmkList[bi].name.length())
-								s << escapefilter << static_cast<T2A>(pbmkList[bi].name.c_str());
-							else
-								s << (DWORD)i;
-							s << "}";
-						}
-						s << "{\\chbrdr \\brdrs \\brdrcf4 "; // iBmkColor
-					}
-					if (i == endoffile)
-						s << "__\\~";
-					else if (i > endoffile)
-						s << "\\~\\~\\~";
-					else
-						s << hex << m_dataArray[i];
-					if (bi < iBmkCount)
-					{
+						s << "{\\*\\bkmkstart ";
+						if (pbmkList[bi].name.length())
+							s << escapefilter << static_cast<T2A>(pbmkList[bi].name.c_str());
+						else
+							s << (DWORD)i;
 						s << "}";
-						if (iEnteringMode == BYTES)
-						{
-							s << "{\\*\\bkmkend ";
-							if (pbmkList[bi].name.length())
-								s << escapefilter << static_cast<T2A>(pbmkList[bi].name.c_str());
-							else
-								s << (DWORD)i;
-							s << "}";
-						}
 					}
-					if (i == eosl)
-						s << "}";
-					//Selected colours
-					s << "\\~";
-				} //Bytes
-				//Charspace
-				for (i = 0; i < iCharSpace; i++)
-					s << "\\~";
-				//Chars
-				for (i = l; i < l + iBytesPerLine; i++)
+					s << "{\\chbrdr \\brdrs \\brdrcf4 "; // iBmkColor
+				}
+				if (i == endoffile)
+					s << "__\\~";
+				else if (i > endoffile)
+					s << "\\~\\~\\~";
+				else
+					s << hex << m_dataArray[i];
+				if (bi < iBmkCount)
 				{
-					if (i == sosl)
-						s << "{\\cb2 \\chcbpat2 \\cf3 "; // iSelBkColorValue, iSelBkColorValue (Word2000 sux), iSelTextColorValue
-					for (bi = 0; bi < iBmkCount; bi++)
-						if (pbmkList[bi].offset == i)
-							break;
-					if (bi < iBmkCount)
+					s << "}";
+					if (iEnteringMode == BYTES)
 					{
-						if (iEnteringMode == CHARS)
-						{
-							s << "{\\*\\bkmkstart ";
-							if (pbmkList[bi].name.length())
-								s << escapefilter << static_cast<T2A>(pbmkList[bi].name.c_str());
-							else
-								s << (DWORD)i;
-							s << "}";
-						}
-						s << "{\\chbrdr \\brdrs \\brdrcf4 "; // iBmkColor
-					}
-					if (i >= endoffile)
-						s << "\\~";
-					else
-					{
-						c = m_dataArray[i];
-						if (!( ( iCharacterSet == OEM_FIXED_FONT && c != 0 ) || ( iCharacterSet == ANSI_FIXED_FONT && ( ( c >= 32 && c <= 126) || (c>=160 && c<=255) || (c>=145 && c<=146) ) ) ))
-							c = '.';
-						s << nbsp << escapefilter << c;
-					}
-					if (bi < iBmkCount)
-					{
+						s << "{\\*\\bkmkend ";
+						if (pbmkList[bi].name.length())
+							s << escapefilter << static_cast<T2A>(pbmkList[bi].name.c_str());
+						else
+							s << (DWORD)i;
 						s << "}";
-						if (iEnteringMode == CHARS)
-						{
-							s << "{\\*\\bkmkend ";
-							if (pbmkList[bi].name.length())
-								s << escapefilter << static_cast<T2A>(pbmkList[bi].name.c_str());
-							else
-								s << (DWORD)i;
-							s << "}";
-						}
 					}
-					if (i == eosl)
-						s << "}"; //Selected colours
-				} //Chars
-				s <<
+				}
+				if (i == eosl)
+					s << "}";
+				//Selected colours
+				s << "\\~";
+			} //Bytes
+			//Charspace
+			for (i = 0; i < iCharSpace; i++)
+				s << "\\~";
+			//Chars
+			for (i = l; i < l + iBytesPerLine; i++)
+			{
+				if (i == sosl)
+					s << "{\\cb2 \\chcbpat2 \\cf3 "; // iSelBkColorValue, iSelBkColorValue (Word2000 sux), iSelTextColorValue
+				for (bi = 0; bi < iBmkCount; bi++)
+					if (pbmkList[bi].offset == i)
+						break;
+				if (bi < iBmkCount)
+				{
+					if (iEnteringMode == CHARS)
+					{
+						s << "{\\*\\bkmkstart ";
+						if (pbmkList[bi].name.length())
+							s << escapefilter << static_cast<T2A>(pbmkList[bi].name.c_str());
+						else
+							s << (DWORD)i;
+						s << "}";
+					}
+					s << "{\\chbrdr \\brdrs \\brdrcf4 "; // iBmkColor
+				}
+				if (i >= endoffile)
+					s << "\\~";
+				else
+				{
+					c = m_dataArray[i];
+					if (!((iCharacterSet == OEM_FIXED_FONT && c != 0) || (iCharacterSet == ANSI_FIXED_FONT && ((c >= 32 && c <= 126) || (c >= 160 && c <= 255) || (c >= 145 && c <= 146)))))
+						c = '.';
+					s << nbsp << escapefilter << c;
+				}
+				if (bi < iBmkCount)
+				{
+					s << "}";
+					if (iEnteringMode == CHARS)
+					{
+						s << "{\\*\\bkmkend ";
+						if (pbmkList[bi].name.length())
+							s << escapefilter << static_cast<T2A>(pbmkList[bi].name.c_str());
+						else
+							s << (DWORD)i;
+						s << "}";
+					}
+				}
+				if (i == eosl)
+					s << "}"; //Selected colours
+			} //Chars
+			s <<
 				//End of line
 				"\\line\n";
-			}
-			else /*No highlights - how boring*/
+		}
+		else /*No highlights - how boring*/
+		{
+			//Bytes
+			for (i = l; i < l + iBytesPerLine; i++)
 			{
-				//Bytes
-				for (i = l; i < l + iBytesPerLine; i++)
-				{
-					if (i == endoffile)
-						s << "__\\~";
-					else if (i > endoffile)
-						s << "\\~\\~\\~";
-					else
-						s << hex << m_dataArray[i] << "\\~";
-				}
-				//Charspace
-				for (i = 0; i < iCharSpace; i++)
+				if (i == endoffile)
+					s << "__\\~";
+				else if (i > endoffile)
+					s << "\\~\\~\\~";
+				else
+					s << hex << m_dataArray[i] << "\\~";
+			}
+			//Charspace
+			for (i = 0; i < iCharSpace; i++)
+				s << "\\~";
+			//Chars
+			for (i = l; i < l + iBytesPerLine; i++)
+			{
+				if (i >= endoffile)
 					s << "\\~";
-				//Chars
-				for (i = l; i < l + iBytesPerLine; i++)
+				else
 				{
-					if(i >= endoffile)
-						s << "\\~";
-					else
-					{
-						c = m_dataArray[i];
-						if (!( ( iCharacterSet == OEM_FIXED_FONT && c != 0 ) || ( iCharacterSet == ANSI_FIXED_FONT && ( ( c >= 32 && c <= 126) || (c>=160 && c<=255) || (c>=145 && c<=146) ) ) ))
-							c = '.';
-						s << nbsp << escapefilter << c;
-					}
+					c = m_dataArray[i];
+					if (!((iCharacterSet == OEM_FIXED_FONT && c != 0) || (iCharacterSet == ANSI_FIXED_FONT && ((c >= 32 && c <= 126) || (c >= 160 && c <= 255) || (c >= 145 && c <= 146)))))
+						c = '.';
+					s << nbsp << escapefilter << c;
 				}
-				//End of line
-				s << "\\line\n";
-			} // No highlights
-		} //for each line
-
-		//The vertical lines
-		//8192 is a majick number used to bring the lines in front of the text
-		//Count is +4 because +2 for the 2 extra lines at charstart +1 for the extra one at the bytes end +1 cause \dpcount needs to be 1 more than the no of lines
-		s << "{\\*\\do \\dobxcolumn \\dobypara \\dodhgt8192 \\dpgroup \\dpcount" << (DWORD)(iBytesPerLine/4+4) << "\n";
-			register int x;
-			register int y = ((end-start)/iBytesPerLine+1)*cyChar*15;
-			//They should have just used the colour table
-			//but no they is Micro$oft with absolutely no clue.
-			register DWORD r = GetRValue(iSepColorValue);
-			register DWORD g = GetGValue(iSepColorValue);
-			register DWORD b = GetBValue(iSepColorValue);
-			//The lines in the bytespace
-			for (i = 0; i < iBytesPerLine / 4 +1; i++)
-			{
-				x = (i*9+iMaxOffsetLen+iByteSpace-2)*cxChar*20+cxChar*10-20;
-				s << //There are 20 twips per point
-				//A line
-				"\\dpline"
-				//Positions of the ends
-				" \\dpptx" << x << " \\dppty0 \\dpptx" << x << " \\dppty" << y <<
-				//Repeat for the benefit of Word - fuck M$ sux
-				" \\dpx" << x << " \\dpy0 \\dpxsize0 \\dpysize" << y <<
-				//Solid lines
-				" \\dplinesolid"
-				//Colour of the lines - fuck M$ sux
-				" \\dplinecor" << r << " \\dplinecog" << g << " \\dplinecob" << b << "\n";
 			}
-			x = (iMaxOffsetLen+iByteSpace+iBytesPerLine*9/4+iCharSpace-1)*cxChar*20-10*cxChar;//There are 20 twips per point
-			//The two lines at the start of the charspace
-			s << 
-			//A line
-			"\\dpline"
-			//Positions of the ends
-			" \\dpptx" << x-30 << " \\dppty0 \\dpptx" << x-30 << " \\dppty" << y <<
-			//Repeat for the benefit of Word - fuck M$ sux
-			" \\dpx" << x-30 << " \\dpy0 \\dpxsize0 \\dpysize" << y <<
-			//Solid lines
-			" \\dplinesolid"
-			//Colour of the lines - fuck M$ sux
-			" \\dplinecor" << r << " \\dplinecog" << g << " \\dplinecob" << b << "\n"
+			//End of line
+			s << "\\line\n";
+		} // No highlights
+	} //for each line
 
+	//The vertical lines
+	//8192 is a majick number used to bring the lines in front of the text
+	//Count is +4 because +2 for the 2 extra lines at charstart +1 for the extra one at the bytes end +1 cause \dpcount needs to be 1 more than the no of lines
+	s << "{\\*\\do \\dobxcolumn \\dobypara \\dodhgt8192 \\dpgroup \\dpcount" << (DWORD)(iBytesPerLine / 4 + 4) << "\n";
+	register int x;
+	register int y = ((end - start) / iBytesPerLine + 1) * cyChar * 15;
+	//They should have just used the colour table
+	//but no they is Micro$oft with absolutely no clue.
+	register DWORD r = GetRValue(iSepColorValue);
+	register DWORD g = GetGValue(iSepColorValue);
+	register DWORD b = GetBValue(iSepColorValue);
+	//The lines in the bytespace
+	for (i = 0; i < iBytesPerLine / 4 + 1; i++)
+	{
+		x = (i * 9 + iMaxOffsetLen + iByteSpace - 2) * cxChar * 20 + cxChar * 10 - 20;
+		s << //There are 20 twips per point
 			//A line
 			"\\dpline"
 			//Positions of the ends
@@ -6602,12 +6622,37 @@ HGLOBAL HexEditorWindow::RTF_hexdump(int start, int end, SIZE_T *plen)
 			//Solid lines
 			" \\dplinesolid"
 			//Colour of the lines - fuck M$ sux
-			" \\dplinecor" << r << " \\dplinecog" << g << " \\dplinecob" << b << "\n"
+			" \\dplinecor" << r << " \\dplinecog" << g << " \\dplinecob" << b << "\n";
+	}
+	x = (iMaxOffsetLen + iByteSpace + iBytesPerLine * 9 / 4 + iCharSpace - 1) * cxChar * 20 - 10 * cxChar;//There are 20 twips per point
+	//The two lines at the start of the charspace
+	s <<
+		//A line
+		"\\dpline"
+		//Positions of the ends
+		" \\dpptx" << x - 30 << " \\dppty0 \\dpptx" << x - 30 << " \\dppty" << y <<
+		//Repeat for the benefit of Word - fuck M$ sux
+		" \\dpx" << x - 30 << " \\dpy0 \\dpxsize0 \\dpysize" << y <<
+		//Solid lines
+		" \\dplinesolid"
+		//Colour of the lines - fuck M$ sux
+		" \\dplinecor" << r << " \\dplinecog" << g << " \\dplinecob" << b << "\n"
 
-			//End of group
-			"\\dpendgroup\n"
+		//A line
+		"\\dpline"
+		//Positions of the ends
+		" \\dpptx" << x << " \\dppty0 \\dpptx" << x << " \\dppty" << y <<
+		//Repeat for the benefit of Word - fuck M$ sux
+		" \\dpx" << x << " \\dpy0 \\dpxsize0 \\dpysize" << y <<
+		//Solid lines
+		" \\dplinesolid"
+		//Colour of the lines - fuck M$ sux
+		" \\dplinecor" << r << " \\dplinecog" << g << " \\dplinecob" << b << "\n"
+
+		//End of group
+		"\\dpendgroup\n"
 		"}\n" // \do
-	"}" << (BYTE)'\0'; // \rtf1
+		"}" << (BYTE)'\0'; // \rtf1
 	if (plen)
 		*plen = s.m_dwLen;
 	return s.Relinquish();
@@ -6620,7 +6665,7 @@ HGLOBAL HexEditorWindow::RTF_hexdump(int start, int end, SIZE_T *plen)
  * @param [in] bEnable If TRUE button will be enabled,
  *   if FALSE button will be disabled.
  */
-static void EnableToolbarButton(HToolBar *toolbar, int ID, BOOL bEnable)
+static void EnableToolbarButton(HToolBar* toolbar, int ID, BOOL bEnable)
 {
 	if (!toolbar)
 		return;
@@ -6639,10 +6684,10 @@ static void EnableToolbarButton(HToolBar *toolbar, int ID, BOOL bEnable)
  */
 void HexEditorWindow::EnableDriveButtons(BOOL bEnable)
 {
-	const int IDS[] = { ID_DISK_GOTOFIRSTTRACK, ID_DISK_GOTONEXTTRACK,
-			ID_DISK_GOTOPREVIOUSTRACK, ID_DISK_GOTOLASTTRACK, -1 };
-	const int IDS_ToDisable[] = { IDM_EDIT_PASTE, IDM_EDIT_CUT, IDM_REPLACE,
-			IDM_SAVE, -1 };
+	const int IDS[] = {ID_DISK_GOTOFIRSTTRACK, ID_DISK_GOTONEXTTRACK,
+		ID_DISK_GOTOPREVIOUSTRACK, ID_DISK_GOTOLASTTRACK, -1};
+	const int IDS_ToDisable[] = {IDM_EDIT_PASTE, IDM_EDIT_CUT, IDM_REPLACE,
+		IDM_SAVE, -1};
 
 	int i;
 	for (i = 0; IDS[i] != -1; i++)
@@ -6651,9 +6696,9 @@ void HexEditorWindow::EnableDriveButtons(BOOL bEnable)
 		EnableToolbarButton(pwndToolBar, IDS_ToDisable[i], !bEnable);
 }
 
-void HexEditorWindow::copy_sel_from(IHexEditorWindow *from)
+void HexEditorWindow::copy_sel_from(IHexEditorWindow* from)
 {
-	const IHexEditorWindow::Status *pStatSrc = from->get_status();
+	const IHexEditorWindow::Status* pStatSrc = from->get_status();
 	int i = min(pStatSrc->iStartOfSelection, pStatSrc->iEndOfSelection);
 	int j = max(pStatSrc->iStartOfSelection, pStatSrc->iEndOfSelection);
 	int u = from->get_length();
@@ -6663,22 +6708,22 @@ void HexEditorWindow::copy_sel_from(IHexEditorWindow *from)
 		SimpleArray<BYTE> olddata(((v <= j) ? v - 1 : j) - i + 1, &m_dataArray[i]);
 		if (v <= j)
 			v = j + 1;
-		BYTE *p = from->get_buffer(u);
-		BYTE *q = get_buffer(v);
+		BYTE* p = from->get_buffer(u);
+		BYTE* q = get_buffer(v);
 		memcpy(q + i, p + i, j - i + 1);
 		push_undorecord(i, olddata, olddata.GetLength(), q, j - i + 1);
 		repaint(i / iBytesPerLine, j / iBytesPerLine);
 	}
 }
 
-void HexEditorWindow::copy_all_from(IHexEditorWindow *from)
+void HexEditorWindow::copy_all_from(IHexEditorWindow* from)
 {
 	if (int i = from->get_length())
 	{
 		int j = get_length();
 		SimpleArray<BYTE> olddata(j, m_dataArray);
-		BYTE *p = from->get_buffer(i);
-		BYTE *q = get_buffer(max(i, j));
+		BYTE* p = from->get_buffer(i);
+		BYTE* q = get_buffer(max(i, j));
 		if (q == 0)
 			return;
 		memcpy(q, p, i);
@@ -6712,9 +6757,9 @@ void HexEditorWindow::clear_undorecords()
 	m_pSharedUndoRecords ? m_pSharedUndoRecords->clear(this) : m_pUndoRecords->clear();
 }
 
-void HexEditorWindow::share_undorecords(IHexEditorWindow *p)
+void HexEditorWindow::share_undorecords(IHexEditorWindow* p)
 {
-	HexEditorWindow *pwnd = static_cast<HexEditorWindow *>(p);
+	HexEditorWindow* pwnd = static_cast<HexEditorWindow *>(p);
 	if (!pwnd->m_pSharedUndoRecords)
 	{
 		pwnd->m_pSharedUndoRecords = new SharedUndoRecords();
@@ -6724,7 +6769,7 @@ void HexEditorWindow::share_undorecords(IHexEditorWindow *p)
 	m_pSharedUndoRecords->add_target(this);
 }
 
-void HexEditorWindow::push_undorecord(size_t offset, const BYTE *oldptr, size_t oldlen, const BYTE *newptr, size_t newlen)
+void HexEditorWindow::push_undorecord(size_t offset, const BYTE* oldptr, size_t oldlen, const BYTE* newptr, size_t newlen)
 {
 	if (m_pSharedUndoRecords)
 		m_pSharedUndoRecords->push_back(this, offset, oldptr, oldlen, newptr, newlen);
@@ -6736,7 +6781,7 @@ UndoRecord::UndoRecord() : pwnd(pwnd), offset(0), olddata(0, 1), newdata(0, 1)
 {
 }
 
-UndoRecord::UndoRecord(HexEditorWindow *pwnd, size_t offset, const BYTE *oldptr, size_t oldlen, const BYTE *newptr, size_t newlen) :
+UndoRecord::UndoRecord(HexEditorWindow* pwnd, size_t offset, const BYTE* oldptr, size_t oldlen, const BYTE* newptr, size_t newlen) :
 	pwnd(pwnd), offset(offset), olddata(static_cast<int>(oldlen), 1), newdata(static_cast<int>(newlen), 1)
 {
 	olddata.SetUpperBound(static_cast<int>(oldlen) - 1);
@@ -6745,7 +6790,7 @@ UndoRecord::UndoRecord(HexEditorWindow *pwnd, size_t offset, const BYTE *oldptr,
 	memcpy(newdata, newptr, newlen);
 }
 
-UndoRecord::UndoRecord(const UndoRecord& rec) : 
+UndoRecord::UndoRecord(const UndoRecord& rec) :
 	pwnd(rec.pwnd), offset(rec.offset), olddata(rec.olddata), newdata(rec.newdata)
 {
 }
@@ -6754,7 +6799,7 @@ UndoRecords::UndoRecords() : pos(0), save_pos(0)
 {
 }
 
-void UndoRecords::push_back(HexEditorWindow *pwnd, size_t offset, const BYTE *oldptr, size_t oldlen, const BYTE *newptr, size_t newlen)
+void UndoRecords::push_back(HexEditorWindow* pwnd, size_t offset, const BYTE* oldptr, size_t oldlen, const BYTE* newptr, size_t newlen)
 {
 	recs.SetUpperBound(pos - 1);
 	recs.Append(UndoRecord(pwnd, offset, oldptr, oldlen, newptr, newlen));
@@ -6806,7 +6851,7 @@ SharedUndoRecords::SharedUndoRecords() : pos(0)
 {
 }
 
-void SharedUndoRecords::push_back(HexEditorWindow *pwnd, size_t offset, const BYTE *oldptr, size_t oldlen, const BYTE *newptr, size_t newlen)
+void SharedUndoRecords::push_back(HexEditorWindow* pwnd, size_t offset, const BYTE* oldptr, size_t oldlen, const BYTE* newptr, size_t newlen)
 {
 	pwnd->m_pUndoRecords->push_back(pwnd, offset, oldptr, oldlen, newptr, newlen);
 	recs.SetUpperBound(pos - 1);
@@ -6814,7 +6859,7 @@ void SharedUndoRecords::push_back(HexEditorWindow *pwnd, size_t offset, const BY
 	++pos;
 }
 
-void SharedUndoRecords::clear(HexEditorWindow *pwnd)
+void SharedUndoRecords::clear(HexEditorWindow* pwnd)
 {
 	if (pwnd)
 	{
@@ -6862,7 +6907,7 @@ bool SharedUndoRecords::can_redo() const
 	return (pos <= recs.GetLength() - 1);
 }
 
-void SharedUndoRecords::add_target(HexEditorWindow *pwnd)
+void SharedUndoRecords::add_target(HexEditorWindow* pwnd)
 {
 	int i;
 	for (i = 0; i < targets.GetLength(); ++i)
@@ -6873,3 +6918,4 @@ void SharedUndoRecords::add_target(HexEditorWindow *pwnd)
 	if (i == targets.GetLength())
 		targets.Append(pwnd);
 }
+

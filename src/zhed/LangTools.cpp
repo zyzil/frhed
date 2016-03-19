@@ -37,9 +37,10 @@ void NTAPI TranslateDialog(HWND hwnd)
 	langArray.TranslateDialog(hwnd);
 }
 
-int NTAPI ShowModalDialog(UINT idd, HWindow *pwnd, DLGPROC dlgproc, LPVOID param)
+int NTAPI ShowModalDialog(UINT idd, HWindow* pwnd, DLGPROC dlgproc, LPVOID param)
 {
 	HINSTANCE hinst = langArray.m_hLangDll ? langArray.m_hLangDll : hMainInstance;
 	return static_cast<int>(DialogBoxParam(
 		hinst, MAKEINTRESOURCE(idd), pwnd->m_hWnd, dlgproc, (LPARAM)param));
 }
+

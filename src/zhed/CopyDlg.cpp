@@ -41,7 +41,7 @@ static const int MaxTextLen = 16;
  * @param [in] hDlg Handle to the dialog.
  * @return TRUE.
  */
-BOOL CopyDlg::OnInitDialog(HWindow *pDlg)
+BOOL CopyDlg::OnInitDialog(HWindow* pDlg)
 {
 	int iStart = iGetStartOfSelection();
 	int iEnd = iGetEndOfSelection();
@@ -64,7 +64,7 @@ BOOL CopyDlg::OnInitDialog(HWindow *pDlg)
  * @param [in] hDlg Handle to the dialog.
  * @return TRUE if bytes were copied, FALSE otherwise.
  */
-BOOL CopyDlg::Apply(HWindow *pDlg)
+BOOL CopyDlg::Apply(HWindow* pDlg)
 {
 	const int bufSize = 64;
 	TCHAR buf[bufSize + 1] = {0};
@@ -112,7 +112,7 @@ BOOL CopyDlg::Apply(HWindow *pDlg)
 		return FALSE;
 	}
 	WaitCursor wc;
-	char *pd = (char *)GlobalLock(hGlobal);
+	char* pd = (char *)GlobalLock(hGlobal);
 	Text2BinTranslator::iTranslateBytesToBC(pd, &m_dataArray[iOffset], iNumberOfBytes);
 	GlobalUnlock(hGlobal);
 	pwnd->OpenClipboard();
@@ -130,7 +130,7 @@ BOOL CopyDlg::Apply(HWindow *pDlg)
  * @param [in] lParam The optional parameter for the command.
  * @return TRUE if the message was handled, FALSE otherwise.
  */
-INT_PTR CopyDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR CopyDlg::DlgProc(HWindow* pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
@@ -149,9 +149,9 @@ INT_PTR CopyDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		case IDC_COPY_OFFSET:
 		case IDC_COPY_BYTES:
 			EnableDlgItem(pDlg, IDC_COPY_OFFSETEDIT,
-				pDlg->IsDlgButtonChecked(IDC_COPY_OFFSET));
+			              pDlg->IsDlgButtonChecked(IDC_COPY_OFFSET));
 			EnableDlgItem(pDlg, IDC_COPY_BYTECOUNT,
-				pDlg->IsDlgButtonChecked(IDC_COPY_BYTES));
+			              pDlg->IsDlgButtonChecked(IDC_COPY_BYTES));
 			return TRUE;
 		}
 		break;
@@ -162,3 +162,4 @@ INT_PTR CopyDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 	return FALSE;
 }
+

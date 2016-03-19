@@ -35,16 +35,17 @@ C_ASSERT(sizeof(FillWithDialog) == sizeof(HexEditorWindow)); // disallow instanc
 TCHAR FillWithDialog::pcFWText[FW_MAX];//hex representation of bytes to fill with
 BYTE FillWithDialog::buf[FW_MAX];//bytes to fill with
 int FillWithDialog::buflen;//number of bytes to fill with
-TCHAR FillWithDialog::szFWFileName[_MAX_PATH];//fill with file name
+TCHAR FillWithDialog::szFWFileName[_MAX_PATH ];//fill with file name
 int FillWithDialog::FWFile;//fill with file
 int FillWithDialog::FWFilelen;//fill with file len
 LONG_PTR FillWithDialog::oldproc;//old hex box proc
 HFONT FillWithDialog::hfon;//needed so possible to display infinity char in fill with dlg box
 TCHAR FillWithDialog::curtyp;//filling with input-0 or file-1
 TCHAR FillWithDialog::asstyp;
+
 //see CMD_fw below
 
-void FillWithDialog::inittxt(HWindow *pDlg) const
+void FillWithDialog::inittxt(HWindow* pDlg) const
 {
 	int iStartOfSelSetting;
 	int iEndOfSelSetting;
@@ -83,7 +84,7 @@ void FillWithDialog::inittxt(HWindow *pDlg) const
 			int m = tteemmpp % buflen;
 			_stprintf(bufff, _T("%d=0x%x"), d, d);
 			pDlg->SetDlgItemText(IDC_IFS, bufff);
-			HFont *hfdef = pDlg->GetFont();
+			HFont* hfdef = pDlg->GetFont();
 			pDlg->SendDlgItemMessage(IDC_IFS, WM_SETFONT, reinterpret_cast<WPARAM>(hfdef), MAKELPARAM(TRUE, 0));
 			_stprintf(bufff, _T("%d=0x%x"), m, m);
 			pDlg->SetDlgItemText(IDC_R, bufff);
@@ -107,7 +108,7 @@ BYTE FillWithDialog::file(int index)
 {
 	BYTE x;
 	_lseek(FWFile, index, SEEK_SET);
-	_read(FWFile,&x,1);
+	_read(FWFile, &x, 1);
 	return x;
 }
 
@@ -119,11 +120,11 @@ void FillWithDialog::hexstring2charstring()
 	if (ii % 2)//if number of hex digits is odd
 	{
 		//concatenate them
-		for (i = 0 ; i < ii ; i++)
+		for (i = 0; i < ii; i++)
 			pcFWText[ii + i] = pcFWText[i];
 		pcFWText[ii * 2] = 0;
 	}
-	for (i = ii = 0 ; pcFWText[i] != '\0' ; i += 2)
+	for (i = ii = 0; pcFWText[i] != '\0'; i += 2)
 	{
 		// RK: next two lines changed, would crash when compiled with VC++ 4.0.
 		/*
@@ -183,13 +184,13 @@ LRESULT CALLBACK FillWithDialog::HexProc(HWND hEdit, UINT iMsg, WPARAM wParam, L
  * @param [in] lParam The optional parameter for the command.
  * @return TRUE if the message was handled, FALSE otherwise.
  */
-INT_PTR FillWithDialog::DlgProc(HWindow *pDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR FillWithDialog::DlgProc(HWindow* pDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (iMsg)
 	{
 	case WM_INITDIALOG:
 		{
-			HEdit *pEditt = static_cast<HEdit *>(pDlg->GetDlgItem(IDC_HEX));//get the handle to the hex edit box
+			HEdit* pEditt = static_cast<HEdit *>(pDlg->GetDlgItem(IDC_HEX));//get the handle to the hex edit box
 			pEditt->LimitText(FW_MAX);//limit the amount of text the user can enter
 			pEditt->SetWindowText(pcFWText);//init hex text
 			pEditt->SetFocus();//give the hex box focus
@@ -197,25 +198,25 @@ INT_PTR FillWithDialog::DlgProc(HWindow *pDlg, UINT iMsg, WPARAM wParam, LPARAM 
 			oldproc = static_cast<LONG_PTR>(pEditt->SetWindowLongPtr(GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(HexProc)));//override the old proc to be HexProc
 			EnableDlgItem(pDlg, IDC_HEXSTAT, !curtyp);
 
-			HComboBox *typ = static_cast<HComboBox *>(pDlg->GetDlgItem(IDC_TYPE));
+			HComboBox* typ = static_cast<HComboBox *>(pDlg->GetDlgItem(IDC_TYPE));
 			typ->AddString(_T("Input"));
 			typ->AddString(_T("File"));
 			typ->SetCurSel(curtyp);//set cursel to previous
 
 			//en/disable filename box and browse button
-			HWindow *fn = pDlg->GetDlgItem(IDC_FN);
+			HWindow* fn = pDlg->GetDlgItem(IDC_FN);
 			fn->SetWindowText(szFWFileName);
 			fn->EnableWindow(curtyp);
 			EnableDlgItem(pDlg, IDC_BROWSE, curtyp);
 			EnableDlgItem(pDlg, IDC_FILESTAT, curtyp);
 
 			hfon = CreateFont(16, 0, 0, 0, FW_NORMAL, 0, 0, 0,
-					DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-					DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, _T("Symbol"));
+			                  DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+			                  DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, _T("Symbol"));
 			inittxt(pDlg);
 			switch (asstyp)
 			{
-			case 0: 
+			case 0:
 				pDlg->CheckDlgButton(IDC_EQ, BST_CHECKED);
 				break;
 			case 1:
@@ -273,7 +274,6 @@ INT_PTR FillWithDialog::DlgProc(HWindow *pDlg, UINT iMsg, WPARAM wParam, LPARAM 
 					}//if
 					hexstring2charstring();//just in case
 					//pcFWText[(aa?buflen:buflen*2)]='\0';//access violation if i do it in the above function
-
 				}
 				if (pDlg->IsDlgButtonChecked(IDC_EQ))
 					asstyp = 0;
@@ -381,7 +381,7 @@ INT_PTR FillWithDialog::DlgProc(HWindow *pDlg, UINT iMsg, WPARAM wParam, LPARAM 
 				ofn.hwndOwner = pDlg->m_hWnd;
 				ofn.lpstrFilter = GetLangString(IDS_OPEN_ALL_FILES);
 				ofn.lpstrFile = szFWFileName;
-				ofn.nMaxFile = _MAX_PATH;
+				ofn.nMaxFile = _MAX_PATH ;
 				ofn.Flags = OFN_PATHMUSTEXIST | OFN_HIDEREADONLY | OFN_FILEMUSTEXIST;
 				//show open dlgbox and if file good save name & path in edit box
 				if (GetOpenFileName(&ofn))
@@ -403,3 +403,4 @@ INT_PTR FillWithDialog::DlgProc(HWindow *pDlg, UINT iMsg, WPARAM wParam, LPARAM 
 	}
 	return FALSE;
 }
+

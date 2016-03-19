@@ -37,17 +37,17 @@ public:
 	~HexDump();
 
 	void Settings(int bytesPerLine, int charsPerLine,
-			bool partialStats, INT64 partialOffset,
-			int byteSpace, int charSpace, int charset);
+	              bool partialStats, INT64 partialOffset,
+	              int byteSpace, int charSpace, int charset);
 	void SetOffsets(int minLen, int maxLen);
-	void SetArray(const SimpleArray<BYTE> *dataArray);
+	void SetArray(const SimpleArray<BYTE>* dataArray);
 	void CreateBuffer(unsigned size);
-	char *GetBuffer() const;
+	char* GetBuffer() const;
 	void Write(int startInd, int endInd) const;
 
 private:
-	SimpleArray<BYTE> *m_pData;
-	char *m_pBuffer;
+	SimpleArray<BYTE>* m_pData;
+	char* m_pBuffer;
 	int m_bytesPerLine;
 	int m_charsPerLine;
 	int m_offsetMaxLen;
@@ -61,3 +61,5 @@ private:
 
 
 #endif // _HEX_DUMP_H_
+
+

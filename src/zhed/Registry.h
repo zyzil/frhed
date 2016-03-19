@@ -36,3 +36,5 @@ BOOL oldpresent();
 BOOL zhedpresent();
 
 #endif // _REGISTRY_H_
+
+

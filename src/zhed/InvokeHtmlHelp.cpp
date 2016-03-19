@@ -41,7 +41,7 @@ Last change: 2013-02-24 by Jochen Neubeck
  * @param [in] path Additional relative path inside help file to open.
  * @param [in] hParentWindow Window opening this help.
  */
-void ShowHtmlHelp(UINT uCommand, LPCTSTR path, HWindow *pParentWindow)
+void ShowHtmlHelp(UINT uCommand, LPCTSTR path, HWindow* pParentWindow)
 {
 	TCHAR fullHelpPath[MAX_PATH];
 	GetModuleFileName(NULL, fullHelpPath, MAX_PATH);
@@ -77,3 +77,4 @@ void ShowHtmlHelp(UINT uCommand, LPCTSTR path, HWindow *pParentWindow)
 		HtmlHelp(NULL, fullHelpPath, HH_DISPLAY_TOC, NULL);
 	}
 }
+

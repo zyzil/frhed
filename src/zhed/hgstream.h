@@ -39,35 +39,40 @@ public:
 
 	HGlobalStream(DWORD blcksz = 1024); //This block size was picked at random
 	~HGlobalStream();
-	HGlobalStream& operator << (const char *);
-	HGlobalStream& operator << (BYTE);
-	HGlobalStream& operator << (DWORD);
-	HGlobalStream& operator << (int);
-	void Realloc(SIZE_T len, void *src);
-	void filter(const char *src);
+	HGlobalStream& operator <<(const char*);
+	HGlobalStream& operator <<(BYTE);
+	HGlobalStream& operator <<(DWORD);
+	HGlobalStream& operator <<(int);
+	void Realloc(SIZE_T len, void* src);
+	void filter(const char* src);
 	HGLOBAL Relinquish();
 	void Reset();
+
 	inline HGlobalStream& HGlobalStream::operator<<(HGlobalStream&(*_f)(HGlobalStream&))
 	{
 		(*_f)(*this);
 		return *this;
 	}
+
 	//Manipulators
 	inline friend HGlobalStream& hex(HGlobalStream& s)
 	{
 		s._hex = 1;
 		return s;
 	}
+
 	inline friend HGlobalStream& nbsp(HGlobalStream& s)
 	{
 		s._nbsp = 1;
 		return s;
 	}
+
 	inline friend HGlobalStream& escapefilter(HGlobalStream& s)
 	{
 		s._escfilt = 1;
 		return s;
 	}
+
 	DWORD precision;
 	SIZE_T m_dwLen;
 	SIZE_T m_dwSize;
@@ -75,10 +80,12 @@ public:
 	HGLOBAL m_hGlobal;
 
 private:
-	char *Extend(SIZE_T len);
+	char* Extend(SIZE_T len);
 	unsigned _hex:1;
 	unsigned _nbsp:1;
 	unsigned _escfilt:1;
 };
 
 #endif // _HG_STREAM_H_
+
+

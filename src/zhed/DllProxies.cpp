@@ -53,7 +53,7 @@ LPVOID DllProxy::Load()
 			Names[1] = 0;
 			return 0;
 		}
-		LPCSTR *p = Names;
+		LPCSTR* p = Names;
 		*Names = 0;
 		while (LPCSTR name = *++p)
 		{
@@ -141,3 +141,4 @@ DllProxy::Instance<struct IMAGEHLP> IMAGEHLP =
 	"MapAndLoad",
 	(HMODULE)0
 };
+

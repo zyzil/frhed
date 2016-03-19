@@ -33,13 +33,13 @@ private:
 
 	bool hdrop_present;
 	IDataObject* pDataObj;
-	HexEditorWindow &hexwnd;
+	HexEditorWindow& hexwnd;
 
 	int PopupDropMenu(POINTL pt);
 
 public:
 	//Members
-	CDropTarget(HexEditorWindow &);
+	CDropTarget(HexEditorWindow&);
 	~CDropTarget();
 
 	//IUnknown members
@@ -51,7 +51,9 @@ public:
 	STDMETHODIMP DragEnter(IDataObject* pDataObject, DWORD grfKeyState, POINTL pt, DWORD* pdwEffect);
 	STDMETHODIMP DragOver(DWORD grfKeyState, POINTL pt, DWORD* pdwEffect);
 	STDMETHODIMP DragLeave();
-	STDMETHODIMP Drop(IDataObject* pDataObject, DWORD grfKeyState, POINTL pt, DWORD * pdwEffect);
+	STDMETHODIMP Drop(IDataObject* pDataObject, DWORD grfKeyState, POINTL pt, DWORD* pdwEffect);
 };
 
 #endif // idt_h
+
+

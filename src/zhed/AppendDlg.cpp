@@ -36,7 +36,7 @@ Last change: 2013-02-24 by Jochen Neubeck
  * @param [in] hDlg Handle to the dialog.
  * @return TRUE if appending succeeded, FALSE if failed.
  */
-BOOL AppendDlg::Apply(HWindow *pDlg)
+BOOL AppendDlg::Apply(HWindow* pDlg)
 {
 	const int bufsize = 64;
 	TCHAR buf[bufsize + 1];
@@ -55,7 +55,7 @@ BOOL AppendDlg::Apply(HWindow *pDlg)
 	}
 	m_dataArray.ExpandToSize();
 	WaitCursor wc;
-	for (int i = 0 ; i < iAppendbytes ; i++)
+	for (int i = 0; i < iAppendbytes; i++)
 		m_dataArray[oldupbound + i] = 0;
 	push_undorecord(oldupbound, NULL, 0, &m_dataArray[oldupbound], iAppendbytes);
 	bFilestatusChanged = true;
@@ -71,7 +71,7 @@ BOOL AppendDlg::Apply(HWindow *pDlg)
  * @param [in] lParam The optional parameter for the command.
  * @return TRUE if the message was handled, FALSE otherwise.
  */
-INT_PTR AppendDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR AppendDlg::DlgProc(HWindow* pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
@@ -97,3 +97,4 @@ INT_PTR AppendDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
 	}
 	return FALSE;
 }
+

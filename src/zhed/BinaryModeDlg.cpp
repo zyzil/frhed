@@ -30,20 +30,20 @@ Last change: 2013-02-24 by Jochen Neubeck
 #include "hexwnd.h"
 #include "hexwdlg.h"
 
-INT_PTR BinaryModeDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR BinaryModeDlg::DlgProc(HWindow* pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
 	case WM_INITDIALOG:
 		pDlg->CheckDlgButton(iBinaryMode == ENDIAN_LITTLE ?
-				IDC_BINMODE_LITTLEEND : IDC_BINMODE_BIGEND, BST_CHECKED);
+			                     IDC_BINMODE_LITTLEEND : IDC_BINMODE_BIGEND, BST_CHECKED);
 		return TRUE;
 	case WM_COMMAND:
 		switch (wParam)
 		{
 		case IDOK:
 			iBinaryMode = pDlg->IsDlgButtonChecked(IDC_BINMODE_LITTLEEND) ?
-					ENDIAN_LITTLE : ENDIAN_BIG;
+				              ENDIAN_LITTLE : ENDIAN_BIG;
 			save_ini_data();
 			// fall through
 		case IDCANCEL:
@@ -58,3 +58,4 @@ INT_PTR BinaryModeDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM l
 	}
 	return FALSE;
 }
+

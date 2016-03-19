@@ -84,7 +84,7 @@ BOOL oldpresent()
 		TCHAR subkeynam[MAX_PATH] = {0};
 		for (DWORD i = 0; ; i++)
 		{
-			res = RegEnumKey(hk ,i, subkeynam, MAX_PATH);
+			res = RegEnumKey(hk, i, subkeynam, MAX_PATH);
 			if (res == ERROR_NO_MORE_ITEMS)
 				break;
 			else if (0 != _tcscmp(subkeynam, OptionsRegistrySettingsPath))
@@ -119,9 +119,10 @@ BOOL linkspresent()
 	HKEY hk;
 	TCHAR keyname[64] = {0};
 	_sntprintf(keyname, RTL_NUMBER_OF(keyname), _T("%s\\links"),
-			OptionsRegistrySettingsPath);
+	           OptionsRegistrySettingsPath);
 	if (ERROR_SUCCESS != RegOpenKeyEx(HKEY_CURRENT_USER, keyname, 0, KEY_READ, &hk))
 		return FALSE;
 	RegCloseKey(hk);
 	return TRUE;
 }
+

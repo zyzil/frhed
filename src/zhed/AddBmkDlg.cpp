@@ -40,7 +40,7 @@ static const int OffsetLen = 16;
  * @param [in] hDlg Handle to dialog.
  * @return TRUE
  */
-BOOL AddBmkDlg::OnInitDialog(HWindow *pDlg)
+BOOL AddBmkDlg::OnInitDialog(HWindow* pDlg)
 {
 	TCHAR buf[OffsetLen + 1];
 	_stprintf(buf, _T("0x%x"), iCurByte);
@@ -58,7 +58,7 @@ BOOL AddBmkDlg::OnInitDialog(HWindow *pDlg)
  * @param [in] lParam Second param (depends on command).
  * @return TRUE if command (message) was handled, FALSE if not.
  */
-BOOL AddBmkDlg::OnCommand(HWindow *pDlg, WPARAM wParam, LPARAM lParam)
+BOOL AddBmkDlg::OnCommand(HWindow* pDlg, WPARAM wParam, LPARAM lParam)
 {
 	TCHAR buf[OffsetLen + 1];
 	int i, offset;
@@ -77,7 +77,7 @@ BOOL AddBmkDlg::OnCommand(HWindow *pDlg, WPARAM wParam, LPARAM lParam)
 			return TRUE;
 		}
 		// Is there already a bookmark on this offset?
-		for (i = 0 ; i < iBmkCount ; i++)
+		for (i = 0; i < iBmkCount; i++)
 		{
 			if (pbmkList[i].offset == offset)
 			{
@@ -106,7 +106,7 @@ BOOL AddBmkDlg::OnCommand(HWindow *pDlg, WPARAM wParam, LPARAM lParam)
  * @param [in] lParam The optional parameter for the command.
  * @return TRUE if the message was handled, FALSE otherwise.
  */
-INT_PTR AddBmkDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR AddBmkDlg::DlgProc(HWindow* pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
@@ -122,3 +122,4 @@ INT_PTR AddBmkDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
 	}
 	return FALSE;
 }
+

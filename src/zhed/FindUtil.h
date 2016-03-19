@@ -31,3 +31,5 @@ Last change: 2013-02-24 by Jochen Neubeck
 int findutils_FindBytes(BYTE* ps, int ls, BYTE* pb, int lb, int mode, bool case_sensitive);
 
 #endif // _FIND_UTIL_H_
+
+

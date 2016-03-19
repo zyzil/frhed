@@ -35,7 +35,8 @@ Last change: 2013-02-24 by Jochen Neubeck
  * This template offers basic array class methods.
  * @note This class is limited in 32-bit space for item count.
  */
-template<class T> class SimpleArray
+template <class T>
+class SimpleArray
 {
 public:
 	SimpleArray();
@@ -49,6 +50,7 @@ public:
 	{
 		return m_pT;
 	}
+
 	operator const T*() const
 	{
 		return m_pT;
@@ -57,7 +59,7 @@ public:
 	bool InsertAt(int nIndex, T argT, int nCount = 1);
 	void InsertAtRef(int nIndex, const T& argT, int nCount = 1);
 	bool InsertAtGrow(int nIndex, T argT, int nCount = 1);
-	bool InsertAtGrow (int nIndex, const T* pT, int nSrcIndex, int nCount);
+	bool InsertAtGrow(int nIndex, const T* pT, int nSrcIndex, int nCount);
 	void InsertAtGrowRef(int nIndex, const T& argT, int nCount = 1);
 	bool RemoveAt(int nIndex, int nCount = 1);
 	void SetAtGrow(int nIndex, T argT);
@@ -72,7 +74,12 @@ public:
 	int GetGrowBy() const;
 	bool SetSize(int nNewSize, int nGrowBy = 0);
 	void SetGrowBy(int nGrowBy);
-	T& operator[](int nIndex) {return m_pT[nIndex];}
+
+	T& operator[](int nIndex)
+	{
+		return m_pT[nIndex];
+	}
+
 	SimpleArray<T>& operator=(const SimpleArray<T>& spa);
 	void ClearAll();
 	bool blContainsRef(const T& argT);
@@ -87,7 +94,7 @@ public:
 	int operator!=(SimpleArray<T>& spa);
 	bool Adopt(T* ptArray, int upbound, int size);
 	void SetUpperBound(int upbnd);
-	bool AppendArray( T* pSrc, int srclen );
+	bool AppendArray(T* pSrc, int srclen);
 	void ExpandToSize();
 	bool CopyFrom(int index, const T* pSrc, int srclen);
 	bool Replace(int ToReplaceIndex, int ToReplaceLength, const T* pReplaceWith, int ReplaceWithLength);
@@ -121,11 +128,13 @@ public:
 	void Clear();
 
 	SimpleString& operator=(LPCSTR ps);
-	SimpleString& operator=(const SimpleString &str);
+	SimpleString& operator=(const SimpleString& str);
 	SimpleString& operator+=(LPCSTR ps);
 };
 
-SimpleString operator+(const SimpleString &ps1, LPCSTR ps2);
-SimpleString operator+(LPCSTR ps1, const SimpleString &ps2);
+SimpleString operator+(const SimpleString& ps1, LPCSTR ps2);
+SimpleString operator+(LPCSTR ps1, const SimpleString& ps2);
 
 #endif // simplearr_h
+
+

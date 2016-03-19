@@ -30,16 +30,16 @@ Last change: 2013-02-24 by Jochen Neubeck
 #include "simparr.h"
 
 HexDump::HexDump()
-: m_pData(nullptr)
-, m_pBuffer(nullptr)
-, m_bytesPerLine(0)
-, m_charsPerLine(0)
-, m_offsetMaxLen(0)
-, m_offsetMinLen(0)
-, m_partialStats(false)
-, m_partialOffset(0)
-, m_byteSpace(0)
-, m_charSpace(0), m_charset(0)
+	: m_pData(nullptr)
+	  , m_pBuffer(nullptr)
+	  , m_bytesPerLine(0)
+	  , m_charsPerLine(0)
+	  , m_offsetMaxLen(0)
+	  , m_offsetMinLen(0)
+	  , m_partialStats(false)
+	  , m_partialOffset(0)
+	  , m_byteSpace(0)
+	  , m_charSpace(0), m_charset(0)
 {
 }
 
@@ -49,8 +49,8 @@ HexDump::~HexDump()
 }
 
 void HexDump::Settings(int bytesPerLine, int charsPerLine,
-		bool partialStats, INT64 partialOffset,
-		int byteSpace, int charSpace, int charset)
+                       bool partialStats, INT64 partialOffset,
+                       int byteSpace, int charSpace, int charset)
 {
 	m_bytesPerLine = bytesPerLine;
 	m_charsPerLine = charsPerLine;
@@ -67,7 +67,7 @@ void HexDump::SetOffsets(int minLen, int maxLen)
 	m_offsetMaxLen = maxLen;
 }
 
-void HexDump::SetArray(const SimpleArray<BYTE> *dataArray)
+void HexDump::SetArray(const SimpleArray<BYTE>* dataArray)
 {
 	m_pData = const_cast<SimpleArray<BYTE>*>(dataArray);
 }
@@ -79,7 +79,7 @@ void HexDump::CreateBuffer(unsigned size)
 		m_pBuffer[i] = ' ';
 }
 
-char *HexDump::GetBuffer() const
+char* HexDump::GetBuffer() const
 {
 	return m_pBuffer;
 }
@@ -95,11 +95,11 @@ void HexDump::Write(int startInd, int endInd) const
 	// a = Offset of current line.
 	// k = Offset in text array.
 	for (int k = 0, a = startInd; a <= endInd;
-			a += m_bytesPerLine, k += m_charsPerLine + 2)
+	     a += m_bytesPerLine , k += m_charsPerLine + 2)
 	{
 		// Write offset.
 		int m = sprintf(buf2, "%*.*llx", m_offsetMinLen, m_offsetMinLen,
-				m_partialStats ? a + m_partialOffset : a);
+		                m_partialStats ? a + m_partialOffset : a);
 
 		for (int i = m; i < m_offsetMaxLen + m_byteSpace - m; i++)
 			buf2[i] = ' ';
@@ -110,12 +110,12 @@ void HexDump::Write(int startInd, int endInd) const
 		while (buf2[n] != '\0')
 			m_pBuffer[k + (l++)] = buf2[n++]; // Copy Offset. l = next empty place after spaces.
 		// Write bytes and chars.
-		for (int j = 0 ; j < m_bytesPerLine ; j++)
+		for (int j = 0; j < m_bytesPerLine; j++)
 		{
 			if (a + j > m_pData->GetUpperBound())
 			{
 				// Nonexistant byte.
-				m_pBuffer[k + l + j * 3    ] = ' ';
+				m_pBuffer[k + l + j * 3] = ' ';
 				m_pBuffer[k + l + j * 3 + 1] = ' ';
 				m_pBuffer[k + l + j * 3 + 2] = ' ';
 				// Nonexistant char.
@@ -125,23 +125,24 @@ void HexDump::Write(int startInd, int endInd) const
 			{
 				// Write byte.
 				sprintf(buf2, "%2.2x ", (*m_pData)[static_cast<int>(a) + j]);
-				m_pBuffer[k + l + j*3    ] = buf2[0];
-				m_pBuffer[k + l + j*3 + 1] = buf2[1];
-				m_pBuffer[k + l + j*3 + 2] = buf2[2];
+				m_pBuffer[k + l + j * 3] = buf2[0];
+				m_pBuffer[k + l + j * 3 + 1] = buf2[1];
+				m_pBuffer[k + l + j * 3 + 2] = buf2[2];
 				// Write char.
 				if (m_charset == OEM_FIXED_FONT && (*m_pData)[static_cast<int>(a) + j] != 0)
-					m_pBuffer[k + l + m_bytesPerLine*3 + m_charSpace + j] = (*m_pData)[static_cast<int>(a) + j];
+					m_pBuffer[k + l + m_bytesPerLine * 3 + m_charSpace + j] = (*m_pData)[static_cast<int>(a) + j];
 				else if (((*m_pData)[static_cast<int>(a) + j] >= 32 && (*m_pData)[static_cast<int>(a) + j] <= 126) ||
-						((*m_pData)[static_cast<int>(a) + j]>=160 && (*m_pData)[static_cast<int>(a) + j] <= 255) ||
-						((*m_pData)[static_cast<int>(a) + j] >= 145 && (*m_pData)[static_cast<int>(a) + j] <= 146))
+					((*m_pData)[static_cast<int>(a) + j] >= 160 && (*m_pData)[static_cast<int>(a) + j] <= 255) ||
+					((*m_pData)[static_cast<int>(a) + j] >= 145 && (*m_pData)[static_cast<int>(a) + j] <= 146))
 				{
-					m_pBuffer[k + l + m_bytesPerLine*3 + m_charSpace + j] = (*m_pData)[static_cast<int>(a) + j];
+					m_pBuffer[k + l + m_bytesPerLine * 3 + m_charSpace + j] = (*m_pData)[static_cast<int>(a) + j];
 				}
 				else
-					m_pBuffer[k + l + m_bytesPerLine*3 + m_charSpace + j] = '.';
+					m_pBuffer[k + l + m_bytesPerLine * 3 + m_charSpace + j] = '.';
 			}
 		}
 		m_pBuffer[k + m_charsPerLine] = '\r';
 		m_pBuffer[k + m_charsPerLine + 1] = '\n';
 	}
 }
+

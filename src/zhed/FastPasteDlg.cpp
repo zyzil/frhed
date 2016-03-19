@@ -39,7 +39,7 @@ static HWND hwndNextViewer = NULL;
  * @param [in] hDlg Handle to the dialog.
  * @return TRUE.
  */
-BOOL FastPasteDlg::OnInitDialog(HWindow *pDlg)
+BOOL FastPasteDlg::OnInitDialog(HWindow* pDlg)
 {
 	RefreshClipboardFormats(pDlg);
 	hwndNextViewer = SetClipboardViewer(pDlg->m_hWnd);
@@ -76,7 +76,7 @@ BOOL FastPasteDlg::OnInitDialog(HWindow *pDlg)
  * @param [in] hDlg Handle to the dialog.
  * @return TRUE if bytes were pasted, FALSE if failed.
  */
-BOOL FastPasteDlg::Apply(HWindow *pDlg)
+BOOL FastPasteDlg::Apply(HWindow* pDlg)
 {
 	bPasteAsText = pDlg->IsDlgButtonChecked(IDC_FPASTE_TXT) == BST_CHECKED;
 	iPasteTimes = pDlg->GetDlgItemInt(IDC_FPASTE_PASTETIMES);
@@ -86,7 +86,7 @@ BOOL FastPasteDlg::Apply(HWindow *pDlg)
 		return FALSE;
 	}
 	iPasteSkip = pDlg->GetDlgItemInt(IDC_FPASTE_SKIPS, 0, TRUE);
-	HListBox *list = static_cast<HListBox *>(pDlg->GetDlgItem(IDC_FPASTE_CFORMAT));
+	HListBox* list = static_cast<HListBox *>(pDlg->GetDlgItem(IDC_FPASTE_CFORMAT));
 	int i = list->GetCurSel();
 	if (i == LB_ERR)
 	{
@@ -94,7 +94,7 @@ BOOL FastPasteDlg::Apply(HWindow *pDlg)
 		return FALSE;
 	}
 	UINT uFormat = list->GetItemData(i);
-	char *pcPastestring = 0;
+	char* pcPastestring = 0;
 	int destlen = 0;
 	BOOL bPasteBinary = FALSE;
 	BOOL bPasteUnicode = FALSE;
@@ -105,8 +105,8 @@ BOOL FastPasteDlg::Apply(HWindow *pDlg)
 			int gsize = 0;
 			if (SIZE_T size = GlobalSize(hClipMemory))
 			{
-				gsize = size <= INT_MAX ? static_cast<int>(size) : INT_MAX;
-				void *pClipMemory = GlobalLock(hClipMemory);
+				gsize = size <= INT_MAX ? static_cast<int>(size) : INT_MAX ;
+				void* pClipMemory = GlobalLock(hClipMemory);
 				pcPastestring = new char[gsize];
 				memcpy(pcPastestring, pClipMemory, gsize);
 				GlobalUnlock(hClipMemory);
@@ -135,9 +135,9 @@ BOOL FastPasteDlg::Apply(HWindow *pDlg)
 		}
 		else
 		{
-			BYTE *pc = 0;
+			BYTE* pc = 0;
 			destlen = create_bc_translation(&pc, pcPastestring,
-				strlen(pcPastestring), iCharacterSet, iBinaryMode);
+			                                strlen(pcPastestring), iCharacterSet, iBinaryMode);
 			delete [] pcPastestring;
 			pcPastestring = (char *)pc;
 		}
@@ -166,7 +166,7 @@ BOOL FastPasteDlg::Apply(HWindow *pDlg)
 			olddata.AppendArray(&m_dataArray[iCurByte], (iPasteTimes - 1) * iPasteSkip);
 		}
 		int i = iCurByte;
-		for (int k = 0 ; k < iPasteTimes ; k++)
+		for (int k = 0; k < iPasteTimes; k++)
 		{
 			if (!m_dataArray.InsertAtGrow(i, (BYTE*)pcPastestring, 0, destlen))
 			{
@@ -190,9 +190,9 @@ BOOL FastPasteDlg::Apply(HWindow *pDlg)
 		}
 		olddata.AppendArray(&m_dataArray[iCurByte], (iPasteTimes - 1) * (iPasteSkip + destlen) + destlen);
 		// Overwrite data.
-		for (int k = 0 ; k < iPasteTimes ; k++)
+		for (int k = 0; k < iPasteTimes; k++)
 		{
-			for (int i = 0 ; i < destlen ; i++)
+			for (int i = 0; i < destlen; i++)
 			{
 				m_dataArray[iCurByte + k * (iPasteSkip + destlen) + i] = pcPastestring[i];
 			}
@@ -211,9 +211,9 @@ BOOL FastPasteDlg::Apply(HWindow *pDlg)
  * the dialog.
  * @param [in] hDlg Handle to the dialog.
  */
-void FastPasteDlg::RefreshClipboardFormats(HWindow *pDlg)
+void FastPasteDlg::RefreshClipboardFormats(HWindow* pDlg)
 {
-	HListBox *const list = static_cast<HListBox *>(pDlg->GetDlgItem(IDC_FPASTE_CFORMAT));
+	HListBox*const list = static_cast<HListBox *>(pDlg->GetDlgItem(IDC_FPASTE_CFORMAT));
 	list->ResetContent();
 	if (CountClipboardFormats() && OpenClipboard(NULL))
 	{
@@ -236,34 +236,50 @@ void FastPasteDlg::RefreshClipboardFormats(HWindow *pDlg)
 				//Get the name of the standard clipboard format.
 				switch (uFormat)
 				{
-					#define CASE(a,b) case a: lpFormatName = _T(#a); SetSel = b; break;
-						CASE(CF_TEXT,1)
-					#undef CASE
-					#define CASE(a) case a: lpFormatName = _T(#a); break;
-						CASE(CF_BITMAP) CASE(CF_METAFILEPICT) CASE(CF_SYLK)
-						CASE(CF_DIF) CASE(CF_TIFF) CASE(CF_OEMTEXT)
-						CASE(CF_DIB) CASE(CF_PALETTE) CASE(CF_PENDATA)
-						CASE(CF_RIFF) CASE(CF_WAVE) CASE(CF_UNICODETEXT)
-						CASE(CF_ENHMETAFILE) CASE(CF_HDROP) CASE(CF_LOCALE)
-						CASE(CF_MAX) CASE(CF_OWNERDISPLAY) CASE(CF_DSPTEXT)
-						CASE(CF_DSPBITMAP) CASE(CF_DSPMETAFILEPICT)
-						CASE(CF_DSPENHMETAFILE) CASE(CF_PRIVATEFIRST)
-						CASE(CF_PRIVATELAST) CASE(CF_GDIOBJFIRST)
-						CASE(CF_GDIOBJLAST) CASE(CF_DIBV5)
-					#undef CASE
-					default:
-						if (i != i)
-							;
-						#define CASE(a) else if(uFormat>a##FIRST&&uFormat<a##LAST) _stprintf(szFormatName,_T(#a) _T("%d"),uFormat-a##FIRST);
-							CASE(CF_PRIVATE) CASE(CF_GDIOBJ)
-						#undef CASE
-						/*Format ideas for future: hex number, system/msdn constant, registered format, WM_ASKFORMATNAME, tickbox for delay rendered or not*/
-						/*else if(uFormat>0xC000&&uFormat<0xFFFF){
-							sprintf(szFormatName,"CF_REGISTERED%d",uFormat-0xC000);
-						}*/
-						else
-							break;
-						lpFormatName = szFormatName;
+#define CASE(a,b) case a: lpFormatName = _T(#a); SetSel = b; break;
+					CASE(CF_TEXT,1)
+#undef CASE
+#define CASE(a) case a: lpFormatName = _T(#a); break;
+					CASE(CF_BITMAP)
+					CASE(CF_METAFILEPICT)
+					CASE(CF_SYLK)
+					CASE(CF_DIF)
+					CASE(CF_TIFF)
+					CASE(CF_OEMTEXT)
+					CASE(CF_DIB)
+					CASE(CF_PALETTE)
+					CASE(CF_PENDATA)
+					CASE(CF_RIFF)
+					CASE(CF_WAVE)
+					CASE(CF_UNICODETEXT)
+					CASE(CF_ENHMETAFILE)
+					CASE(CF_HDROP)
+					CASE(CF_LOCALE)
+					CASE(CF_MAX)
+					CASE(CF_OWNERDISPLAY)
+					CASE(CF_DSPTEXT)
+					CASE(CF_DSPBITMAP)
+					CASE(CF_DSPMETAFILEPICT)
+					CASE(CF_DSPENHMETAFILE)
+					CASE(CF_PRIVATEFIRST)
+					CASE(CF_PRIVATELAST)
+					CASE(CF_GDIOBJFIRST)
+					CASE(CF_GDIOBJLAST)
+					CASE(CF_DIBV5)
+#undef CASE
+				default:
+					if (i != i);
+#define CASE(a) else if(uFormat>a##FIRST&&uFormat<a##LAST) _stprintf(szFormatName,_T(#a) _T("%d"),uFormat-a##FIRST);
+					CASE(CF_PRIVATE)
+					CASE(CF_GDIOBJ)
+#undef CASE
+					/*Format ideas for future: hex number, system/msdn constant, registered format, WM_ASKFORMATNAME, tickbox for delay rendered or not*/
+					/*else if(uFormat>0xC000&&uFormat<0xFFFF){
+						sprintf(szFormatName,"CF_REGISTERED%d",uFormat-0xC000);
+					}*/
+					else
+						break;
+					lpFormatName = szFormatName;
 					break;
 				}
 			}
@@ -299,7 +315,7 @@ void FastPasteDlg::RefreshClipboardFormats(HWindow *pDlg)
  * @param [in] hDlg Handle to the dialog.
  * @param [in] wParam Control ID.
  */
-BOOL FastPasteDlg::OnCommand(HWindow *pDlg, WPARAM wParam, LPARAM)
+BOOL FastPasteDlg::OnCommand(HWindow* pDlg, WPARAM wParam, LPARAM)
 {
 	switch (wParam)
 	{
@@ -315,7 +331,7 @@ BOOL FastPasteDlg::OnCommand(HWindow *pDlg, WPARAM wParam, LPARAM)
 		return TRUE;
 	case MAKEWPARAM(IDC_FPASTE_CFORMAT, LBN_SELCHANGE):
 		{
-			HListBox *const list = static_cast<HListBox *>(pDlg->GetDlgItem(IDC_FPASTE_CFORMAT));
+			HListBox*const list = static_cast<HListBox *>(pDlg->GetDlgItem(IDC_FPASTE_CFORMAT));
 			int i = list->GetCurSel();
 			UINT f = list->GetItemData(i);
 			if (f == CF_UNICODETEXT)
@@ -334,7 +350,7 @@ BOOL FastPasteDlg::OnCommand(HWindow *pDlg, WPARAM wParam, LPARAM)
  * @param [in] lParam The optional parameter for the command.
  * @return TRUE if the message was handled, FALSE otherwise.
  */
-INT_PTR FastPasteDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR FastPasteDlg::DlgProc(HWindow* pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
@@ -348,9 +364,9 @@ INT_PTR FastPasteDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lP
 			hwndNextViewer = (HWND)lParam;
 		// Otherwise, pass the message to the next link.
 		else if (hwndNextViewer != NULL)
-			SendMessage(hwndNextViewer, uMsg, wParam, lParam);
+		SendMessage(hwndNextViewer, uMsg, wParam, lParam);
 		break;
-	case WM_DRAWCLIPBOARD:  // clipboard contents changed.
+	case WM_DRAWCLIPBOARD: // clipboard contents changed.
 		// Update the window by using Auto clipboard format.
 		pDlg->SendMessage(WM_COMMAND, IDC_FPASTE_REFRESH, 0);
 		// Pass the message to the next window in clipboard viewer chain.
@@ -367,3 +383,4 @@ INT_PTR FastPasteDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lP
 	}
 	return FALSE;
 }
+

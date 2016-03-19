@@ -41,7 +41,7 @@ static const int OffsetLen = 16;
  * @param [in] hDlg Handle to the dialog.
  * @return TRUE
  */
-BOOL CutDlg::OnInitDialog(HWindow *pDlg)
+BOOL CutDlg::OnInitDialog(HWindow* pDlg)
 {
 	int iStart = iGetStartOfSelection();
 	int iEnd = iGetEndOfSelection();
@@ -64,7 +64,7 @@ BOOL CutDlg::OnInitDialog(HWindow *pDlg)
  * @param [in] hDlg Handle to the dialog.
  * @return TRUE if the cutting succeeded, FALSE otherwise.
  */
-BOOL CutDlg::Apply(HWindow *pDlg)
+BOOL CutDlg::Apply(HWindow* pDlg)
 {
 	TCHAR buf[OffsetLen + 1];
 	int iOffset;
@@ -115,7 +115,7 @@ BOOL CutDlg::Apply(HWindow *pDlg)
 		return FALSE;
 	}
 	WaitCursor wc;
-	char *pd = (char *)GlobalLock(hGlobal);
+	char* pd = (char *)GlobalLock(hGlobal);
 	Text2BinTranslator::iTranslateBytesToBC(pd, &m_dataArray[iOffset], iNumberOfBytes);
 	GlobalUnlock(hGlobal);
 	pwnd->OpenClipboard();
@@ -150,7 +150,7 @@ BOOL CutDlg::Apply(HWindow *pDlg)
  * @param [in] lParam Second message parameter (depends on message).
  * @return TRUE if message was handled, FALSE if ignored.
  */
-INT_PTR CutDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR CutDlg::DlgProc(HWindow* pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
@@ -166,12 +166,12 @@ INT_PTR CutDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				pDlg->EndDialog(wParam);
 			}
 			return TRUE;
-		case IDC_CUT_INCLUDEOFFSET:  
+		case IDC_CUT_INCLUDEOFFSET:
 		case IDC_CUT_NUMBEROFBYTES:
 			EnableDlgItem(pDlg, IDC_CUT_NUMBYTES,
-				pDlg->IsDlgButtonChecked(IDC_CUT_NUMBEROFBYTES));
+			              pDlg->IsDlgButtonChecked(IDC_CUT_NUMBEROFBYTES));
 			EnableDlgItem(pDlg, IDC_CUT_ENDOFFSET,
-				pDlg->IsDlgButtonChecked(IDC_CUT_INCLUDEOFFSET));
+			              pDlg->IsDlgButtonChecked(IDC_CUT_INCLUDEOFFSET));
 			return TRUE;
 		}
 		break;
@@ -182,3 +182,4 @@ INT_PTR CutDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 	return FALSE;
 }
+

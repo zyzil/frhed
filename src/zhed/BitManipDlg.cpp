@@ -35,7 +35,7 @@ Last change: 2013-02-24 by Jochen Neubeck
  * @brief Initialize the dialog.
  * @param [in] hDlg Handle to the dialog.
  */
-BOOL BitManipDlg::OnInitDialog(HWindow *pDlg)
+BOOL BitManipDlg::OnInitDialog(HWindow* pDlg)
 {
 	TCHAR buf[64];
 	_sntprintf(buf, RTL_NUMBER_OF(buf), GetLangString(IDS_BITMANIP_AT_OFFSET), iCurByte, iCurByte);
@@ -67,7 +67,7 @@ BOOL BitManipDlg::OnInitDialog(HWindow *pDlg)
  * @param [in] wParam Command user selected.
  * @return TRUE if bytes were copied, FALSE otherwise.
  */
-BOOL BitManipDlg::Apply(HWindow *pDlg, WPARAM wParam)
+BOOL BitManipDlg::Apply(HWindow* pDlg, WPARAM wParam)
 {
 	BYTE cBitValue = 0;
 	if (pDlg->IsDlgButtonChecked(IDC_MANIPBITS_BIT8))
@@ -97,7 +97,7 @@ BOOL BitManipDlg::Apply(HWindow *pDlg, WPARAM wParam)
 	}
 	TCHAR buf[64];
 	_sntprintf(buf, RTL_NUMBER_OF(buf), GetLangString(IDS_BITMANIP_VALUE),
-		(BYTE)cBitValue, (signed char)cBitValue, (BYTE)cBitValue);
+	           (BYTE)cBitValue, (signed char)cBitValue, (BYTE)cBitValue);
 	pDlg->SetDlgItemText(IDC_MANIPBITS_VALUE, buf);
 	return FALSE;
 }
@@ -110,7 +110,7 @@ BOOL BitManipDlg::Apply(HWindow *pDlg, WPARAM wParam)
  * @param [in] lParam The optional parameter for the command.
  * @return TRUE if the message was handled, FALSE otherwise.
  */
-INT_PTR BitManipDlg::DlgProc(HWindow *pDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR BitManipDlg::DlgProc(HWindow* pDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (iMsg)
 	{
@@ -138,3 +138,4 @@ INT_PTR BitManipDlg::DlgProc(HWindow *pDlg, UINT iMsg, WPARAM wParam, LPARAM lPa
 	}
 	return FALSE;
 }
+

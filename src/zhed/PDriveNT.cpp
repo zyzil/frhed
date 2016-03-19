@@ -28,11 +28,11 @@ BOOL PNtPhysicalDrive::GetDriveLayout(LPBYTE lpbMemory, DWORD dwSize)
 	DWORD junk;
 
 	return DeviceIoControl(m_hDevice, // the device we are querying
-		IOCTL_DISK_GET_DRIVE_LAYOUT, // operation to perform
-		NULL, 0, // no input buffer, so we pass zero
-		lpbMemory, dwSize, // the output buffer
-		&junk, // discard the count of bytes returned
-		NULL);
+	                       IOCTL_DISK_GET_DRIVE_LAYOUT, // operation to perform
+	                       NULL, 0, // no input buffer, so we pass zero
+	                       lpbMemory, dwSize, // the output buffer
+	                       &junk, // discard the count of bytes returned
+	                       NULL);
 } // GetDriveLayout()
 
 BOOL PNtPhysicalDrive::GetDriveLayoutEx(LPBYTE lpbMemory, DWORD dwSize)
@@ -40,11 +40,11 @@ BOOL PNtPhysicalDrive::GetDriveLayoutEx(LPBYTE lpbMemory, DWORD dwSize)
 	DWORD junk;
 
 	return DeviceIoControl(m_hDevice, // the device we are querying
-		IOCTL_DISK_GET_DRIVE_LAYOUT_EX, // operation to perform
-		NULL, 0, // no input buffer, so we pass zero
-		lpbMemory, dwSize, // the output buffer
-		&junk, // discard the count of bytes returned
-		NULL);
+	                       IOCTL_DISK_GET_DRIVE_LAYOUT_EX, // operation to perform
+	                       NULL, 0, // no input buffer, so we pass zero
+	                       lpbMemory, dwSize, // the output buffer
+	                       &junk, // discard the count of bytes returned
+	                       NULL);
 } // GetDriveLayout()
 
 BOOL PNtPhysicalDrive::GetDriveGeometry(DISK_GEOMETRY* lpDG)
@@ -52,11 +52,11 @@ BOOL PNtPhysicalDrive::GetDriveGeometry(DISK_GEOMETRY* lpDG)
 	DWORD junk;
 
 	return DeviceIoControl(m_hDevice, // the device we are querying
-		IOCTL_DISK_GET_DRIVE_GEOMETRY, // operation to perform
-		NULL, 0, // no input buffer, so we pass zero
-		lpDG, sizeof(DISK_GEOMETRY), // the output buffer
-		&junk, // discard the count of bytes returned
-		NULL);
+	                       IOCTL_DISK_GET_DRIVE_GEOMETRY, // operation to perform
+	                       NULL, 0, // no input buffer, so we pass zero
+	                       lpDG, sizeof(DISK_GEOMETRY), // the output buffer
+	                       &junk, // discard the count of bytes returned
+	                       NULL);
 } // GetDriveGeometry()
 
 BOOL PNtPhysicalDrive::GetDriveGeometryEx(DISK_GEOMETRY_EX* lpDG, DWORD dwSize)
@@ -64,11 +64,11 @@ BOOL PNtPhysicalDrive::GetDriveGeometryEx(DISK_GEOMETRY_EX* lpDG, DWORD dwSize)
 	DWORD junk;
 
 	return DeviceIoControl(m_hDevice, // the device we are querying
-		IOCTL_DISK_GET_DRIVE_GEOMETRY_EX, // operation to perform
-		NULL, 0, // no input buffer, so we pass zero
-		lpDG, dwSize, // the output buffer
-		&junk, // discard the count of bytes returned
-		NULL);
+	                       IOCTL_DISK_GET_DRIVE_GEOMETRY_EX, // operation to perform
+	                       NULL, 0, // no input buffer, so we pass zero
+	                       lpDG, dwSize, // the output buffer
+	                       &junk, // discard the count of bytes returned
+	                       NULL);
 } // GetDriveGeometry()
 
 BOOL PNtPhysicalDrive::Open(int iDrive)

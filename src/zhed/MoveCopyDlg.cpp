@@ -37,7 +37,7 @@ Last change: 2013-02-24 by Jochen Neubeck
  * @brief Initialize the dialog.
  * @param [in] hDlg Handle to the dialog.
  */
-BOOL MoveCopyDlg::OnInitDialog(HWindow *pDlg)
+BOOL MoveCopyDlg::OnInitDialog(HWindow* pDlg)
 {
 	TCHAR buf[30];
 	int iMove1stEnd = iGetStartOfSelection();
@@ -63,7 +63,7 @@ BOOL MoveCopyDlg::OnInitDialog(HWindow *pDlg)
  * @param [out] value Value read from the dialog.
  * @return true if the value was read, false if value could not be read.
  */
-bool MoveCopyDlg::ReadStartOffset(HWindow *pDlg, int &value)
+bool MoveCopyDlg::ReadStartOffset(HWindow* pDlg, int& value)
 {
 	TCHAR buf[30];
 	if (!pDlg->GetDlgItemText(IDC_1STOFFSET, buf, RTL_NUMBER_OF(buf)) ||
@@ -86,7 +86,7 @@ bool MoveCopyDlg::ReadStartOffset(HWindow *pDlg, int &value)
  * @param [out] value Value read from the dialog.
  * @return true if the value was read, false if value could not be read.
  */
-bool MoveCopyDlg::ReadEndOffset(HWindow *pDlg, int &value)
+bool MoveCopyDlg::ReadEndOffset(HWindow* pDlg, int& value)
 {
 	TCHAR buf[30];
 	if (!pDlg->GetDlgItemText(IDC_2NDDELIM, buf, RTL_NUMBER_OF(buf)) ||
@@ -110,7 +110,7 @@ bool MoveCopyDlg::ReadEndOffset(HWindow *pDlg, int &value)
  * @param [out] value Value read from the dialog.
  * @return true if the value was read, false if value could not be read.
  */
-bool MoveCopyDlg::ReadTargetOffset(HWindow *pDlg, int &value)
+bool MoveCopyDlg::ReadTargetOffset(HWindow* pDlg, int& value)
 {
 	TCHAR buf[30];
 	if (!pDlg->GetDlgItemText(IDC_MOVEMENT, buf, RTL_NUMBER_OF(buf)) ||
@@ -132,7 +132,7 @@ bool MoveCopyDlg::ReadTargetOffset(HWindow *pDlg, int &value)
  * @param [in] hDlg Handle to the dialog.
  * @return TRUE if operation succeeded, FALSE otherwise.
  */
-BOOL MoveCopyDlg::Apply(HWindow *pDlg)
+BOOL MoveCopyDlg::Apply(HWindow* pDlg)
 {
 	int vals[3];
 	if (!ReadStartOffset(pDlg, vals[0]))
@@ -141,7 +141,7 @@ BOOL MoveCopyDlg::Apply(HWindow *pDlg)
 		return FALSE;
 	if (!ReadTargetOffset(pDlg, vals[2]))
 		return FALSE;
-	
+
 	int clen = m_dataArray.GetLength();
 	int iMove1stEnd = vals[0];
 	int iMove2ndEndorLen = vals[1];
@@ -188,8 +188,8 @@ BOOL MoveCopyDlg::Apply(HWindow *pDlg)
 	}
 
 	if (iMovePos < 0 || (iMoveOpTyp == OPTYP_MOVE ?
-		iMovePos + iMove2ndEndorLen - iMove1stEnd >= clen :
-		iMovePos > clen))
+		                     iMovePos + iMove2ndEndorLen - iMove1stEnd >= clen :
+		                     iMovePos > clen))
 	{
 		MessageBox(pDlg, GetLangString(IDS_CM_OUTSIDE_DATA), MB_ICONERROR);
 		return FALSE;
@@ -205,7 +205,7 @@ BOOL MoveCopyDlg::Apply(HWindow *pDlg)
  * @param [in] lParam Optional parameter for the command.
  * @return TRUE if the command was handled, FALSE otherwise.
  */
-BOOL MoveCopyDlg::OnCommand(HWindow *pDlg, WPARAM wParam, LPARAM lParam)
+BOOL MoveCopyDlg::OnCommand(HWindow* pDlg, WPARAM wParam, LPARAM lParam)
 {
 	switch (wParam)
 	{
@@ -228,7 +228,7 @@ BOOL MoveCopyDlg::OnCommand(HWindow *pDlg, WPARAM wParam, LPARAM lParam)
  * @param [in] lParam The optional parameter for the command.
  * @return TRUE if the message was handled, FALSE otherwise.
  */
-INT_PTR MoveCopyDlg::DlgProc(HWindow *pDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR MoveCopyDlg::DlgProc(HWindow* pDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (iMsg)
 	{
@@ -243,3 +243,4 @@ INT_PTR MoveCopyDlg::DlgProc(HWindow *pDlg, UINT iMsg, WPARAM wParam, LPARAM lPa
 	}
 	return FALSE;
 }
+

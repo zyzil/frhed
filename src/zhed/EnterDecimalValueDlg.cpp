@@ -40,7 +40,7 @@ bool EnterDecimalValueDlg::bSigned = false;
  * @param [in] hDlg Handle to the dialog.
  * @return TRUE.
  */
-BOOL EnterDecimalValueDlg::OnInitDialog(HWindow *pDlg)
+BOOL EnterDecimalValueDlg::OnInitDialog(HWindow* pDlg)
 {
 	// Handle value as unsigned, convert to signed (if needed) when sending
 	// the value to GUI.
@@ -66,8 +66,8 @@ BOOL EnterDecimalValueDlg::OnInitDialog(HWindow *pDlg)
 	pDlg->SetDlgItemInt(IDC_DECIMAL_TIMES, 1, TRUE);
 	pDlg->CheckDlgButton(
 		iDecValDlgSize == 4 ? IDC_DECIMAL_DWORD :
-		iDecValDlgSize == 2 ? IDC_DECIMAL_WORD :
-		IDC_DECIMAL_BYTE,
+			iDecValDlgSize == 2 ? IDC_DECIMAL_WORD :
+			IDC_DECIMAL_BYTE,
 		BST_CHECKED);
 	return TRUE;
 }
@@ -77,12 +77,12 @@ BOOL EnterDecimalValueDlg::OnInitDialog(HWindow *pDlg)
  * @param [in] hDlg Handle to the dialog.
  * @return TRUE if values are valid, FALSE if there are errors.
  */
-BOOL EnterDecimalValueDlg::Apply(HWindow *pDlg)
+BOOL EnterDecimalValueDlg::Apply(HWindow* pDlg)
 {
 	iDecValDlgSize =
 		pDlg->IsDlgButtonChecked(IDC_DECIMAL_DWORD) ? 4 :
-		pDlg->IsDlgButtonChecked(IDC_DECIMAL_WORD) ? 2 :
-		1;
+			pDlg->IsDlgButtonChecked(IDC_DECIMAL_WORD) ? 2 :
+			1;
 	TCHAR buf[16];
 	BOOL translated;
 	UINT iDecValDlgValue = pDlg->GetDlgItemInt(IDC_DECIMAL_VALUE, &translated, bSigned);
@@ -177,7 +177,7 @@ BOOL EnterDecimalValueDlg::Apply(HWindow *pDlg)
  * @param [in] lParam The optional parameter for the command.
  * @return TRUE if the message was handled, FALSE otherwise.
  */
-INT_PTR EnterDecimalValueDlg::DlgProc(HWindow *pDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR EnterDecimalValueDlg::DlgProc(HWindow* pDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (iMsg)
 	{
@@ -202,3 +202,4 @@ INT_PTR EnterDecimalValueDlg::DlgProc(HWindow *pDlg, UINT iMsg, WPARAM wParam, L
 	}
 	return FALSE;
 }
+

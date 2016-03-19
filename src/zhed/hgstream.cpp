@@ -29,11 +29,11 @@ Last change: 2013-02-24 by Jochen Neubeck
 #include "hgstream.h"
 
 HGlobalStream::HGlobalStream(DWORD blcksz)
-: _hex(0), _nbsp(0), _escfilt(0)
-, precision(0)
-, m_hGlobal(NULL)
-, m_dwLen(0), m_dwSize(0)
-, m_dwBlockSize(blcksz)
+	: _hex(0), _nbsp(0), _escfilt(0)
+	  , precision(0)
+	  , m_hGlobal(NULL)
+	  , m_dwLen(0), m_dwSize(0)
+	  , m_dwBlockSize(blcksz)
 {
 }
 
@@ -43,7 +43,7 @@ HGlobalStream::~HGlobalStream()
 		GlobalFree(m_hGlobal);
 }
 
-HGlobalStream& HGlobalStream::operator << (const char *pszSource)
+HGlobalStream& HGlobalStream::operator <<(const char* pszSource)
 {
 	if (!_nbsp && !_escfilt)
 		Realloc(strlen(pszSource), (void*)pszSource);
@@ -53,22 +53,22 @@ HGlobalStream& HGlobalStream::operator << (const char *pszSource)
 	return *this;
 }
 
-HGlobalStream& HGlobalStream::operator << (BYTE c)
+HGlobalStream& HGlobalStream::operator <<(BYTE c)
 {
 	if (_hex)
 	{
-		BYTE nib[2] = { static_cast<BYTE>(c >> 4 & 0xf), static_cast<BYTE>(c & 0xf) };
+		BYTE nib[2] = {static_cast<BYTE>(c >> 4 & 0xf), static_cast<BYTE>(c & 0xf)};
 		nib[0] += nib[0] >= 0xa ? 'a' - 0xa : '0';
 		nib[1] += nib[1] >= 0xa ? 'a' - 0xa : '0';
 		Realloc(sizeof nib, nib);
 	}
 	else
 	{
-		BYTE e[2] = { '\\', c };
+		BYTE e[2] = {'\\', c};
 		DWORD size = 1;
 		switch (c)
 		{
-		case ' ': 
+		case ' ':
 			if (_nbsp)
 			{
 				e[1] = '~';
@@ -90,7 +90,7 @@ HGlobalStream& HGlobalStream::operator << (BYTE c)
 	return *this;
 }
 
-HGlobalStream& HGlobalStream::operator << (DWORD i)
+HGlobalStream& HGlobalStream::operator <<(DWORD i)
 {
 	//Maximum size of an integer in hex is 8
 	//Maximum size for an unsigned int is the length of 4294967295 (10)
@@ -102,14 +102,14 @@ HGlobalStream& HGlobalStream::operator << (DWORD i)
 	if (precision)
 		precision = sprintf(integer, _hex ? "%*.*x" : "%*.*u", precision, precision, i);
 	else
-		precision = sprintf(integer, _hex? "%x" : "%u", i);
+		precision = sprintf(integer, _hex ? "%x" : "%u", i);
 	Realloc(precision, integer);
 	_hex = _nbsp = _escfilt = 0;
 	precision = 0;
 	return *this;
 }
 
-HGlobalStream& HGlobalStream::operator << (int i)
+HGlobalStream& HGlobalStream::operator <<(int i)
 {
 	//Maximum size of an integer in hex is 8
 	//Maximum size for an int is the length of -2147483647 (11)
@@ -123,18 +123,18 @@ HGlobalStream& HGlobalStream::operator << (int i)
 	return *this;
 }
 
-char *HGlobalStream::Extend(SIZE_T len)
+char* HGlobalStream::Extend(SIZE_T len)
 {
-	char *pTemp = 0;
+	char* pTemp = 0;
 	SIZE_T newlen = m_dwLen + len;
 	SIZE_T newsize = (newlen / m_dwBlockSize + 1) * m_dwBlockSize;
 	HGLOBAL hgTemp = m_hGlobal;
 	if (newsize > m_dwSize)
 	{
 		if (hgTemp)
-			hgTemp = GlobalReAlloc(hgTemp, newsize, GHND|GMEM_DDESHARE);
+			hgTemp = GlobalReAlloc(hgTemp, newsize, GHND | GMEM_DDESHARE);
 		else
-			hgTemp = GlobalAlloc(GHND|GMEM_DDESHARE, newsize);
+			hgTemp = GlobalAlloc(GHND | GMEM_DDESHARE, newsize);
 	}
 	if (hgTemp)
 	{
@@ -146,9 +146,9 @@ char *HGlobalStream::Extend(SIZE_T len)
 	return pTemp;
 }
 
-void HGlobalStream::Realloc(SIZE_T len, void *src)
+void HGlobalStream::Realloc(SIZE_T len, void* src)
 {
-	if (char *pTemp = Extend(len))
+	if (char* pTemp = Extend(len))
 	{
 		if (src)
 			memcpy(pTemp, src, len);
@@ -156,7 +156,7 @@ void HGlobalStream::Realloc(SIZE_T len, void *src)
 	}
 }
 
-void HGlobalStream::filter(const char *src)
+void HGlobalStream::filter(const char* src)
 {
 	if (src == 0)
 		return;
@@ -210,7 +210,7 @@ void HGlobalStream::filter(const char *src)
 	else
 		return;
 
-	if (char *pTemp = Extend(len))
+	if (char* pTemp = Extend(len))
 	{
 		DWORD ii = i = 0;
 		//Filter the data
@@ -278,3 +278,4 @@ void HGlobalStream::Reset()
 	if (HGLOBAL hGlobal = Relinquish())
 		GlobalFree(hGlobal);
 }
+

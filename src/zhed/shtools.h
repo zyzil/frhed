@@ -37,3 +37,5 @@ STDAPI CreateShellCommand(LPCTSTR);
 STDAPI GetLongPathNameWin32(LPCTSTR lpszShortPath, LPTSTR lpszLongPath);
 
 #endif // _SHTOOLS_H_
+
+

@@ -30,7 +30,7 @@ Last change: 2013-02-24 by Jochen Neubeck
 
 struct s_MEMORY_ENCODING;
 
-typedef void (WINAPI* LPFNEncodeMemoryFunction)( s_MEMORY_ENCODING* p );
+typedef void (WINAPI* LPFNEncodeMemoryFunction)(s_MEMORY_ENCODING* p);
 
 /**
  * @brief Encoder description.
@@ -51,13 +51,15 @@ typedef struct s_MEMORY_ENCODING
 	DWORD dwSize; /**< Size of the data. */
 	LPCTSTR lpszArguments; /**< Arguments for the function. */
 	BOOL bEncode; /**< If TRUE encode, if false decode. */
-	const MEMORY_CODING_DESCRIPTION *fpMcd; /**< Encoder description. */
+	const MEMORY_CODING_DESCRIPTION* fpMcd; /**< Encoder description. */
 } MEMORY_CODING;
 
-EXTERN_C const MEMORY_CODING_DESCRIPTION *WINAPI GetMemoryCodings();
-typedef const MEMORY_CODING_DESCRIPTION *(WINAPI *LPFNGetMemoryCodings)();
+EXTERN_C const MEMORY_CODING_DESCRIPTION*WINAPI GetMemoryCodings();
+typedef const MEMORY_CODING_DESCRIPTION*(WINAPI *LPFNGetMemoryCodings)();
 
-void WINAPI XorEncoder(MEMORY_CODING *);
-void WINAPI Rot13Encoder(MEMORY_CODING *);
+void WINAPI XorEncoder(MEMORY_CODING*);
+void WINAPI Rot13Encoder(MEMORY_CODING*);
 
 #endif // _ENCODER_LIB_H_
+
+

@@ -35,18 +35,18 @@ Last change: 2013-02-24 by Jochen Neubeck
  * @brief Initialize the dialog.
  * @param [in] hDlg Handle to the dialog.
  */
-BOOL AboutDlg::OnInitDialog(HWindow *pDlg)
+BOOL AboutDlg::OnInitDialog(HWindow* pDlg)
 {
 	// Set the version information.
 	TCHAR buf[4096];
 	buf[RTL_NUMBER_OF(buf) - 1] = _T('\0');
 	_sntprintf(buf, RTL_NUMBER_OF(buf) - 1, GetLangString(IDS_ABOUTZHEDVER),
-		ZHED_MAJOR_VERSION, ZHED_MINOR_VERSION, ZHED_SUB_RELEASE_NO);
+	           ZHED_MAJOR_VERSION, ZHED_MINOR_VERSION, ZHED_SUB_RELEASE_NO);
 	pDlg->SetDlgItemText(IDC_ABOUT_VER, buf);
 	// Set the homepage URL.
 	pDlg->SetDlgItemText(IDC_ABOUT_URL, ZhedHomepageURL);
 	// Set the icon.
-	if (HWindow *pwndParent = pDlg->GetParent())
+	if (HWindow* pwndParent = pDlg->GetParent())
 		if (DWORD_PTR dwIcon = pwndParent->GetClassLongPtr(GCLP_HICON))
 			pDlg->SendDlgItemMessage(IDC_APPICON, STM_SETICON, dwIcon, 0);
 	return TRUE;
@@ -59,7 +59,7 @@ BOOL AboutDlg::OnInitDialog(HWindow *pDlg)
  * @param [in] lParam Optional parameter for the command.
  * @return TRUE if the command was handled, FALSE otherwise.
  */
-BOOL AboutDlg::OnCommand(HWindow *pDlg, WPARAM wParam, LPARAM lParam) const
+BOOL AboutDlg::OnCommand(HWindow* pDlg, WPARAM wParam, LPARAM lParam) const
 {
 	switch (wParam)
 	{
@@ -71,7 +71,7 @@ BOOL AboutDlg::OnCommand(HWindow *pDlg, WPARAM wParam, LPARAM lParam) const
 	case IDC_ABOUT_OPENURL:
 		{
 			HINSTANCE hi = ShellExecute(pDlg->m_hWnd,
-				_T("open"), ZhedHomepageURL, nullptr, nullptr, SW_SHOWNORMAL);
+			                            _T("open"), ZhedHomepageURL, nullptr, nullptr, SW_SHOWNORMAL);
 			if (reinterpret_cast<UINT>(hi) <= HINSTANCE_ERROR)
 			{
 				MessageBox(pDlg, GetLangString(IDS_ABOUT_BROWSER_ERR), MB_ICONERROR);
@@ -109,7 +109,7 @@ BOOL AboutDlg::OnCommand(HWindow *pDlg, WPARAM wParam, LPARAM lParam) const
  * @param [in] lParam The optional parameter for the command.
  * @return TRUE if the message was handled, FALSE otherwise.
  */
-INT_PTR AboutDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) const
+INT_PTR AboutDlg::DlgProc(HWindow* pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) const
 {
 	switch (uMsg)
 	{
@@ -125,3 +125,4 @@ INT_PTR AboutDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam
 	}
 	return FALSE;
 }
+

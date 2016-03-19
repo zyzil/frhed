@@ -41,12 +41,12 @@ SimpleString ReplaceDlg::strReplaceWithData;
 
 //-------------------------------------------------------------------
 // Translate the text in the string to binary data and store in the array.
-int ReplaceDlg::transl_text_to_binary(SimpleArray<BYTE> &out)
+int ReplaceDlg::transl_text_to_binary(SimpleArray<BYTE>& out)
 {
-	BYTE *pcOut;
+	BYTE* pcOut;
 	int destlen = create_bc_translation(&pcOut,
-		strReplaceWithData, strReplaceWithData.StrLen(),
-		iCharacterSet, iBinaryMode);
+	                                    strReplaceWithData, strReplaceWithData.StrLen(),
+	                                    iCharacterSet, iBinaryMode);
 	if (destlen)
 		out.Adopt(pcOut, destlen - 1, destlen);
 	return destlen;
@@ -55,13 +55,13 @@ int ReplaceDlg::transl_text_to_binary(SimpleArray<BYTE> &out)
 //-------------------------------------------------------------------
 // Create a text representation of an array of bytes and save it in
 // a SimpleString object.
-int	ReplaceDlg::transl_binary_to_text(const BYTE *src, int len)
+int ReplaceDlg::transl_binary_to_text(const BYTE* src, int len)
 {
 	// How long will the text representation of array of bytes be?
 	int destlen = Text2BinTranslator::iBytes2BytecodeDestLen(src, len);
 	strToReplaceData.SetSize(destlen);
 	strToReplaceData.ExpandToSize();
-	if (char *pd = strToReplaceData)
+	if (char* pd = strToReplaceData)
 	{
 		Text2BinTranslator::iTranslateBytesToBC(pd, (unsigned char*) src, len);
 		return TRUE;
@@ -72,10 +72,10 @@ int	ReplaceDlg::transl_binary_to_text(const BYTE *src, int len)
 //-------------------------------------------------------------------
 bool ReplaceDlg::find_and_select_data(int finddir, bool case_sensitive)
 {
-	BYTE *tofind;
+	BYTE* tofind;
 	// Create a translation from bytecode to char array of finddata.
 	int destlen = create_bc_translation(&tofind, strToReplaceData,
-		strToReplaceData.StrLen(), iCharacterSet, iBinaryMode);
+	                                    strToReplaceData.StrLen(), iCharacterSet, iBinaryMode);
 	int i = iGetStartOfSelection();
 	int n = iGetEndOfSelection() - i + 1;
 	int j;
@@ -84,8 +84,8 @@ bool ReplaceDlg::find_and_select_data(int finddir, bool case_sensitive)
 		i += finddir * n;
 		// Find forward.
 		j = findutils_FindBytes(&m_dataArray[i],
-			m_dataArray.GetLength() - i - 1,
-			tofind,	destlen, 1, case_sensitive);
+		                        m_dataArray.GetLength() - i - 1,
+		                        tofind, destlen, 1, case_sensitive);
 		if (j != -1)
 			i += j;
 	}
@@ -93,8 +93,8 @@ bool ReplaceDlg::find_and_select_data(int finddir, bool case_sensitive)
 	{
 		// Find backward.
 		j = findutils_FindBytes(&m_dataArray[0],
-			min(iCurByte + (destlen - 1), m_dataArray.GetLength()),
-			tofind, destlen, -1, case_sensitive);
+		                        min(iCurByte + (destlen - 1), m_dataArray.GetLength()),
+		                        tofind, destlen, -1, case_sensitive);
 		if (j != -1)
 			i = j;
 	}
@@ -113,7 +113,7 @@ bool ReplaceDlg::find_and_select_data(int finddir, bool case_sensitive)
 
 //-------------------------------------------------------------------
 // SimpleString replacedata contains data to replace with.
-bool ReplaceDlg::replace_selected_data(HWindow *pDlg)
+bool ReplaceDlg::replace_selected_data(HWindow* pDlg)
 {
 	if (!bSelected)
 	{
@@ -167,7 +167,7 @@ bool ReplaceDlg::replace_selected_data(HWindow *pDlg)
 	return true;
 }
 
-void ReplaceDlg::find_directed(HWindow *pDlg, int finddir)
+void ReplaceDlg::find_directed(HWindow* pDlg, int finddir)
 {
 	GetDlgItemText(pDlg, IDC_TO_REPLACE_EDIT, strToReplaceData);
 	bool case_sensitive = pDlg->IsDlgButtonChecked(IDC_MATCHCASE_CHECK) == BST_CHECKED;
@@ -184,7 +184,7 @@ void ReplaceDlg::find_directed(HWindow *pDlg, int finddir)
 	}
 }
 
-void ReplaceDlg::replace_directed(HWindow *pDlg, int finddir, bool showCount)
+void ReplaceDlg::replace_directed(HWindow* pDlg, int finddir, bool showCount)
 {
 	bool case_sensitive = pDlg->IsDlgButtonChecked(IDC_MATCHCASE_CHECK) == BST_CHECKED;
 	GetDlgItemText(pDlg, IDC_TO_REPLACE_EDIT, strToReplaceData);
@@ -200,7 +200,7 @@ void ReplaceDlg::replace_directed(HWindow *pDlg, int finddir, bool showCount)
 	}
 	WaitCursor wc;
 	int occ_num = 0;
-	HWindow *pwndFocus = HWindow::GetFocus();
+	HWindow* pwndFocus = HWindow::GetFocus();
 	if (EnableDlgItem(pDlg, IDC_REPLACE_BUTTON, FALSE) == FALSE)
 	{
 		// Don't lose focus.
@@ -241,7 +241,7 @@ void ReplaceDlg::replace_directed(HWindow *pDlg, int finddir, bool showCount)
  * @param [in] lParam The optional parameter for the command.
  * @return TRUE if the message was handled, FALSE otherwise.
  */
-INT_PTR ReplaceDlg::DlgProc(HWindow *pDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR ReplaceDlg::DlgProc(HWindow* pDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (iMsg)
 	{
@@ -262,9 +262,9 @@ INT_PTR ReplaceDlg::DlgProc(HWindow *pDlg, UINT iMsg, WPARAM wParam, LPARAM lPar
 			pDlg->CheckDlgButton(IDC_USETRANSLATION_CHECK, BST_UNCHECKED);
 		else
 			pDlg->CheckDlgButton(IDC_USETRANSLATION_CHECK, BST_CHECKED);
-		if (char *pstr = strToReplaceData)
+		if (char* pstr = strToReplaceData)
 			pDlg->SetDlgItemTextA(IDC_TO_REPLACE_EDIT, pstr);
-		if (char *pstr = strReplaceWithData)
+		if (char* pstr = strReplaceWithData)
 			pDlg->SetDlgItemTextA(IDC_REPLACEWITH_EDIT, pstr);
 		return TRUE;
 
@@ -304,3 +304,4 @@ INT_PTR ReplaceDlg::DlgProc(HWindow *pDlg, UINT iMsg, WPARAM wParam, LPARAM lPar
 	}
 	return FALSE;
 }
+

@@ -57,7 +57,7 @@ static LRESULT CALLBACK WndProcDroppedComboBox(HWND hWnd, UINT uMsg, WPARAM wPar
 	return CallWindowProc(DefWndProcDroppedComboBox, hWnd, uMsg, wParam, lParam);
 }
 
-HComboBox *ViewSettingsDlg::pCbLang;
+HComboBox* ViewSettingsDlg::pCbLang;
 
 static BOOL fAllLanguages = FALSE;
 
@@ -121,9 +121,9 @@ int ViewSettingsDlg::FormatLangId(LPWSTR bufW, LANGID langid, bool verbose)
 		if (verbose)
 		{
 			bufW[i - 1] = '\t';
-			i += GetLocaleInfoW(langid, LOCALE_SNATIVELANGNAME|LOCALE_USE_CP_ACP, bufW + i, 40);
+			i += GetLocaleInfoW(langid, LOCALE_SNATIVELANGNAME | LOCALE_USE_CP_ACP, bufW + i, 40);
 			bufW[i - 1] = '\t';
-			i += GetLocaleInfoW(langid, LOCALE_SNATIVECTRYNAME|LOCALE_USE_CP_ACP, bufW + i, 40);
+			i += GetLocaleInfoW(langid, LOCALE_SNATIVECTRYNAME | LOCALE_USE_CP_ACP, bufW + i, 40);
 			bufW[i - 1] = '\t';
 			i += GetLocaleInfoW(langid, LOCALE_SENGLANGUAGE, bufW + i, 40);
 			bufW[i - 1] = '\t';
@@ -154,14 +154,14 @@ int ViewSettingsDlg::FormatLangId(LPWSTR bufW, LANGID langid, bool verbose)
 	return i;
 }
 
-void ViewSettingsDlg::OnDrawitemLangId(DRAWITEMSTRUCT *pdis)
+void ViewSettingsDlg::OnDrawitemLangId(DRAWITEMSTRUCT* pdis)
 {
 	int iColorText = COLOR_WINDOWTEXT;
 	int iColorTextBk = COLOR_WINDOW;
 	if (pdis->itemState & ODS_SELECTED)
 	{
 		iColorText = COLOR_HIGHLIGHTTEXT;
-		iColorTextBk =  COLOR_HIGHLIGHT;
+		iColorTextBk = COLOR_HIGHLIGHT;
 	}
 	if (HIWORD(pdis->itemData) == 0)
 	{
@@ -171,8 +171,8 @@ void ViewSettingsDlg::OnDrawitemLangId(DRAWITEMSTRUCT *pdis)
 	SetBkColor(pdis->hDC, GetSysColor(iColorTextBk));
 	int x = pdis->rcItem.left + 2;
 	int y = pdis->rcItem.top + 2;
-	static const int rgcx[] = { 50, 120, 180, 120, 220, 0 };
-	const int *pcx = rgcx;
+	static const int rgcx[] = {50, 120, 180, 120, 220, 0};
+	const int* pcx = rgcx;
 	UINT flags = ETO_OPAQUE;
 	WCHAR buffer[200];
 	int length = FormatLangId(buffer, LOWORD(pdis->itemData), true);
@@ -191,7 +191,7 @@ void ViewSettingsDlg::OnDrawitemLangId(DRAWITEMSTRUCT *pdis)
 	}
 }
 
-INT_PTR ViewSettingsDlg::OnCompareitemLangId(COMPAREITEMSTRUCT *pcis)
+INT_PTR ViewSettingsDlg::OnCompareitemLangId(COMPAREITEMSTRUCT* pcis)
 {
 	WCHAR name1[20];
 	FormatLangId(name1, LOWORD(pcis->itemData1));
@@ -215,14 +215,14 @@ INT_PTR ViewSettingsDlg::OnCompareitemLangId(COMPAREITEMSTRUCT *pcis)
  * @param [in] hDlg Handle to the dialog.
  * @return TRUE.
  */
-BOOL ViewSettingsDlg::OnInitDialog(HWindow *pDlg)
+BOOL ViewSettingsDlg::OnInitDialog(HWindow* pDlg)
 {
 	pDlg->SetDlgItemInt(IDC_SETTINGS_BYTESPERLINE, iBytesPerLine);
 	pDlg->SetDlgItemInt(IDC_SETTINGS_OFFSETLEN, iMinOffsetLen);
 	UINT checked = iAutomaticBPL == 0 ? BST_UNCHECKED : BST_CHECKED;
 	pDlg->CheckDlgButton(IDC_SETTINGS_ADJUST_BYTELINE, checked);
 	pDlg->CheckDlgButton(bUnsignedView ? IDC_SETTINGS_CARETUNSIGN :
-			IDC_SETTINGS_CARETSIGN, BST_CHECKED);
+		                     IDC_SETTINGS_CARETSIGN, BST_CHECKED);
 	checked = bOpenReadOnly == 0 ? BST_UNCHECKED : BST_CHECKED;
 	pDlg->CheckDlgButton(IDC_SETTINGS_OPENRO, checked);
 	checked = bAutoOffsetLen == 0 ? BST_UNCHECKED : BST_CHECKED;
@@ -249,7 +249,7 @@ BOOL ViewSettingsDlg::OnInitDialog(HWindow *pDlg)
  * @param [in] hDlg Handle to the dialog.
  * @return TRUE.
  */
-BOOL ViewSettingsDlg::Apply(HWindow *pDlg)
+BOOL ViewSettingsDlg::Apply(HWindow* pDlg)
 {
 	iBytesPerLine = pDlg->GetDlgItemInt(IDC_SETTINGS_BYTESPERLINE, 0);
 	if (iBytesPerLine < 1)
@@ -259,7 +259,7 @@ BOOL ViewSettingsDlg::Apply(HWindow *pDlg)
 		iMinOffsetLen = 1;
 	// Get the text editor path and name.
 	pDlg->GetDlgItemText(IDC_SETTINGS_EDITOR, TexteditorName, RTL_NUMBER_OF(TexteditorName));
-	
+
 	UINT res = pDlg->IsDlgButtonChecked(IDC_SETTINGS_ADJUST_BYTELINE);
 	if (res == BST_CHECKED)
 		iAutomaticBPL = 1;
@@ -294,7 +294,7 @@ BOOL ViewSettingsDlg::Apply(HWindow *pDlg)
  * @brief Show the file selection dialog to select text editor executable.
  * @param [in] hDlg Handle to the view settings dialog.
  */
-void ViewSettingsDlg::SelectEditor(HWindow *pDlg)
+void ViewSettingsDlg::SelectEditor(HWindow* pDlg)
 {
 	TCHAR szFileName[MAX_PATH];
 	szFileName[0] = '\0';
@@ -321,7 +321,7 @@ void ViewSettingsDlg::SelectEditor(HWindow *pDlg)
  * @param [in] lParam The optional parameter for the command.
  * @return TRUE if the message was handled, FALSE otherwise.
  */
-INT_PTR ViewSettingsDlg::DlgProc(HWindow *pDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR ViewSettingsDlg::DlgProc(HWindow* pDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (iMsg)
 	{
@@ -383,3 +383,4 @@ INT_PTR ViewSettingsDlg::DlgProc(HWindow *pDlg, UINT iMsg, WPARAM wParam, LPARAM
 	}
 	return FALSE;
 }
+

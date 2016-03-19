@@ -38,13 +38,13 @@ Last change: 2013-02-24 by Jochen Neubeck
  * @param [in] text Text to copy.
  * @param [in] len Lenght of the text in characters.
  */
-void TextToClipboard(HWindow *pwnd, TCHAR *text, SIZE_T len)
+void TextToClipboard(HWindow* pwnd, TCHAR* text, SIZE_T len)
 {
 	const SIZE_T size = (len + 1) * sizeof(TCHAR);
 	if (HGLOBAL hGlobal = GlobalAlloc(GHND, size))
 	{
 		WaitCursor wc;
-		if (TCHAR *pd = (TCHAR *)GlobalLock(hGlobal))
+		if (TCHAR* pd = (TCHAR *)GlobalLock(hGlobal))
 		{
 			// Succesfully got pointer
 			_tcsncpy(pd, text, len);
@@ -80,13 +80,13 @@ void TextToClipboard(HWindow *pwnd, TCHAR *text, SIZE_T len)
  * @param [in] hwnd Parent window handle.
  * @param [in] text Text to copy.
  */
-void TextToClipboard(HWindow *pwnd, TCHAR *text)
+void TextToClipboard(HWindow* pwnd, TCHAR* text)
 {
 	SIZE_T len = _tcslen(text);
 	TextToClipboard(pwnd, text, len);
 }
 
-void MessageCopyBox(HWindow *pwnd, LPTSTR text, UINT type)
+void MessageCopyBox(HWindow* pwnd, LPTSTR text, UINT type)
 {
 	SIZE_T len = _tcslen(text);
 	_tcscat(text, GetLangString(IDS_CLIPBOARD_COPY_TO));
@@ -97,3 +97,4 @@ void MessageCopyBox(HWindow *pwnd, LPTSTR text, UINT type)
 		TextToClipboard(pwnd, text, len);
 	}
 }
+

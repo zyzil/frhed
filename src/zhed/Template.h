@@ -29,7 +29,8 @@ Last change: 2013-02-24 by Jochen Neubeck
 #define _TEMPLATE_H_
 
 #include "Simparr.h"
-#include "hexwnd.h"  // For HexEditorWindow::BYTE_ENDIAN
+#include "hexwnd.h" // For HexEditorWindow::BYTE_ENDIAN
+
 
 /** @brief Maximum length of the type in template. */
 const int TPL_TYPE_MAXLEN = 16;
@@ -42,7 +43,7 @@ const int TPL_NAME_MAXLEN = 128;
 class Template
 {
 public:
-	Template(const SimpleArray<BYTE> &);
+	Template(const SimpleArray<BYTE>&);
 	~Template();
 
 	void SetOriginalFilename(LPCTSTR filename);
@@ -53,17 +54,19 @@ public:
 	LPCTSTR GetResult();
 
 protected:
-	bool ignore_non_code(char *pcTpl, int tpl_len, int &index);
-	bool read_tpl_token(char *pcTpl, int tpl_len, int &index, TCHAR *name);
+	bool ignore_non_code(char* pcTpl, int tpl_len, int& index);
+	bool read_tpl_token(char* pcTpl, int tpl_len, int& index, TCHAR* name);
 
 private:
 	int m_filehandle; /**< File handle to template file. */
 	TCHAR m_origFilename[MAX_PATH]; /**< Filename of the file in the editor. */
 	TCHAR m_filename[MAX_PATH]; /**< Template file name. */
 	int m_filelen; /**< Template file size. */
-	char *m_tmplBuf; /**< Template file data buffer (read from file). */
+	char* m_tmplBuf; /**< Template file data buffer (read from file). */
 	String m_resultString; /**< Resulting string for applied template. */
-	const SimpleArray<BYTE> &m_dataArray; /**< Original data. */
+	const SimpleArray<BYTE>& m_dataArray; /**< Original data. */
 };
 
 #endif // _TEMPLATE_H_
+
+

@@ -38,19 +38,25 @@ Last change: 2013-02-24 by Jochen Neubeck
 class DragDropDlg
 {
 public:
-	enum { IDD = IDD_DRAG_DROP };
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM);
+	enum
+	{
+		IDD = IDD_DRAG_DROP
+	};
+
+	INT_PTR DlgProc(HWindow*, UINT, WPARAM, LPARAM);
 
 	DWORD allowable_effects; /**< Allowed operations bitmask. */
 	bool effect; /**< Copy (true) or move (false) the data from other app? */
 	UINT numformatetcs;
-	FORMATETC *formatetcs;
+	FORMATETC* formatetcs;
 	UINT numformats;
-	UINT *formats;
+	UINT* formats;
 
 protected:
-	BOOL OnInitDialog(HWindow *);
-	BOOL OnCommand(HWindow *, WPARAM, LPARAM);
+	BOOL OnInitDialog(HWindow*);
+	BOOL OnCommand(HWindow*, WPARAM, LPARAM);
 };
 
 #endif // _DRAG_DROP_DLG_H_
+
+

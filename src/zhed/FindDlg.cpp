@@ -38,7 +38,7 @@ Last change: 2013-02-24 by Jochen Neubeck
  * @brief Initialize the dialog.
  * @param [in] hDlg Handle to the dialog.
  */
-BOOL FindDlg::OnInitDialog(HWindow *pDlg)
+BOOL FindDlg::OnInitDialog(HWindow* pDlg)
 {
 	// If there is selected data then make it the data to find.
 	if (bSelected)
@@ -56,7 +56,7 @@ BOOL FindDlg::OnInitDialog(HWindow *pDlg)
 		}
 		// Translate the selection into bytecode and write it into the find text buffer.
 		int destLen = Text2BinTranslator::iBytes2BytecodeDestLen(&m_dataArray[sel_start], select_len);
-		char *tmpBuf = new char[destLen + 1];
+		char* tmpBuf = new char[destLen + 1];
 		ZeroMemory(tmpBuf, destLen + 1);
 		Text2BinTranslator::iTranslateBytesToBC(tmpBuf, &m_dataArray[sel_start], select_len);
 		m_pFindCtxt->SetText(tmpBuf);
@@ -81,92 +81,92 @@ BOOL FindDlg::OnInitDialog(HWindow *pDlg)
  * @param [in] lParam Optional parameter for the command.
  * @return TRUE if the command was handled, FALSE otherwise.
  */
-BOOL FindDlg::OnCommand(HWindow *pDlg, WPARAM wParam, LPARAM lParam)
+BOOL FindDlg::OnCommand(HWindow* pDlg, WPARAM wParam, LPARAM lParam)
 {
 	switch (wParam)
 	{
 	case IDOK:
-	{
-		char *tmpBuf = new char[FindCtxt::MAX_TEXT_LEN + 1];
-		ZeroMemory(tmpBuf, FindCtxt::MAX_TEXT_LEN + 1);
-		int srclen = pDlg->GetDlgItemTextA(IDC_FIND_TEXT, tmpBuf, FindCtxt::MAX_TEXT_LEN);
-		m_pFindCtxt->SetText(tmpBuf);
-		delete [] tmpBuf;
-		if (srclen)
 		{
-			UINT matchCase = pDlg->IsDlgButtonChecked(IDC_FIND_MATCHCASE);
-			m_pFindCtxt->m_bMatchCase = matchCase == BST_CHECKED;
-			UINT findUnicode = pDlg->IsDlgButtonChecked(IDC_FIND_UNICODE);
-			m_pFindCtxt->m_bUnicode = findUnicode == BST_CHECKED;
-			m_pFindCtxt->m_iDirection = pDlg->IsDlgButtonChecked(IDC_FIND_UP) ? -1 : 1;
-			// Copy text in Edit-Control. Return the number of characters
-			// in the Edit-control minus the zero byte at the end.
-			BYTE *pcFindstring = 0;
-			int destlen;
-			if (m_pFindCtxt->m_bUnicode)
+			char* tmpBuf = new char[FindCtxt::MAX_TEXT_LEN + 1];
+			ZeroMemory(tmpBuf, FindCtxt::MAX_TEXT_LEN + 1);
+			int srclen = pDlg->GetDlgItemTextA(IDC_FIND_TEXT, tmpBuf, FindCtxt::MAX_TEXT_LEN);
+			m_pFindCtxt->SetText(tmpBuf);
+			delete [] tmpBuf;
+			if (srclen)
 			{
-				pcFindstring = new BYTE[srclen * 2];
-				destlen = MultiByteToWideChar(CP_ACP, 0, m_pFindCtxt->GetText(),
-						srclen, (WCHAR *)pcFindstring, srclen) * 2;
-			}
-			else
-			{
-				// Create findstring.
-				destlen = create_bc_translation(&pcFindstring,
-						m_pFindCtxt->GetText(), srclen, iCharacterSet,
-						iBinaryMode);
-			}
-			if (destlen)
-			{
-				int i;
-				SetCursor(LoadCursor(NULL, IDC_WAIT));
-				// Find forward.
-				if (m_pFindCtxt->m_iDirection == 1)
+				UINT matchCase = pDlg->IsDlgButtonChecked(IDC_FIND_MATCHCASE);
+				m_pFindCtxt->m_bMatchCase = matchCase == BST_CHECKED;
+				UINT findUnicode = pDlg->IsDlgButtonChecked(IDC_FIND_UNICODE);
+				m_pFindCtxt->m_bUnicode = findUnicode == BST_CHECKED;
+				m_pFindCtxt->m_iDirection = pDlg->IsDlgButtonChecked(IDC_FIND_UP) ? -1 : 1;
+				// Copy text in Edit-Control. Return the number of characters
+				// in the Edit-control minus the zero byte at the end.
+				BYTE* pcFindstring = 0;
+				int destlen;
+				if (m_pFindCtxt->m_bUnicode)
 				{
-					i = findutils_FindBytes(&m_dataArray[iCurByte + 1],
-							m_dataArray.GetLength() - iCurByte - 1,
-							pcFindstring, destlen, 1, m_pFindCtxt->m_bMatchCase);
-					if (i != -1)
-						iCurByte += i + 1;
+					pcFindstring = new BYTE[srclen * 2];
+					destlen = MultiByteToWideChar(CP_ACP, 0, m_pFindCtxt->GetText(),
+					                                    srclen, (WCHAR *)pcFindstring, srclen) * 2;
 				}
-				// Find backward.
 				else
 				{
-					i = findutils_FindBytes(&m_dataArray[0],
-						min(iCurByte + (destlen - 1), m_dataArray.GetLength()),
-						pcFindstring, destlen, -1, m_pFindCtxt->m_bMatchCase);
-					if (i != -1)
-						iCurByte = i;
+					// Create findstring.
+					destlen = create_bc_translation(&pcFindstring,
+					                                m_pFindCtxt->GetText(), srclen, iCharacterSet,
+					                                iBinaryMode);
 				}
-				SetCursor(LoadCursor(NULL, IDC_ARROW));
+				if (destlen)
+				{
+					int i;
+					SetCursor(LoadCursor(NULL, IDC_WAIT));
+					// Find forward.
+					if (m_pFindCtxt->m_iDirection == 1)
+					{
+						i = findutils_FindBytes(&m_dataArray[iCurByte + 1],
+						                        m_dataArray.GetLength() - iCurByte - 1,
+						                        pcFindstring, destlen, 1, m_pFindCtxt->m_bMatchCase);
+						if (i != -1)
+							iCurByte += i + 1;
+					}
+					// Find backward.
+					else
+					{
+						i = findutils_FindBytes(&m_dataArray[0],
+						                        min(iCurByte + (destlen - 1), m_dataArray.GetLength()),
+						                        pcFindstring, destlen, -1, m_pFindCtxt->m_bMatchCase);
+						if (i != -1)
+							iCurByte = i;
+					}
+					SetCursor(LoadCursor(NULL, IDC_ARROW));
 
-				if (i != -1)
-				{
-					// Select found interval.
-					bSelected = true;
-					iStartOfSelection = iCurByte;
-					iEndOfSelection = iCurByte + destlen - 1;
-					adjust_view_for_selection();
-					repaint();
+					if (i != -1)
+					{
+						// Select found interval.
+						bSelected = true;
+						iStartOfSelection = iCurByte;
+						iEndOfSelection = iCurByte + destlen - 1;
+						adjust_view_for_selection();
+						repaint();
+					}
+					else
+					{
+						MessageBox(pDlg, GetLangString(IDS_FIND_CANNOT_FIND), MB_ICONWARNING);
+					}
+					//GK16AUG2K
 				}
 				else
 				{
-					MessageBox(pDlg, GetLangString(IDS_FIND_CANNOT_FIND), MB_ICONWARNING);
+					MessageBox(pDlg, GetLangString(IDS_FIND_EMPTY_STRING), MB_ICONERROR);
 				}
-				//GK16AUG2K
+				delete [] pcFindstring;
 			}
 			else
 			{
 				MessageBox(pDlg, GetLangString(IDS_FIND_EMPTY_STRING), MB_ICONERROR);
 			}
-			delete [] pcFindstring;
 		}
-		else
-		{
-			MessageBox(pDlg, GetLangString(IDS_FIND_EMPTY_STRING), MB_ICONERROR);
-		}
-	}
-	// fall through
+		// fall through
 	case IDCANCEL:
 		pDlg->EndDialog(wParam);
 		return TRUE;
@@ -182,7 +182,7 @@ BOOL FindDlg::OnCommand(HWindow *pDlg, WPARAM wParam, LPARAM lParam)
  * @param [in] lParam The optional parameter for the command.
  * @return TRUE if the message was handled, FALSE otherwise.
  */
-INT_PTR FindDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR FindDlg::DlgProc(HWindow* pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
@@ -198,3 +198,4 @@ INT_PTR FindDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 	return FALSE;
 }
+

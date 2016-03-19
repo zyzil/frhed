@@ -35,7 +35,7 @@ static PList PartitionInfoList;
 
 BOOL WINAPI GetDllExportNames(LPCTSTR pszFilename, ULONG* lpulOffset, ULONG* lpulSize)
 {
-	struct IMAGEHLP *IMAGEHLP = ::IMAGEHLP;
+	struct IMAGEHLP* IMAGEHLP = ::IMAGEHLP;
 	if (IMAGEHLP == 0)
 		return FALSE;
 
@@ -54,7 +54,7 @@ BOOL WINAPI GetDllExportNames(LPCTSTR pszFilename, ULONG* lpulOffset, ULONG* lpu
 			DWORD lastName = pExpDir->Name;
 			if (pExpDir->NumberOfNames)
 			{
-				DWORD *pExpNames = (DWORD *)
+				DWORD* pExpNames = (DWORD *)
 					IMAGEHLP->ImageRvaToVa(li.FileHeader, li.MappedAddress, pExpDir->AddressOfNames, 0);
 				if (pExpNames)
 				{
@@ -62,9 +62,9 @@ BOOL WINAPI GetDllExportNames(LPCTSTR pszFilename, ULONG* lpulOffset, ULONG* lpu
 					lastName = *pExpNames;
 				}
 			}
-			char *pszFirstName = static_cast<char *>(
+			char* pszFirstName = static_cast<char *>(
 				IMAGEHLP->ImageRvaToVa(li.FileHeader, li.MappedAddress, firstName, 0));
-			char *pszLastName = static_cast<char *>(
+			char* pszLastName = static_cast<char *>(
 				IMAGEHLP->ImageRvaToVa(li.FileHeader, li.MappedAddress, lastName, 0));
 			if (pszFirstName && pszLastName)
 			{
@@ -80,7 +80,7 @@ BOOL WINAPI GetDllExportNames(LPCTSTR pszFilename, ULONG* lpulOffset, ULONG* lpu
 
 BOOL WINAPI GetDllImportNames(LPCTSTR pszFilename, ULONG* lpulOffset, ULONG* lpulSize)
 {
-	struct IMAGEHLP *IMAGEHLP = ::IMAGEHLP;
+	struct IMAGEHLP* IMAGEHLP = ::IMAGEHLP;
 	if (IMAGEHLP == 0)
 		return FALSE;
 
@@ -91,34 +91,34 @@ BOOL WINAPI GetDllImportNames(LPCTSTR pszFilename, ULONG* lpulOffset, ULONG* lpu
 	BOOL bDone = FALSE;
 	if (DWORD dw = li.FileHeader->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress)
 	{
-		IMAGE_IMPORT_DESCRIPTOR *pDescriptor = (IMAGE_IMPORT_DESCRIPTOR *)
+		IMAGE_IMPORT_DESCRIPTOR* pDescriptor = (IMAGE_IMPORT_DESCRIPTOR *)
 			IMAGEHLP->ImageRvaToVa(li.FileHeader, li.MappedAddress, dw, 0);
-		char *upper = reinterpret_cast<char *>(li.MappedAddress);
-		char *lower = upper + li.SizeOfImage;
+		char* upper = reinterpret_cast<char *>(li.MappedAddress);
+		char* lower = upper + li.SizeOfImage;
 		while (pDescriptor->FirstThunk)
 		{
-			if (char *name = static_cast<char *>(
+			if (char* name = static_cast<char *>(
 				IMAGEHLP->ImageRvaToVa(li.FileHeader, li.MappedAddress,
-				pDescriptor->Name, 0)))
+				                       pDescriptor->Name, 0)))
 			{
 				if (lower > name)
 					lower = name;
-				char *end = name + strlen(name) + 1;
+				char* end = name + strlen(name) + 1;
 				if (upper < end)
 					upper = end;
-				if (IMAGE_THUNK_DATA *pThunk = static_cast<IMAGE_THUNK_DATA *>(
+				if (IMAGE_THUNK_DATA* pThunk = static_cast<IMAGE_THUNK_DATA *>(
 					IMAGEHLP->ImageRvaToVa(li.FileHeader, li.MappedAddress,
-					pDescriptor->OriginalFirstThunk, 0)))
+					                       pDescriptor->OriginalFirstThunk, 0)))
 				{
 					// https://github.com/adoxa/cmdkey/blob/master/edit.c
 					while (pThunk->u1.AddressOfData)
 					{
-						IMAGE_IMPORT_BY_NAME *pImport = static_cast<IMAGE_IMPORT_BY_NAME *>(
+						IMAGE_IMPORT_BY_NAME* pImport = static_cast<IMAGE_IMPORT_BY_NAME *>(
 							IMAGEHLP->ImageRvaToVa(li.FileHeader, li.MappedAddress, pThunk->u1.AddressOfData, 0));
 						if (pImport)
 						{
-							char *name = reinterpret_cast<char *>(pImport->Name);
-							char *end = name + strlen(name);
+							char* name = reinterpret_cast<char *>(pImport->Name);
+							char* end = name + strlen(name);
 							if (lower > name)
 								lower = name;
 							if (upper < end)
@@ -143,27 +143,27 @@ BOOL WINAPI GetDllImportNames(LPCTSTR pszFilename, ULONG* lpulOffset, ULONG* lpu
 
 static const MEMORY_CODING_DESCRIPTION BuiltinEncoders[] =
 {
-	{ "ROT-13", Rot13Encoder },
-	{ "XOR -1", XorEncoder },
-	{ 0, 0 }
+	{"ROT-13", Rot13Encoder},
+	{"XOR -1", XorEncoder},
+	{0, 0}
 };
 
-static void AddEncoders(HListBox *pListbox, const MEMORY_CODING_DESCRIPTION *lpEncoders)
+static void AddEncoders(HListBox* pListbox, const MEMORY_CODING_DESCRIPTION* lpEncoders)
 {
-	for ( ; lpEncoders->lpszDescription ; ++lpEncoders)
+	for (; lpEncoders->lpszDescription; ++lpEncoders)
 	{
 		int i = pListbox->AddString(static_cast<A2T>(lpEncoders->lpszDescription));
 		pListbox->SetItemDataPtr(i, const_cast<MEMORY_CODING_DESCRIPTION *>(lpEncoders));
 	}
 }
 
-INT_PTR EncodeDecodeDialog::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM)
+INT_PTR EncodeDecodeDialog::DlgProc(HWindow* pDlg, UINT uMsg, WPARAM wParam, LPARAM)
 {
 	switch (uMsg)
 	{
 	case WM_INITDIALOG:
 		{
-			HListBox *pListbox = static_cast<HListBox *>(pDlg->GetDlgItem(IDC_ENCODE_LIST));
+			HListBox* pListbox = static_cast<HListBox *>(pDlg->GetDlgItem(IDC_ENCODE_LIST));
 			AddEncoders(pListbox, BuiltinEncoders);
 			TCHAR path[MAX_PATH];
 			GetModuleFileName(NULL, path, MAX_PATH);
@@ -189,7 +189,8 @@ INT_PTR EncodeDecodeDialog::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPA
 							AddEncoders(pListbox, callback());
 						}
 					}
-				} while (FindNextFile(h, &ff));
+				}
+				while (FindNextFile(h, &ff));
 				FindClose(h);
 			}
 			pListbox->SetCurSel(0);
@@ -207,7 +208,7 @@ INT_PTR EncodeDecodeDialog::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPA
 				pDlg->GetDlgItemText(IDC_ENCODE_ARGS, sBuffer);
 				mc.bEncode = pDlg->IsDlgButtonChecked(IDC_ENCODE_ENC);
 				mc.lpszArguments = sBuffer.c_str();
-				HListBox *pListbox = static_cast<HListBox *>(pDlg->GetDlgItem(IDC_ENCODE_LIST));
+				HListBox* pListbox = static_cast<HListBox *>(pDlg->GetDlgItem(IDC_ENCODE_LIST));
 				int nCurSel = pListbox->GetCurSel();
 				if (nCurSel < 0)
 					return TRUE;
@@ -237,7 +238,7 @@ INT_PTR EncodeDecodeDialog::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPA
 	return FALSE;
 }
 
-INT_PTR OpenDriveDialog::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM)
+INT_PTR OpenDriveDialog::DlgProc(HWindow* pDlg, UINT uMsg, WPARAM wParam, LPARAM)
 {
 	switch (uMsg)
 	{
@@ -246,17 +247,17 @@ INT_PTR OpenDriveDialog::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM
 			pDlg->ShowWindow(SW_SHOW);
 			if (PartitionInfoList.IsEmpty())
 			{
-				if (IPhysicalDrive *Drive = CreatePhysicalDriveInstance())
+				if (IPhysicalDrive* Drive = CreatePhysicalDriveInstance())
 				{
 					Drive->GetPartitionInfo(&PartitionInfoList);
 					delete Drive;
 				}
 			}
-			HListBox *list = static_cast<HListBox *>(pDlg->GetDlgItem(IDC_DRIVE_LIST));
-			LIST_ENTRY *Flink = &PartitionInfoList;
+			HListBox* list = static_cast<HListBox *>(pDlg->GetDlgItem(IDC_DRIVE_LIST));
+			LIST_ENTRY* Flink = &PartitionInfoList;
 			while ((Flink = Flink->Flink) != &PartitionInfoList)
 			{
-				PartitionInfo *pi = static_cast<PartitionInfo *>(Flink);
+				PartitionInfo* pi = static_cast<PartitionInfo *>(Flink);
 				int i = list->AddString(pi->GetNameAsString());
 				list->SetItemDataPtr(i, pi);
 			}
@@ -269,14 +270,14 @@ INT_PTR OpenDriveDialog::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM
 		{
 		case IDOK:
 			{
-				HListBox *list = static_cast<HListBox *>(pDlg->GetDlgItem(IDC_DRIVE_LIST));
+				HListBox* list = static_cast<HListBox *>(pDlg->GetDlgItem(IDC_DRIVE_LIST));
 				int nCurSel = list->GetCurSel();
 				if (nCurSel < 0)
 					return TRUE;
-				PartitionInfo *SelectedPartitionInfo =
+				PartitionInfo* SelectedPartitionInfo =
 					static_cast<PartitionInfo *>(list->GetItemDataPtr(nCurSel));
 
-				IPhysicalDrive *Drive = CreatePhysicalDriveInstance();
+				IPhysicalDrive* Drive = CreatePhysicalDriveInstance();
 				if (Drive == 0 || !Drive->Open(SelectedPartitionInfo->m_dwDrive))
 				{
 					MessageBox(pwnd, GetLangString(IDS_DRIVES_ERR_OPEN), MB_ICONERROR);
@@ -303,7 +304,7 @@ INT_PTR OpenDriveDialog::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM
 	return FALSE;
 }
 
-INT_PTR GotoTrackDialog::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR GotoTrackDialog::DlgProc(HWindow* pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
@@ -323,24 +324,24 @@ INT_PTR GotoTrackDialog::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM
 			TotalSizeInBytes *= dg.Cylinders.QuadPart;
 
 			_stprintf(szTempBuffer,
-				_T("%s = %I64d\r\n")
-				_T("%s = %I64d\r\n")
-				_T("%s = %ld\r\n")
-				_T("%s = %ld\r\n")
-				_T("%s = %ld\r\n")
-				_T("%s = %I64d\r\n"),
-				GetLangString(IDS_DRIVES_CYLINDERS),
-				dg.Cylinders.QuadPart,
-				GetLangString(IDS_DRIVES_SECTORS),
-				SelectedPartitionInfo->m_NumberOfSectors,
-				GetLangString(IDS_DRIVES_TRACSPERCYL),
-				dg.TracksPerCylinder,
-				GetLangString(IDS_DRIVES_SECTPERTRACK),
-				dg.SectorsPerTrack,
-				GetLangString(IDS_DRIVES_BYTESPERSECT),
-				dg.BytesPerSector,
-				GetLangString(IDS_DRIVES_TOTALBYTES),
-				TotalSizeInBytes);
+			          _T("%s = %I64d\r\n")
+			          _T("%s = %I64d\r\n")
+			          _T("%s = %ld\r\n")
+			          _T("%s = %ld\r\n")
+			          _T("%s = %ld\r\n")
+			          _T("%s = %I64d\r\n"),
+			          GetLangString(IDS_DRIVES_CYLINDERS),
+			          dg.Cylinders.QuadPart,
+			          GetLangString(IDS_DRIVES_SECTORS),
+			          SelectedPartitionInfo->m_NumberOfSectors,
+			          GetLangString(IDS_DRIVES_TRACSPERCYL),
+			          dg.TracksPerCylinder,
+			          GetLangString(IDS_DRIVES_SECTPERTRACK),
+			          dg.SectorsPerTrack,
+			          GetLangString(IDS_DRIVES_BYTESPERSECT),
+			          dg.BytesPerSector,
+			          GetLangString(IDS_DRIVES_TOTALBYTES),
+			          TotalSizeInBytes);
 
 			pDlg->SetDlgItemText(IDC_DRIVE_INFO, szTempBuffer);
 		}
@@ -373,3 +374,4 @@ INT_PTR GotoTrackDialog::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM
 	}
 	return FALSE;
 }
+

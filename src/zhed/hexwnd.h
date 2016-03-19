@@ -72,9 +72,26 @@ typedef struct
 } bookmark;
 
 //--------------------------------------------------------------------------------------------
-enum ClickArea { AREA_NONE, AREA_OFFSETS, AREA_BYTES, AREA_CHARS };
-enum SCROLL_TYPE { SCROLL_NONE, SCROLL_BACK, SCROLL_FORWARD };
-enum EnteringMode { BYTES, CHARS };
+enum ClickArea
+{
+	AREA_NONE,
+	AREA_OFFSETS,
+	AREA_BYTES,
+	AREA_CHARS
+};
+
+enum SCROLL_TYPE
+{
+	SCROLL_NONE,
+	SCROLL_BACK,
+	SCROLL_FORWARD
+};
+
+enum EnteringMode
+{
+	BYTES,
+	CHARS
+};
 
 class hexfile_stream;
 class HexFile;
@@ -92,10 +109,10 @@ class CDropTarget;
  * derived from this class.
  */
 class HexEditorWindow
-: public IHexEditorWindow
-, public IHexEditorWindow::Colors
-, public IHexEditorWindow::Settings
-, public IHexEditorWindow::Status
+	: public IHexEditorWindow
+	  , public IHexEditorWindow::Colors
+	  , public IHexEditorWindow::Settings
+	  , public IHexEditorWindow::Status
 {
 	friend CDropTarget;
 	friend load_hexfile_0;
@@ -122,7 +139,7 @@ public:
 	void CMD_CloseDrive();
 	void OnContextMenu(LPARAM);
 
-//Pabs changed - line insert
+	//Pabs changed - line insert
 	bool dragging;
 	void CMD_fw();//fill selection with command
 	void CMD_revert();
@@ -133,7 +150,7 @@ public:
 	void CMD_move_copy(int iMove1stEnd, int iMove2ndEndorLen, bool redraw);
 	bool move_copy_sub(int iMove1stEnd, int iMove2ndEndorLen, bool redraw);
 	void CMD_reverse();
-	bool load_hexfile(hexfile_stream &);
+	bool load_hexfile(hexfile_stream&);
 	void CMD_open_hexdump();
 	void status_bar_click(bool left);
 	void CMD_adopt_colours();
@@ -154,13 +171,13 @@ public:
 	int output_text_special;
 	int output_text_hexdump_display;
 	int output_CF_RTF;
-	HGLOBAL RTF_hexdump(int start, int end, SIZE_T *plen = NULL);
+	HGLOBAL RTF_hexdump(int start, int end, SIZE_T* plen = NULL);
 	int CMD_OLEDD_options();
 	CDropTarget* target;
 	void start_mouse_operation();
 	ClickArea area;
 	void get_pos(long x, long y);
-	void set_drag_caret(long x, long y, bool Copying, bool Overwrite );
+	void set_drag_caret(long x, long y, bool Copying, bool Overwrite);
 	void fix_scroll_timers(long x, long y);
 	void kill_scroll_timers();
 	void reset();
@@ -180,7 +197,7 @@ public:
 	BOOL STDMETHODCALLTYPE select_prev_diff(BOOL bFromEnd);
 	void CMD_colors_to_default();
 	void CMD_goto();
-	void apply_template(TCHAR *pcTemplate);
+	void apply_template(TCHAR* pcTemplate);
 	void CMD_apply_template();
 	void dropfiles(HDROP);
 	void CMD_open_partially();
@@ -188,7 +205,7 @@ public:
 	void CMD_remove_bkm();
 	void CMD_goto_bookmark(int i);
 	void make_bookmark_list(HMENU);
-	void CMD_add_bookmark ();
+	void CMD_add_bookmark();
 	void CMD_MRU_selected(int i);
 	void make_MRU_list(HMENU);
 	void update_MRU();
@@ -198,25 +215,25 @@ public:
 	void CMD_compare();
 	void CMD_properties();
 	void make_font();
-	void CMD_on_backspace ();
+	void CMD_on_backspace();
 	void CMD_toggle_insertmode();
 	void STDMETHODCALLTYPE CMD_character_set();
 	void CMD_manipulate_bits();
 	void CMD_edit_append();
 	virtual void STDMETHODCALLTYPE save_ini_data();
-//Pabs inserted "char* key = NULL"
-	virtual void STDMETHODCALLTYPE read_ini_data(TCHAR *key = 0);
-//end
+	//Pabs inserted "char* key = NULL"
+	virtual void STDMETHODCALLTYPE read_ini_data(TCHAR* key = 0);
+	//end
 	void CMD_color_settings(COLORREF* pColor);
 	void STDMETHODCALLTYPE CMD_view_settings();
-	void adjust_view_for_selection ();
-	int CMD_select_with_arrowkeys (int key);
+	void adjust_view_for_selection();
+	int CMD_select_with_arrowkeys(int key);
 	void CMD_open();
 	int CMD_save();
 	int CMD_save_as();
 	int CMD_new();
 	void CMD_edit_enterdecimalvalue();
-	int CMD_copy_hexdump(int iCopyHexdumpMode, int iCopyHexdumpType, int iCopyHexdumpDlgStart, int iCopyHexdumpDlgEnd, char *mem = 0, DWORD memlen = 0);
+	int CMD_copy_hexdump(int iCopyHexdumpMode, int iCopyHexdumpType, int iCopyHexdumpDlgStart, int iCopyHexdumpDlgEnd, char* mem = 0, DWORD memlen = 0);
 	void CMD_copy_hexdump();
 	void STDMETHODCALLTYPE CMD_edit_undo();
 	void STDMETHODCALLTYPE CMD_edit_redo();
@@ -237,9 +254,9 @@ public:
 	virtual bool STDMETHODCALLTYPE close();
 	virtual int STDMETHODCALLTYPE initmenupopup(WPARAM w, LPARAM l);
 	void adjust_view_for_caret();
-	void print_line(HSurface *pdc, int line, HBrush *pbr);
-	void PrintBookmarkIndicators(HSurface *pdc, HBrush *pbr, int startpos);
-	void mark_char(HSurface *pdc);
+	void print_line(HSurface* pdc, int line, HBrush* pbr);
+	void PrintBookmarkIndicators(HSurface* pdc, HBrush* pbr, int startpos);
+	void mark_char(HSurface* pdc);
 	void STDMETHODCALLTYPE adjust_hscrollbar();
 	void STDMETHODCALLTYPE adjust_vscrollbar();
 	void clear_all();
@@ -252,33 +269,33 @@ public:
 
 	unsigned STDMETHODCALLTYPE get_interface_version();
 	void STDMETHODCALLTYPE resize_window();
-	BYTE *STDMETHODCALLTYPE get_buffer(int);
+	BYTE*STDMETHODCALLTYPE get_buffer(int);
 	int STDMETHODCALLTYPE get_length();
-	void STDMETHODCALLTYPE set_sibling(IHexEditorWindow *);
-	void STDMETHODCALLTYPE set_sibling2(IHexEditorWindow *, IHexEditorWindow *);
-	Colors *STDMETHODCALLTYPE get_colors();
-	Settings *STDMETHODCALLTYPE get_settings();
-	Status *STDMETHODCALLTYPE get_status();
-	int STDMETHODCALLTYPE translate_accelerator(MSG *);
+	void STDMETHODCALLTYPE set_sibling(IHexEditorWindow*);
+	void STDMETHODCALLTYPE set_sibling2(IHexEditorWindow*, IHexEditorWindow*);
+	Colors*STDMETHODCALLTYPE get_colors();
+	Settings*STDMETHODCALLTYPE get_settings();
+	Status*STDMETHODCALLTYPE get_status();
+	int STDMETHODCALLTYPE translate_accelerator(MSG*);
 	BOOL STDMETHODCALLTYPE load_lang(LANGID langid, LPCWSTR langdir = NULL);
 	LPTSTR STDMETHODCALLTYPE load_string(UINT);
 	void STDMETHODCALLTYPE free_string(LPTSTR);
 	HMENU STDMETHODCALLTYPE load_menu(UINT);
-	void STDMETHODCALLTYPE copy_sel_from(IHexEditorWindow *);
-	void STDMETHODCALLTYPE copy_all_from(IHexEditorWindow *);
+	void STDMETHODCALLTYPE copy_sel_from(IHexEditorWindow*);
+	void STDMETHODCALLTYPE copy_all_from(IHexEditorWindow*);
 	void STDMETHODCALLTYPE set_savepoint();
 	bool STDMETHODCALLTYPE get_modified() const;
 	bool STDMETHODCALLTYPE can_undo() const;
 	bool STDMETHODCALLTYPE can_redo() const;
 	void STDMETHODCALLTYPE clear_undorecords();
-	void STDMETHODCALLTYPE share_undorecords(IHexEditorWindow *p);
-	void push_undorecord(size_t offset, const BYTE *oldptr, size_t oldlen, const BYTE *newptr, size_t newlen);
+	void STDMETHODCALLTYPE share_undorecords(IHexEditorWindow* p);
+	void push_undorecord(size_t offset, const BYTE* oldptr, size_t oldlen, const BYTE* newptr, size_t newlen);
 
 	int load_file(LPCTSTR);
 	virtual int STDMETHODCALLTYPE open_file(LPCWSTR);
 	int file_is_loadable(LPCTSTR fname);
 	int at_window_create(HWND, HINSTANCE);
-	void set_control_bar(HWindow *);
+	void set_control_bar(HWindow*);
 	void set_focus();
 	void kill_focus();
 	int lbuttondown(int nFlags, int xPos, int yPos);
@@ -290,13 +307,13 @@ public:
 	void hscroll(int cmd);
 	int paint();
 	virtual void STDMETHODCALLTYPE command(int cmd);
-	void notify(NMHDR *);
+	void notify(NMHDR*);
 	int destroy_window();
 	virtual void STDMETHODCALLTYPE set_wnd_title();
 	void set_caret_pos();
-	void print_text(HSurface *pdc, int x, int y, TCHAR *pch, int cch);
+	void print_text(HSurface* pdc, int x, int y, TCHAR* pch, int cch);
 	virtual HRESULT STDMETHODCALLTYPE ResolveIt(LPCTSTR lpszLinkFile, LPTSTR lpszPath);
-	static void OnHelp(HWindow *);
+	static void OnHelp(HWindow*);
 
 	static void LoadStringTable();
 	static void FreeStringTable();
@@ -305,16 +322,16 @@ public:
 	int iWindowShowCmd, iWindowX, iWindowY, iWindowWidth, iWindowHeight;
 	int iInstCount;
 	HWND hwndMain; /**< Handle to main window. */
-	HToolBar *pwndToolBar; /**< Handle to main window's toolbar. */
-	HStatusBar *pwndStatusBar; /**< Handle to main window's statusbar. */
+	HToolBar* pwndToolBar; /**< Handle to main window's toolbar. */
+	HStatusBar* pwndStatusBar; /**< Handle to main window's statusbar. */
 	HACCEL hAccel; /**< Handle to accelerator keys list. */
-	UndoRecords *m_pUndoRecords;
-	SharedUndoRecords *m_pSharedUndoRecords;
+	UndoRecords* m_pUndoRecords;
+	SharedUndoRecords* m_pSharedUndoRecords;
 
 protected:
-//Pabs inserted
+	//Pabs inserted
 	int bMakeBackups; /**< Backup the file when saving. */
-//end
+	//end
 	static int ScrollDelay;
 	static int ScrollInterval;
 	static int MouseOpDist;
@@ -333,13 +350,13 @@ protected:
 	int iBmkCount; /**< Count of bookmarks. */
 	bookmark pbmkList[BMKMAX]; /**< List of bookmarks. */
 	int iMRU_count; /**< Count of MRU list items active. */
-	TCHAR strMRU[MRUMAX][_MAX_PATH]; /**< List of MRU items. */
+	TCHAR strMRU[MRUMAX][_MAX_PATH ]; /**< List of MRU items. */
 	bool bFilestatusChanged;
 	bool bScrollTimerSet;
 	int iMouseX; /**< Current mouse X position. */
 	int iMouseY; /**< Current mouse Y position. */
 	bool bUnsignedView; /**< View shows byte values as unsigned? */
-	HFont *pFont;
+	HFont* pFont;
 	bool bInsertMode; /**< Editing mode is in insert-mode? */
 	bool bFileNeverSaved;
 	SimpleArray<BYTE> m_dataArray;
@@ -347,13 +364,13 @@ protected:
 	int iLBDownX, iLBDownY;
 	int cxChar, cxCaps, cyChar, cxClient, cyClient, cxBuffer, cyBuffer, iNumlines;
 	int iByteSpace, iCharSpace;
-	TCHAR filename[_MAX_PATH];
-	HWindow *pwnd;
+	TCHAR filename[_MAX_PATH ];
+	HWindow* pwnd;
 	HINSTANCE hInstance;
 	IHexEditorWindow *sibling, *sibling2, *ary_sibling[2];
 
-	IPhysicalDrive *Drive;
-	PartitionInfo *SelectedPartitionInfo;
+	IPhysicalDrive* Drive;
+	PartitionInfo* SelectedPartitionInfo;
 
 	PMemoryBlock Track;
 	INT64 CurrentSectorNumber;
@@ -362,10 +379,10 @@ protected:
 	void format_bit_string(TCHAR* buf, BYTE by);
 	void statusbar_chset_and_editmode();
 
-	FindCtxt *m_pFindCtxt;
+	FindCtxt* m_pFindCtxt;
 };
 
-void reverse_bytes(BYTE *, BYTE *);
+void reverse_bytes(BYTE*, BYTE*);
 
 class WaitCursor
 {
@@ -376,13 +393,14 @@ public:
 	{
 		cur = SetCursor(LoadCursor(0, IDC_WAIT));
 	}
+
 	~WaitCursor()
 	{
 		SetCursor(cur);
 	}
 };
 
-template<class T>
+template <class T>
 class dialog : public T
 {
 	static INT_PTR CALLBACK DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -395,14 +413,16 @@ class dialog : public T
 		return ((T *)GetWindowLongPtr(hWnd, DWLP_USER))->DlgProc(
 			reinterpret_cast<HWindow *>(hWnd), uMsg, wParam, lParam);
 	}
+
 public:
-	int DoModal(HWindow *pWnd)
+	int DoModal(HWindow* pWnd)
 	{
 		return ShowModalDialog(IDD, pWnd, DlgProc, this);
 	}
 };
 
-template<class T> inline void swap(T& x, T& y)
+template <class T>
+inline void swap(T& x, T& y)
 {
 	T temp = x;
 	x = y;
@@ -412,9 +432,9 @@ template<class T> inline void swap(T& x, T& y)
 struct UndoRecord
 {
 	UndoRecord();
-	UndoRecord(HexEditorWindow *pwnd, size_t offset, const BYTE *oldptr, size_t oldlen, const BYTE *newptr, size_t newlen);
+	UndoRecord(HexEditorWindow* pwnd, size_t offset, const BYTE* oldptr, size_t oldlen, const BYTE* newptr, size_t newlen);
 	UndoRecord(const UndoRecord& rec);
-	HexEditorWindow *pwnd;
+	HexEditorWindow* pwnd;
 	size_t offset;
 	SimpleArray<BYTE> olddata;
 	SimpleArray<BYTE> newdata;
@@ -423,7 +443,7 @@ struct UndoRecord
 struct UndoRecords
 {
 	UndoRecords();
-	void push_back(HexEditorWindow *pwnd, size_t offset, const BYTE *oldptr, size_t oldlen, const BYTE *newptr, size_t newlen);
+	void push_back(HexEditorWindow* pwnd, size_t offset, const BYTE* oldptr, size_t oldlen, const BYTE* newptr, size_t newlen);
 	void clear();
 	const UndoRecord& undo();
 	const UndoRecord& redo();
@@ -439,13 +459,13 @@ struct UndoRecords
 struct SharedUndoRecords
 {
 	SharedUndoRecords();
-	void push_back(HexEditorWindow *pwnd, size_t offset, const BYTE *oldptr, size_t oldlen, const BYTE *newptr, size_t newlen);
-	void clear(HexEditorWindow *pwnd = NULL);
+	void push_back(HexEditorWindow* pwnd, size_t offset, const BYTE* oldptr, size_t oldlen, const BYTE* newptr, size_t newlen);
+	void clear(HexEditorWindow* pwnd = NULL);
 	const UndoRecord& undo();
 	const UndoRecord& redo();
 	bool can_undo() const;
 	bool can_redo() const;
-	void add_target(HexEditorWindow *pwnd);
+	void add_target(HexEditorWindow* pwnd);
 	int pos;
 	SimpleArray<HexEditorWindow *> recs;
 	SimpleArray<HexEditorWindow *> targets;
@@ -453,8 +473,16 @@ struct SharedUndoRecords
 
 extern HINSTANCE hMainInstance;
 extern int iMovePos;
-enum OPTYP { OPTYP_MOVE, OPTYP_COPY };
+
+enum OPTYP
+{
+	OPTYP_MOVE,
+	OPTYP_COPY
+};
+
 extern OPTYP iMoveOpTyp;
 extern const CLIPFORMAT CF_BINARYDATA;
 extern const CLIPFORMAT CF_RICH_TEXT_FORMAT;
 #endif // hexwnd_h
+
+

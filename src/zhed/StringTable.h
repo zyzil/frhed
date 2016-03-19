@@ -36,9 +36,15 @@ Last change: 2013-02-24 by Jochen Neubeck
 template <class T>
 struct StringTable
 {
-	operator T *() { return reinterpret_cast<T *>(this); }
+	operator T *()
+	{
+		return reinterpret_cast<T *>(this);
+	}
+
 #	define DECLARE(X) T m_##X;
 #	include "StringTable.inl"
+
+
 #	undef DECLARE
 };
 
@@ -48,3 +54,5 @@ extern StringTable<WORD> IDS;
 #define GetLangString(id) ::S.m_##id
 
 #endif // _STRING_TABLE_H_
+
+

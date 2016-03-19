@@ -23,3 +23,5 @@ Last change: 2013-02-24 by Jochen Neubeck
 #define toolbar_h
 HWND CreateTBar(HWND, HINSTANCE);
 #endif // toolbar_h
+
+

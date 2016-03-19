@@ -35,5 +35,8 @@ StringTable<WORD> IDS =
 {
 #	define DECLARE(X) X,
 #	include "StringTable.inl"
+
+
 #	undef DECLARE
 };
+

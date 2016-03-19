@@ -28,8 +28,10 @@ Last change: 2013-02-24 by Jochen Neubeck
 #ifndef _CLIPBOARD_H_
 #define _CLIPBOARD_H_
 
-void TextToClipboard(HWindow *pwnd, TCHAR *text);
-void TextToClipboard(HWindow *pwnd, TCHAR *text, SIZE_T len);
-void MessageCopyBox(HWindow *pwnd, LPTSTR text, UINT type);
+void TextToClipboard(HWindow* pwnd, TCHAR* text);
+void TextToClipboard(HWindow* pwnd, TCHAR* text, SIZE_T len);
+void MessageCopyBox(HWindow* pwnd, LPTSTR text, UINT type);
 
 #endif // _CLIPBOARD_H_
+
+

@@ -32,19 +32,19 @@ Last change: 2013-02-24 by Jochen Neubeck
 #include "hexwdlg.h"
 #include "StringTable.h"
 
-void ChooseDiffDlg::add_diff(HListBox *list, int diff, int lower, int upper)
+void ChooseDiffDlg::add_diff(HListBox* list, int diff, int lower, int upper)
 {
 	TCHAR buf[100];
 	_stprintf(buf,
-		// "%d) 0x%x=%u to 0x%x=%u (%d bytes)"
-		GetLangString(IDS_DIFFLISTITEMFORMAT),
-		diff, lower, lower,	upper, upper, upper - lower + 1);
+	          // "%d) 0x%x=%u to 0x%x=%u (%d bytes)"
+	          GetLangString(IDS_DIFFLISTITEMFORMAT),
+	          diff, lower, lower, upper, upper, upper - lower + 1);
 	list->AddString(buf);
 }
 
 //-------------------------------------------------------------------
 // Transfer offsets of differences to pdiff.
-int ChooseDiffDlg::get_diffs(HListBox *list, BYTE *ps, int sl, BYTE *pd, int dl)
+int ChooseDiffDlg::get_diffs(HListBox* list, BYTE* ps, int sl, BYTE* pd, int dl)
 {
 	int lower, upper;
 	int i = 0, diff = 0, type = 1;
@@ -89,9 +89,9 @@ int ChooseDiffDlg::get_diffs(HListBox *list, BYTE *ps, int sl, BYTE *pd, int dl)
  * @param [in] hDlg Handle to dialog.
  * @return TRUE
  */
-BOOL ChooseDiffDlg::OnInitDialog(HWindow *pDlg)
+BOOL ChooseDiffDlg::OnInitDialog(HWindow* pDlg)
 {
-	TCHAR szFileName[_MAX_PATH];
+	TCHAR szFileName[_MAX_PATH ];
 	szFileName[0] = '\0';
 
 	OPENFILENAME ofn;
@@ -100,11 +100,11 @@ BOOL ChooseDiffDlg::OnInitDialog(HWindow *pDlg)
 	ofn.hwndOwner = pDlg->m_hWnd;
 	ofn.lpstrFilter = GetLangString(IDS_OPEN_ALL_FILES);
 	ofn.lpstrFile = szFileName;
-	ofn.nMaxFile = _MAX_PATH;
+	ofn.nMaxFile = _MAX_PATH ;
 	ofn.lpstrTitle = GetLangString(IDS_DIFF_CHOOSEFILE);
 	if (!GetOpenFileName(&ofn))
 		return FALSE;
-	int filehandle = _topen(szFileName, _O_RDONLY|_O_BINARY);
+	int filehandle = _topen(szFileName, _O_RDONLY | _O_BINARY);
 	if (filehandle == -1)
 	{
 		MessageBox(pDlg, GetLangString(IDS_DIFF_ERROPEN), MB_ICONERROR);
@@ -115,12 +115,12 @@ BOOL ChooseDiffDlg::OnInitDialog(HWindow *pDlg)
 	{
 		int iDestFileLen = filelen;
 		int iSrcFileLen = m_dataArray.GetLength() - iCurByte;
-		if (BYTE *cmpdata = new BYTE[filelen])
+		if (BYTE* cmpdata = new BYTE[filelen])
 		{
 			// Read data.
 			if (_read(filehandle, cmpdata, filelen) != -1)
 			{
-				HListBox *list = static_cast<HListBox *>(pDlg->GetDlgItem(IDC_CHOOSEDIFF_DIFFLIST));
+				HListBox* list = static_cast<HListBox *>(pDlg->GetDlgItem(IDC_CHOOSEDIFF_DIFFLIST));
 				if (int diff = get_diffs(list, &m_dataArray[iCurByte], m_dataArray.GetLength() - iCurByte, cmpdata, filelen))
 				{
 					TCHAR buf[100];
@@ -158,11 +158,11 @@ BOOL ChooseDiffDlg::OnInitDialog(HWindow *pDlg)
  * @param [in] wParam First param (depends on command).
  * @return TRUE if command (message) was handled, FALSE if not.
  */
-BOOL ChooseDiffDlg::OnCommand(HWindow *pDlg, WPARAM wParam, LPARAM)
+BOOL ChooseDiffDlg::OnCommand(HWindow* pDlg, WPARAM wParam, LPARAM)
 {
 	switch (wParam)
 	{
-	// By pabs.
+		// By pabs.
 	case IDCOPY:
 		{//copy button was pressed
 			if (!pwnd->OpenClipboard()) //open clip
@@ -171,13 +171,13 @@ BOOL ChooseDiffDlg::OnCommand(HWindow *pDlg, WPARAM wParam, LPARAM)
 				return TRUE;
 			}
 			EmptyClipboard(); //empty clip
-			IStream *piStream = 0;
+			IStream* piStream = 0;
 			if (SUCCEEDED(CreateStreamOnHGlobal(0, FALSE, &piStream)))
 			{
-				HListBox *list = static_cast<HListBox *>(pDlg->GetDlgItem(IDC_CHOOSEDIFF_DIFFLIST));
+				HListBox* list = static_cast<HListBox *>(pDlg->GetDlgItem(IDC_CHOOSEDIFF_DIFFLIST));
 				CLIPFORMAT cf = sizeof(TCHAR) == sizeof(WCHAR) ? CF_UNICODETEXT : CF_TEXT;
 				int num = list->GetCount();
-				for (int i = 0 ; i < num ; i++)
+				for (int i = 0; i < num; i++)
 				{
 					String s;
 					list->GetText(i, s);
@@ -199,16 +199,16 @@ BOOL ChooseDiffDlg::OnCommand(HWindow *pDlg, WPARAM wParam, LPARAM)
 
 	case IDOK:
 		{
-			HListBox *pLb = static_cast<HListBox *>(pDlg->GetDlgItem(IDC_CHOOSEDIFF_DIFFLIST));
+			HListBox* pLb = static_cast<HListBox *>(pDlg->GetDlgItem(IDC_CHOOSEDIFF_DIFFLIST));
 			int i = pLb->GetCurSel();
 			if (i != -1)
 			{
 				String s;
 				pLb->GetText(i, s);
 				i = _stscanf(s.c_str(),
-					// "%d) 0x%x=%u to 0x%x=%u (%d bytes)"
-					GetLangString(IDS_DIFFLISTITEMFORMAT),
-					&i, &i, &iStartOfSelection, &i, &iEndOfSelection, &i);
+				             // "%d) 0x%x=%u to 0x%x=%u (%d bytes)"
+				             GetLangString(IDS_DIFFLISTITEMFORMAT),
+				             &i, &i, &iStartOfSelection, &i, &iEndOfSelection, &i);
 				iStartOfSelection += iCurByte;
 				iEndOfSelection += iCurByte;
 				iCurByte = iStartOfSelection;
@@ -233,7 +233,7 @@ BOOL ChooseDiffDlg::OnCommand(HWindow *pDlg, WPARAM wParam, LPARAM)
  * @param [in] lParam The optional parameter for the command.
  * @return TRUE if the message was handled, FALSE otherwise.
  */
-INT_PTR ChooseDiffDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR ChooseDiffDlg::DlgProc(HWindow* pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
@@ -251,3 +251,4 @@ INT_PTR ChooseDiffDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM l
 	}
 	return FALSE;
 }
+

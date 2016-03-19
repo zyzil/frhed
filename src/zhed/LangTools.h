@@ -32,6 +32,8 @@ class LangArray;
 extern LangArray langArray;
 
 void NTAPI TranslateDialog(HWND);
-int NTAPI ShowModalDialog(UINT, HWindow *, DLGPROC, LPVOID);
+int NTAPI ShowModalDialog(UINT, HWindow*, DLGPROC, LPVOID);
 
 #endif // _LANG_TOOLS_H_
+
+

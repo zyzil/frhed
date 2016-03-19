@@ -32,7 +32,7 @@ Last change: 2013-02-24 by Jochen Neubeck
  * @brief Build-in XOR -1 encoder.
  * @param [in, out] p Data (and parameters) to encode.
  */
-void WINAPI XorEncoder(MEMORY_CODING *p)
+void WINAPI XorEncoder(MEMORY_CODING* p)
 {
 	LPBYTE q = p->lpbMemory;
 	LPBYTE qMax = q + p->dwSize;
@@ -44,10 +44,11 @@ void WINAPI XorEncoder(MEMORY_CODING *p)
  * @brief Build-in ROT-13 encoder.
  * @param [in, out] p Data (and parameters) to encode.
  */
-void WINAPI Rot13Encoder(MEMORY_CODING *p)
+void WINAPI Rot13Encoder(MEMORY_CODING* p)
 {
 	LPBYTE q = p->lpbMemory;
 	LPBYTE qMax = q + p->dwSize;
 	while (q < qMax)
 		*(q++) = isalpha(*q) ? (BYTE)(tolower(*q) < 'n' ? *q + 13 : *q - 13) : *q;
 }
+

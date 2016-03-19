@@ -25,25 +25,29 @@ Last change: 2013-02-24 by Jochen Neubeck
 
 #define NumBx(var) NumBox( #var , var, L"NumBox" )
 #define NBx(capt, var) NumBox( #var , var, capt )
-void NumBox (wchar_t* varname, int x, wchar_t* caption)
+
+void NumBox(wchar_t* varname, int x, wchar_t* caption)
 {
 	wchar_t buf[100];
-	wsprintf (buf, L"%s = %d = 0x%x", varname, x, x);
-	MessageBox (nullptr, buf, caption, MB_OK);
+	wsprintf(buf, L"%s = %d = 0x%x", varname, x, x);
+	MessageBox(nullptr, buf, caption, MB_OK);
 }
 
 #define TxtBx(var) TxtBox( #var , var)
-void TxtBox (char* varname, char* s)
+
+void TxtBox(char* varname, char* s)
 {
 	wchar_t buf[100];
-	wsprintf (buf, L"%s = %s", varname, s);
-	MessageBox (nullptr, buf, L"TxtBox", MB_OK);
+	wsprintf(buf, L"%s = %s", varname, s);
+	MessageBox(nullptr, buf, L"TxtBox", MB_OK);
 }
 
 #define ChrBx(var) CharBox( #var , var)
-void CharBox (wchar_t* varname, wchar_t c)
+
+void CharBox(wchar_t* varname, wchar_t c)
 {
 	wchar_t buf[100];
-	wsprintf (buf, L"%s = %c", varname, c);
-	MessageBox (nullptr, buf, L"CharBox", MB_OK);
+	wsprintf(buf, L"%s = %c", varname, c);
+	MessageBox(nullptr, buf, L"CharBox", MB_OK);
 }
+

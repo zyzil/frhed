@@ -37,13 +37,26 @@ private:
 	BSTR m_bstr;
 public:
 	MakeAnsi(PCWSTR text, UINT codepage = CP_ACP, int textlen = -1);
-	MakeAnsi(): m_bstr(0) { }
-	~MakeAnsi() { SysFreeString(m_bstr); }
-	operator PCSTR() { return (PCSTR)m_bstr; }
+
+	MakeAnsi(): m_bstr(0)
+	{
+	}
+
+	~MakeAnsi()
+	{
+		SysFreeString(m_bstr);
+	}
+
+	operator PCSTR()
+	{
+		return (PCSTR)m_bstr;
+	}
+
 	UINT GetLength()
 	{
 		return SysStringByteLen(m_bstr);
 	}
+
 	PSTR GetBufferSetLength(UINT len)
 	{
 		assert((len & 1) == 0);
@@ -60,13 +73,26 @@ private:
 	BSTR m_bstr;
 public:
 	MakeWide(PCSTR text, UINT codepage = CP_ACP, int textlen = -1);
-	MakeWide(): m_bstr(0) { }
-	~MakeWide() { SysFreeString(m_bstr); }
-	operator PCWSTR() { return m_bstr; }
+
+	MakeWide(): m_bstr(0)
+	{
+	}
+
+	~MakeWide()
+	{
+		SysFreeString(m_bstr);
+	}
+
+	operator PCWSTR()
+	{
+		return m_bstr;
+	}
+
 	UINT GetLength()
 	{
 		return SysStringLen(m_bstr);
 	}
+
 	PWSTR GetBufferSetLength(UINT len)
 	{
 		return SysReAllocStringLen(&m_bstr, 0, len) ? m_bstr : 0;
@@ -86,3 +112,4 @@ typedef MakeAnsi W2T;
 #endif
 
 #endif
+

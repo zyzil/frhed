@@ -29,7 +29,7 @@ Last change: 2013-02-24 by Jochen Neubeck
 #include "AnsiConvert.h"
 
 MakeAnsi::MakeAnsi(PCWSTR text, UINT codepage, int textlen)
-: m_bstr(0)
+	: m_bstr(0)
 {
 	if (text)
 	{
@@ -43,7 +43,7 @@ MakeAnsi::MakeAnsi(PCWSTR text, UINT codepage, int textlen)
 }
 
 MakeWide::MakeWide(PCSTR text, UINT codepage, int textlen)
-: m_bstr(0)
+	: m_bstr(0)
 {
 	if (text)
 	{
@@ -55,3 +55,4 @@ MakeWide::MakeWide(PCSTR text, UINT codepage, int textlen)
 		}
 	}
 }
+

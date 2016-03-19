@@ -23,22 +23,29 @@ Last change: 2013-02-24 by Jochen Neubeck
 #include "precomp.h"
 #include "RefCounted.h"
 
-namespace MAUtil {
+namespace MAUtil
+{
+	RefCounted::RefCounted(int startCount) : mRefCount(startCount)
+	{
+	}
 
-	RefCounted::RefCounted(int startCount) : mRefCount(startCount) {}
-	
-	void RefCounted::addRef() {
+	void RefCounted::addRef()
+	{
 		mRefCount++;
 	}
 
-	void RefCounted::release() {
+	void RefCounted::release()
+	{
 		mRefCount--;
-		if(mRefCount == 0) {
+		if (mRefCount == 0)
+		{
 			delete this;
 		}
 	}
 
-	int RefCounted::getRefCount() {
+	int RefCounted::getRefCount()
+	{
 		return mRefCount;
 	}
 }
+

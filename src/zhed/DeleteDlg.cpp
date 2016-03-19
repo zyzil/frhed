@@ -41,7 +41,7 @@ static const int OffsetLen = 16;
  * @param [in] hDlg Handle to the dialog.
  * @return TRUE
  */
-BOOL DeleteDlg::OnInitDialog(HWindow *pDlg)
+BOOL DeleteDlg::OnInitDialog(HWindow* pDlg)
 {
 	int iStart = iGetStartOfSelection();
 	int iEnd = iGetEndOfSelection();
@@ -64,7 +64,7 @@ BOOL DeleteDlg::OnInitDialog(HWindow *pDlg)
  * @param [in] hDlg Handle to the dialog.
  * @return TRUE if the deleting succeeded, FALSE otherwise.
  */
-BOOL DeleteDlg::Apply(HWindow *pDlg)
+BOOL DeleteDlg::Apply(HWindow* pDlg)
 {
 	TCHAR buf[OffsetLen + 1];
 	int iOffset;
@@ -132,7 +132,7 @@ BOOL DeleteDlg::Apply(HWindow *pDlg)
  * @param [in] lParam Second message parameter (depends on message).
  * @return TRUE if message was handled, FALSE if ignored.
  */
-INT_PTR DeleteDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR DeleteDlg::DlgProc(HWindow* pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
@@ -148,12 +148,12 @@ INT_PTR DeleteDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
 				pDlg->EndDialog(wParam);
 			}
 			return TRUE;
-		case IDC_DELETE_INCLUDEOFFSET:  
+		case IDC_DELETE_INCLUDEOFFSET:
 		case IDC_DELETE_NUMBEROFBYTES:
 			EnableDlgItem(pDlg, IDC_DELETE_NUMBYTES,
-				pDlg->IsDlgButtonChecked(IDC_DELETE_NUMBEROFBYTES));
+			              pDlg->IsDlgButtonChecked(IDC_DELETE_NUMBEROFBYTES));
 			EnableDlgItem(pDlg, IDC_DELETE_ENDOFFSET,
-				pDlg->IsDlgButtonChecked(IDC_DELETE_INCLUDEOFFSET));
+			              pDlg->IsDlgButtonChecked(IDC_DELETE_INCLUDEOFFSET));
 			return TRUE;
 		}
 		break;
@@ -164,3 +164,4 @@ INT_PTR DeleteDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
 	}
 	return FALSE;
 }
+

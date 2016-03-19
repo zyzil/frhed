@@ -35,14 +35,14 @@ Last change: 2013-02-24 by Jochen Neubeck
 // Return: Length of resulting string.
 // ppd = pointer to pointer to result, must be delete[]-ed later.
 // If the input string was empty, no translated array is created and zero is returned.
-int create_bc_translation(BYTE **ppd, const char* src, int srclen, int charset, int binarymode)
+int create_bc_translation(BYTE** ppd, const char* src, int srclen, int charset, int binarymode)
 {
 	int destlen = Text2BinTranslator::iLengthOfTransToBin(src, srclen);
 	if (destlen > 0)
 	{
 		*ppd = new BYTE[destlen];
 		Text2BinTranslator::iCreateBcTranslation(*ppd, src, srclen,
-				charset, binarymode);
+		                                         charset, binarymode);
 		return destlen;
 	}
 	else
@@ -62,7 +62,7 @@ int create_bc_translation(BYTE **ppd, const char* src, int srclen, int charset, 
  */
 int Text2BinTranslator::iFindBytePos(const char* src, char c)
 {
-	const char *ptr = strchr(src, c);
+	const char* ptr = strchr(src, c);
 	return static_cast<int>(ptr != NULL ? ptr - src : strlen(src));
 }
 
@@ -100,7 +100,7 @@ int Text2BinTranslator::GetTrans2Bin(SimpleArray<BYTE>& sa, int charmode, int bi
  * @param [in] srclen How many chars to calculate.
  * @return Length of bytecode-string including zero-byte.
  */
-int Text2BinTranslator::iBytes2BytecodeDestLen(const BYTE *src, int srclen)
+int Text2BinTranslator::iBytes2BytecodeDestLen(const BYTE* src, int srclen)
 {
 	int destlen = 1;
 	for (int i = 0; i < srclen; i++)
@@ -134,7 +134,7 @@ int Text2BinTranslator::iIsBytecode(const char* src, int len)
 		return 0;
 
 	if (src[1] != 'b' && src[1] != 'w' && src[1] != 'l' && src[1] != 'f' &&
-			src[1] != 'd')
+		src[1] != 'd')
 		return 0; // Wrong first option.
 
 	if (src[2] != 'd' && src[2] != 'h' && src[2] != 'l' && src[2] != 'o')
@@ -151,7 +151,7 @@ int Text2BinTranslator::iIsBytecode(const char* src, int len)
 	}
 
 	if (j == 4 || j == len)
-		// No concluding ">" found.
+	// No concluding ">" found.
 		return 0;
 
 	for (int k = 4; k < j; k++)
@@ -167,7 +167,7 @@ int Text2BinTranslator::iIsBytecode(const char* src, int len)
 
 		case 'h':
 			if ((src[k] >= '0' && src[k] <= '9') ||
-					(src[k] >= 'a' && src[k] <= 'f'))
+				(src[k] >= 'a' && src[k] <= 'f'))
 				continue;
 			else
 				return 0; // Non-hex-digit.
@@ -175,14 +175,14 @@ int Text2BinTranslator::iIsBytecode(const char* src, int len)
 
 		case 'o': case 'l': // float or double.
 			if ((src[k] >= '0' && src[k] <= '9') || src[k] == '-' ||
-					src[k] == '.' || src[k] == 'e' || src[k] == 'E')
+				src[k] == '.' || src[k] == 'e' || src[k] == 'E')
 				continue;
 			else
 				return 0;
 			break;
 		}
 	}
-	
+
 	// Return length by type
 	switch (src[1])
 	{
@@ -199,13 +199,13 @@ int Text2BinTranslator::iIsBytecode(const char* src, int len)
 // Get value of *one* bytecode token.
 // Return: value of code.
 // bytecode must be checked before!!
-int Text2BinTranslator::iTranslateOneBytecode(BYTE* dest, const char* src, int srclen, int binmode )
+int Text2BinTranslator::iTranslateOneBytecode(BYTE* dest, const char* src, int srclen, int binmode)
 {
-	int i, k=0;
+	int i, k = 0;
 	char buf[50];
-	for (i=4; i<srclen; i++)
+	for (i = 4; i < srclen; i++)
 	{
-		if (src[i]=='>')
+		if (src[i] == '>')
 			break;
 		else
 		{
@@ -245,14 +245,14 @@ int Text2BinTranslator::iTranslateOneBytecode(BYTE* dest, const char* src, int s
 
 		case 'w':
 			dest[0] = (char)(value & 0xff);
-			dest[1] = (char)((value & 0xff00)>>8);
+			dest[1] = (char)((value & 0xff00) >> 8);
 			break;
 
 		case 'l':
 			dest[0] = (char)(value & 0xff);
-			dest[1] = (char)((value & 0xff00)>>8);
-			dest[2] = (char)((value & 0xff0000)>>16);
-			dest[3] = (char)((value & 0xff000000)>>24);
+			dest[1] = (char)((value & 0xff00) >> 8);
+			dest[2] = (char)((value & 0xff0000) >> 16);
+			dest[3] = (char)((value & 0xff000000) >> 24);
 			break;
 
 		case 'f':
@@ -288,9 +288,9 @@ int Text2BinTranslator::iTranslateOneBytecode(BYTE* dest, const char* src, int s
 			{
 				char* p = (char*) &fvalue;
 				int i;
-				for (i=0; i<4; i++)
+				for (i = 0; i < 4; i++)
 				{
-					dest[i] = p[3-i];
+					dest[i] = p[3 - i];
 				}
 			}
 			break;
@@ -317,7 +317,7 @@ int Text2BinTranslator::iLengthOfTransToBin(const char* src, int srclen)
 	int i, destlen = 0, l, k;
 	for (i = 0; i < srclen; i++)
 	{
-		if ((l = iIsBytecode (&(src[i]), srclen - i)) == 0)
+		if ((l = iIsBytecode(&(src[i]), srclen - i)) == 0)
 		{
 			if (src[i] == '\\')
 			{
@@ -366,7 +366,7 @@ int Text2BinTranslator::iLengthOfTransToBin(const char* src, int srclen)
 
 //-------------------------------------------------------------------
 // dest must be set to right length before calling.
-int Text2BinTranslator::iCreateBcTranslation(BYTE* dest, const char* src, int srclen, int charmode, int binmode )
+int Text2BinTranslator::iCreateBcTranslation(BYTE* dest, const char* src, int srclen, int charmode, int binmode)
 {
 	int i, di = 0, bclen;
 	for (i = 0; i < srclen; i++)
@@ -428,7 +428,7 @@ Text2BinTranslator::Text2BinTranslator(const char* ps)
 }
 
 //-------------------------------------------------------------------
-int Text2BinTranslator::bCompareBin( Text2BinTranslator& tr2, int charmode, int binmode )
+int Text2BinTranslator::bCompareBin(Text2BinTranslator& tr2, int charmode, int binmode)
 {
 	SimpleArray<BYTE> sa1, sa2;
 	GetTrans2Bin(sa1, charmode, binmode);
@@ -482,3 +482,4 @@ int Text2BinTranslator::iTranslateBytesToBC(char* pd, const BYTE* src, int srcle
 	pd[k] = '\0';
 	return k + 1;
 }
+

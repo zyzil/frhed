@@ -46,3 +46,4 @@ const TCHAR OptionsRegistrySettingsPath[] = _T("Software\\zhed\\Settings");
 
 /** @brief Subfolder where language files (PO files) are. */
 const WCHAR LangFileSubFolder[] = L"Languages";
+

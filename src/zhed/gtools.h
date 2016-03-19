@@ -35,14 +35,16 @@ public:
 	{
 		Flink = Blink = this;
 	}
+
 	virtual ~PNode()
 	{
 		Blink->Flink = Flink;
 		Flink->Blink = Blink;
 	}
+
 private:
-	PNode(const PNode &); // disallow copy construction
-	void operator=(const PNode &); // disallow assignment
+	PNode(const PNode&); // disallow copy construction
+	void operator=(const PNode&); // disallow assignment
 };
 
 class PList : public PNode
@@ -50,11 +52,13 @@ class PList : public PNode
 public:
 	PList();
 	virtual ~PList();
-	void AddTail(PNode *);
+	void AddTail(PNode*);
+
 	bool IsEmpty()
 	{
 		return Flink == this;
 	}
+
 	void DeleteContents();
 	long Count;
 };
@@ -68,30 +72,36 @@ private:
 	PFormat(); // disallow construction
 };
 
-template<size_t capacity>
+template <size_t capacity>
 class PString
 {
 	TCHAR buffer[capacity];
 public:
-	operator LPTSTR() { return buffer; }
-	PFormat &operator[](unsigned position)
+	operator LPTSTR()
+	{
+		return buffer;
+	}
+
+	PFormat& operator[](unsigned position)
 	{
 		// only remaining capacity (minus padding to store it) is ours
-		PFormat &r = reinterpret_cast<PFormat &>(buffer[position]);
+		PFormat& r = reinterpret_cast<PFormat &>(buffer[position]);
 		r.capacity = capacity - position - sizeof(unsigned) / sizeof(TCHAR) + 1;
 		return r;
 	}
+
 	operator PFormat *()
 	{
 		// total capacity is ours
-		PFormat *p = reinterpret_cast<PFormat *>(buffer);
+		PFormat* p = reinterpret_cast<PFormat *>(buffer);
 		p->capacity = capacity;
 		return p;
 	}
-	PFormat *operator->()
+
+	PFormat* operator->()
 	{
 		// total capacity is ours
-		PFormat *p = reinterpret_cast<PFormat *>(buffer);
+		PFormat* p = reinterpret_cast<PFormat *>(buffer);
 		p->capacity = capacity;
 		return p;
 	}
@@ -100,3 +110,5 @@ public:
 void TRACE(const char* pszFormat,...);
 
 #endif // gtools_h
+
+

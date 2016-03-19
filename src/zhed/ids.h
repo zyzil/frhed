@@ -39,7 +39,7 @@ public:
 	~CDropSource();
 
 	//IUnknown members
-	STDMETHODIMP QueryInterface(REFIID iid, void **ppvObject);
+	STDMETHODIMP QueryInterface(REFIID iid, void** ppvObject);
 	STDMETHODIMP_(ULONG) AddRef();
 	STDMETHODIMP_(ULONG) Release();
 
@@ -49,3 +49,5 @@ public:
 };
 
 #endif // ids_h
+
+

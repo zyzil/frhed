@@ -29,6 +29,8 @@ Last change: 2013-02-24 by Jochen Neubeck
 #ifndef _INVOKE_HTML_HELP_H_
 #define _INVOKE_HTML_HELP_H_
 
-void ShowHtmlHelp(UINT uCommand, LPCTSTR path, HWindow *pParentWindow);
+void ShowHtmlHelp(UINT uCommand, LPCTSTR path, HWindow* pParentWindow);
 
 #endif // _INVOKE_HTML_HELP_H_
+
+

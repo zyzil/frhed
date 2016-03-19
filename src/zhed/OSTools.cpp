@@ -38,13 +38,13 @@ Last change: 2013-04-09 by Jochen Neubeck
 BOOL ostools_HaveAdminAccess()
 {
 	BOOL isadmin = TRUE;
-	if (struct ADVAPI32 *ADVAPI32 = ::ADVAPI32)
+	if (struct ADVAPI32* ADVAPI32 = ::ADVAPI32)
 	{
 		SID_IDENTIFIER_AUTHORITY ntauth = SECURITY_NT_AUTHORITY;
 		PSID admgroup = NULL;
 		if (ADVAPI32->AllocateAndInitializeSid(&ntauth, 2,
-			SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS,
-			0, 0, 0, 0, 0, 0, &admgroup))
+		                                       SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS,
+		                                       0, 0, 0, 0, 0, 0, &admgroup))
 		{
 			if (!ADVAPI32->CheckTokenMembership(NULL, admgroup, &isadmin))
 			{
@@ -55,3 +55,4 @@ BOOL ostools_HaveAdminAccess()
 	}
 	return isadmin;
 }
+

@@ -30,33 +30,36 @@ Software Foundation, 59 Temple Place - Suite 330, Boston, MA
 //#include <ma.h>
 
 #if 0//ndef MAPIP
+
 #define HAVE_EMPTY_STRING
 #endif
 
-template<class Tchar> int tstrlen(const Tchar*);
-template<class Tchar> int tstrcmp(const Tchar*, const Tchar*);
+template <class Tchar>
+int tstrlen(const Tchar*);
+template <class Tchar>
+int tstrcmp(const Tchar*, const Tchar*);
 
-namespace MAUtil {
-
+namespace MAUtil
+{
 #ifdef NEW_OPERATORS
 	class StringData;
 	class String;
 	class StringStream;
 
 	namespace StringTranscribe {
-		/**
-		* Returns the maximum number of bytes that might be required to
-		* convert \a t to a string.
-		*/
-		//int requiredSpace(T t);
+	/**
+	* Returns the maximum number of bytes that might be required to
+	* convert \a t to a string.
+	*/
+	//int requiredSpace(T t);
 
-		/**
-		* Writes a string representation of \a t, including a null terminator,
-		* into \a dst. Must not write more bytes than requiredSpace() returns for this
-		* object, but may write less.
-		* Returns the number of bytes actually written.
-		*/
-		//int transcribe(T t, char* dst);
+	/**
+	* Writes a string representation of \a t, including a null terminator,
+	* into \a dst. Must not write more bytes than requiredSpace() returns for this
+	* object, but may write less.
+	* Returns the number of bytes actually written.
+	*/
+	//int transcribe(T t, char* dst);
 	}
 	// make specializations for int, double, maybe char and String.
 	// Others will have to make their own specializations.
@@ -71,27 +74,34 @@ namespace MAUtil {
 		}
 	private:
 		StringStream(String& s) : mS(s) {}
-		//StringStream(StringStream& o) : mS(o.mS) {}
+	//StringStream(StringStream& o) : mS(o.mS) {}
 		String& mS;
 		template<class T> friend
 			StringStream operator+=(String& s, T st);
 	};
 
-#endif	//NEW_OPERATORS
+#endif //NEW_OPERATORS
+
 
 	/**
 	* \brief A class that holds the actual data used by String.
 	*
 	* It's a reference counted vector.
 	*/
-	template<class Tchar> class StringData : public Vector<Tchar>, public RefCounted {
+	template <class Tchar>
+	class StringData : public Vector<Tchar>, public RefCounted
+	{
 	public:
 		StringData(const Tchar* text);
 		StringData(const Tchar* text, int len);
 		StringData(int len);
 		StringData(const StringData& other);
-		template<class T> friend class BasicString;
-		virtual ~StringData() {}
+		template <class T>
+		friend class BasicString;
+
+		virtual ~StringData()
+		{
+		}
 	};
 
 	/**
@@ -101,10 +111,13 @@ namespace MAUtil {
 	* instances are shared between strings as much as possible by using
 	* the copy-on-write idiom.
 	*/
-	template<class Tchar> class BasicString {
+	template <class Tchar>
+	class BasicString
+	{
 	public:
 
-		enum {
+		enum
+		{
 			npos = -1
 		};
 
@@ -122,7 +135,7 @@ namespace MAUtil {
 		* Copies the specified null-terminated string into the new string.
 		*/
 		BasicString(const Tchar* text);
-		
+
 		/**
 		* Copies \a len bytes of the string \a text into the new string.
 		*/
@@ -157,16 +170,16 @@ namespace MAUtil {
 		* false otherwise. */
 		bool operator<(const BasicString& other) const;
 
- 		/** Returns true if \a this is lexiographically greater than other,
-		* false otherwise. */
+		/** Returns true if \a this is lexiographically greater than other,
+	 * false otherwise. */
 		bool operator>(const BasicString& other) const;
 
 		/** Returns true if \a this is lexiographically less than or equal to \a other,
 		* false otherwise. */
 		bool operator<=(const BasicString& other) const;
 
- 		/** Returns true if \a this is lexiographically greater than or equal to \a other,
-		* false otherwise. */
+		/** Returns true if \a this is lexiographically greater than or equal to \a other,
+	 * false otherwise. */
 		bool operator>=(const BasicString& other) const;
 
 #ifdef NEW_OPERATORS
@@ -186,7 +199,8 @@ namespace MAUtil {
 		/** Concatenates a string in-place with \a c and returns a reference to itself. */
 		BasicString& operator+=(Tchar c);
 #endif
-#endif	//NEW_OPERATORS
+#endif //NEW_OPERATORS
+
 
 		/**
 		* Returns the index of the first instance of the given string inside this string,
@@ -261,13 +275,16 @@ namespace MAUtil {
 		* Returns a const pointer to the string data. The pointer becomes invalidated by
 		* any non-const method of this class.
 		*/
-		const Tchar* pointer() const { return c_str(); }
+		const Tchar* pointer() const
+		{
+			return c_str();
+		}
 
 		~BasicString();
 
 	protected:
-		void allocStringData(const Tchar *text, int len);
-	
+		void allocStringData(const Tchar* text, int len);
+
 		/** A pointer to the string data object shared by this string. */
 		StringData<Tchar>* sd;
 #ifdef HAVE_EMPTY_STRING
@@ -292,7 +309,7 @@ namespace MAUtil {
 		}
 	private:
 		StringDupeStream(const String& s) : mS(s) {}
-		//StringDupeStream(StringDupeStream& o) : mS(o.mS) {}
+	//StringDupeStream(StringDupeStream& o) : mS(o.mS) {}
 		String mS;
 		template<class T> friend
 			StringDupeStream operator+(const String& s, T st);
@@ -345,8 +362,8 @@ namespace MAUtil {
 		public:
 			T mT;
 
-			//friend StringTranscriber<T> toString(T t);
-		//private:
+	//friend StringTranscriber<T> toString(T t);
+	//private:
 			StringTranscriber(T t) : mT(t) {}
 		};
 		template<class T> inline int requiredSpace(StringTranscriber<T> st) {
@@ -385,17 +402,22 @@ namespace MAUtil {
 		const char* mT;
 		const int mLen;
 	};
-#endif	//0
+#endif //0
+
 #else
 	/**
 	* \returns A new string that is the concatenation of \a c and \a s.
 	*/
-	template<class Tchar> inline BasicString<Tchar> operator+(const Tchar* c,
-		const BasicString<Tchar>& s)
+	template <class Tchar>
+	inline BasicString<Tchar> operator+(const Tchar* c,
+	                                    const BasicString<Tchar>& s)
 	{
-		return BasicString<Tchar>(c)+s;
+		return BasicString<Tchar>(c) + s;
 	}
-#endif	//NEW_OPERATORS
+#endif //NEW_OPERATORS
+
 }
 
-#endif	//_SE_MSAB_MAUTIL_STRING_H_
+#endif //_SE_MSAB_MAUTIL_STRING_H_
+
+

@@ -26,35 +26,35 @@ Last change: 2013-02-24 by Jochen Neubeck
 #include "hexwdlg.h"
 #include "StringTable.h"
 
-void GetWindowText(HWindow *pwnd, SimpleString &str)
+void GetWindowText(HWindow* pwnd, SimpleString& str)
 {
 	int len = pwnd->GetWindowTextLength() + 1;
 	str.SetSize(len);
 	pwnd->GetWindowTextA(str, len);
 }
 
-void GetDlgItemText(HWindow *pwnd, int id, SimpleString &str)
+void GetDlgItemText(HWindow* pwnd, int id, SimpleString& str)
 {
 	GetWindowText(pwnd->GetDlgItem(id), str);
 }
 
-BOOL EnableDlgItem(HWindow *pwnd, int id, BOOL enable)
+BOOL EnableDlgItem(HWindow* pwnd, int id, BOOL enable)
 {
 	return pwnd->GetDlgItem(id)->EnableWindow(enable);
 }
 
-BOOL IsDlgItemEnabled(HWindow *pwnd, int id)
+BOOL IsDlgItemEnabled(HWindow* pwnd, int id)
 {
 	return pwnd->GetDlgItem(id)->IsWindowEnabled();
 }
 
-int MessageBox(HWindow *pwnd, LPCTSTR text, UINT type)
+int MessageBox(HWindow* pwnd, LPCTSTR text, UINT type)
 {
 	LPCTSTR app = GetLangString(IDS_APPNAME);
 	return pwnd->MessageBox(text, app, type);
 }
 
-int CheckHResult(HWindow *pwnd, HRESULT hr, UINT type)
+int CheckHResult(HWindow* pwnd, HRESULT hr, UINT type)
 {
 	int response = 0;
 	if (FAILED(hr))
@@ -68,7 +68,7 @@ int CheckHResult(HWindow *pwnd, HRESULT hr, UINT type)
 
 C_ASSERT(sizeof(DragDropOptionsDlg) == sizeof(HexEditorWindow)); // disallow instance members
 
-INT_PTR DragDropOptionsDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR DragDropOptionsDlg::DlgProc(HWindow* pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	UINT checked = 0;
 	switch (uMsg)
@@ -140,7 +140,7 @@ INT_PTR DragDropOptionsDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPA
 	return FALSE;
 }
 
-INT_PTR ChangeInstDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR ChangeInstDlg::DlgProc(HWindow* pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	//God damn spinners make life easy
 	switch (uMsg)
@@ -174,7 +174,7 @@ INT_PTR ChangeInstDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM l
 			//iInstCount is the start pos
 			LONG range = MAKELONG(iLoadInst, iSaveInst);
 			LONG pos = MAKELONG(iInstCount, 0);
-			HWindow *pWndUpDown = pDlg->GetDlgItem(IDC_SINST);
+			HWindow* pWndUpDown = pDlg->GetDlgItem(IDC_SINST);
 			pWndUpDown->SendMessage(UDM_SETRANGE, 0L, range);
 			pWndUpDown->SendMessage(UDM_SETPOS, 0L, pos);
 			pWndUpDown = pDlg->GetDlgItem(IDC_LINST);
@@ -203,3 +203,4 @@ INT_PTR ChangeInstDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM l
 	}
 	return FALSE;
 }
+

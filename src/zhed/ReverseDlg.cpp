@@ -40,7 +40,7 @@ Last change: 2013-02-24 by Jochen Neubeck
  * @param [in] l The optional parameter for the command.
  * @return TRUE if the message was handled, FALSE otherwise.
  */
-INT_PTR ReverseDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR ReverseDlg::DlgProc(HWindow* pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	TCHAR buf[32];
 	int iStartOfSelSetting = 0;
@@ -59,70 +59,70 @@ INT_PTR ReverseDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
 		switch (wParam)
 		{
 		case IDOK:
-		{
-			if (pDlg->GetDlgItemText(IDC_REVERSE_OFFSET, buf, RTL_NUMBER_OF(buf)) &&
-				!offset_parse(buf, iStartOfSelSetting))
 			{
-				MessageBox(pDlg, GetLangString(IDS_OFFSET_START_ERROR), MB_ICONERROR);
-				return TRUE;
-			}
-			if (pDlg->GetDlgItemText(IDC_REVERSE_OFFSETEND, buf, RTL_NUMBER_OF(buf)) &&
-				!offset_parse(buf, iEndOfSelSetting))
-			{
-				MessageBox(pDlg, GetLangString(IDS_OFFSET_END_ERROR), MB_ICONERROR);
-				return TRUE;
-			}
-			if (iEndOfSelSetting == iStartOfSelSetting)
-			{
-				MessageBox(pDlg, GetLangString(IDS_REVERSE_ONE_BYTE), MB_ICONERROR);
-				return TRUE;
-			}
-
-			SetCursor (LoadCursor (NULL, IDC_WAIT));
-			if (iEndOfSelSetting < iStartOfSelSetting)
-				swap(iEndOfSelSetting, iStartOfSelSetting);
-
-			maxb = m_dataArray.GetUpperBound();
-			if (iStartOfSelSetting < 0 || iEndOfSelSetting > maxb)
-			{
-				MessageBox(pDlg, GetLangString(IDS_REVERSE_BLOCK_EXTEND), MB_ICONERROR);
-			}
-
-			if (iStartOfSelSetting < 0)
-				iStartOfSelSetting = 0;
-			if (iEndOfSelSetting > maxb)
-				iEndOfSelSetting = maxb;
-			SimpleArray<BYTE> olddata(iEndOfSelSetting - iStartOfSelSetting + 1, &m_dataArray[iStartOfSelSetting]);
-			reverse_bytes(&m_dataArray[iStartOfSelSetting], &m_dataArray[iEndOfSelSetting]);
-			push_undorecord(iStartOfSelSetting, olddata, olddata.GetLength(), &m_dataArray[iStartOfSelSetting], iEndOfSelSetting - iStartOfSelSetting + 1);
-			if (bSelected)
-			{
-				//If the selection was inside the bit that was reversed, then reverse it too
-				if (iStartOfSelSetting <= iStartOfSelection &&
-					iStartOfSelSetting <= iEndOfSelection &&
-					iEndOfSelSetting >= iStartOfSelection &&
-					iEndOfSelSetting >= iEndOfSelection)
+				if (pDlg->GetDlgItemText(IDC_REVERSE_OFFSET, buf, RTL_NUMBER_OF(buf)) &&
+					!offset_parse(buf, iStartOfSelSetting))
 				{
-					iStartOfSelection = iEndOfSelSetting - iStartOfSelection + iStartOfSelSetting;
-					iEndOfSelection = iEndOfSelSetting - iEndOfSelection + iStartOfSelSetting;
+					MessageBox(pDlg, GetLangString(IDS_OFFSET_START_ERROR), MB_ICONERROR);
+					return TRUE;
 				}
-				else
+				if (pDlg->GetDlgItemText(IDC_REVERSE_OFFSETEND, buf, RTL_NUMBER_OF(buf)) &&
+					!offset_parse(buf, iEndOfSelSetting))
 				{
-					bSelected = false;
-				}//If the above is not true deselect - this may change when multiple selections are allowed
+					MessageBox(pDlg, GetLangString(IDS_OFFSET_END_ERROR), MB_ICONERROR);
+					return TRUE;
+				}
+				if (iEndOfSelSetting == iStartOfSelSetting)
+				{
+					MessageBox(pDlg, GetLangString(IDS_REVERSE_ONE_BYTE), MB_ICONERROR);
+					return TRUE;
+				}
+
+				SetCursor(LoadCursor(NULL, IDC_WAIT));
+				if (iEndOfSelSetting < iStartOfSelSetting)
+					swap(iEndOfSelSetting, iStartOfSelSetting);
+
+				maxb = m_dataArray.GetUpperBound();
+				if (iStartOfSelSetting < 0 || iEndOfSelSetting > maxb)
+				{
+					MessageBox(pDlg, GetLangString(IDS_REVERSE_BLOCK_EXTEND), MB_ICONERROR);
+				}
+
+				if (iStartOfSelSetting < 0)
+					iStartOfSelSetting = 0;
+				if (iEndOfSelSetting > maxb)
+					iEndOfSelSetting = maxb;
+				SimpleArray<BYTE> olddata(iEndOfSelSetting - iStartOfSelSetting + 1, &m_dataArray[iStartOfSelSetting]);
+				reverse_bytes(&m_dataArray[iStartOfSelSetting], &m_dataArray[iEndOfSelSetting]);
+				push_undorecord(iStartOfSelSetting, olddata, olddata.GetLength(), &m_dataArray[iStartOfSelSetting], iEndOfSelSetting - iStartOfSelSetting + 1);
+				if (bSelected)
+				{
+					//If the selection was inside the bit that was reversed, then reverse it too
+					if (iStartOfSelSetting <= iStartOfSelection &&
+						iStartOfSelSetting <= iEndOfSelection &&
+						iEndOfSelSetting >= iStartOfSelection &&
+						iEndOfSelSetting >= iEndOfSelection)
+					{
+						iStartOfSelection = iEndOfSelSetting - iStartOfSelection + iStartOfSelSetting;
+						iEndOfSelection = iEndOfSelSetting - iEndOfSelection + iStartOfSelSetting;
+					}
+					else
+					{
+						bSelected = false;
+					}//If the above is not true deselect - this may change when multiple selections are allowed
+				}
+				//Or if the current byte was in the reversed bytes reverse it too
+				else if (iCurByte >= iStartOfSelSetting &&
+					iCurByte <= iEndOfSelSetting)
+				{
+					iCurByte = iEndOfSelSetting - iCurByte + iStartOfSelSetting;
+					iCurNibble = !iCurNibble;
+				}
+				SetCursor(LoadCursor(NULL, IDC_ARROW));
+				bFilestatusChanged = true;
+				repaint();
+				// fall through
 			}
-			//Or if the current byte was in the reversed bytes reverse it too
-			else if (iCurByte >= iStartOfSelSetting &&
-				iCurByte <= iEndOfSelSetting)
-			{
-				iCurByte = iEndOfSelSetting - iCurByte + iStartOfSelSetting;
-				iCurNibble = !iCurNibble;
-			}
-			SetCursor (LoadCursor (NULL, IDC_ARROW));
-			bFilestatusChanged = true;
-			repaint();
-			// fall through
-		}
 		case IDCANCEL:
 			pDlg->EndDialog(wParam);
 			return TRUE;
@@ -135,3 +135,4 @@ INT_PTR ReverseDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
 	}
 	return FALSE;
 }
+

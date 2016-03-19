@@ -34,16 +34,16 @@ Last change: 2013-02-24 by Jochen Neubeck
  * @brief Initialize the dialog.
  * @param [in] hDlg Handle to the dialog.
  */
-BOOL RemoveBmkDlg::OnInitDialog(HWindow *pDlg)
+BOOL RemoveBmkDlg::OnInitDialog(HWindow* pDlg)
 {
 	TCHAR buf[INFOTIPSIZE];
-	HListBox *list = static_cast<HListBox *>(pDlg->GetDlgItem(IDC_REMOVEBMK_LIST));
-	for (int i = 0 ; i < iBmkCount ; i++)
+	HListBox* list = static_cast<HListBox *>(pDlg->GetDlgItem(IDC_REMOVEBMK_LIST));
+	for (int i = 0; i < iBmkCount; i++)
 	{
 		if (pbmkList[i].name.length())
-			_stprintf(buf, _T("%d %s (0x%x)"), i + 1, pbmkList[i].name.c_str(), pbmkList[i].offset);
+		_stprintf(buf, _T("%d %s (0x%x)"), i + 1, pbmkList[i].name.c_str(), pbmkList[i].offset);
 		else
-			_stprintf(buf, _T("%d 0x%x"), i + 1, pbmkList[i].offset);
+		_stprintf(buf, _T("%d 0x%x"), i + 1, pbmkList[i].offset);
 		list->AddString(buf);
 	}
 	list->SetCurSel(0);
@@ -57,7 +57,7 @@ BOOL RemoveBmkDlg::OnInitDialog(HWindow *pDlg)
  * @param [in] lParam Optional parameter for the command.
  * @return TRUE if the command was handled, FALSE otherwise.
  */
-BOOL RemoveBmkDlg::OnCommand(HWindow *pDlg, WPARAM wParam, LPARAM lParam)
+BOOL RemoveBmkDlg::OnCommand(HWindow* pDlg, WPARAM wParam, LPARAM lParam)
 {
 	int i;
 	switch (wParam)
@@ -66,7 +66,7 @@ BOOL RemoveBmkDlg::OnCommand(HWindow *pDlg, WPARAM wParam, LPARAM lParam)
 		i = static_cast<int>(pDlg->SendDlgItemMessage(IDC_REMOVEBMK_LIST, LB_GETCURSEL));
 		pbmkList[i].name.clear();
 		--iBmkCount;
-		for ( ; i < iBmkCount ; i++)
+		for (; i < iBmkCount; i++)
 			pbmkList[i] = pbmkList[i + 1];
 		repaint();
 		// fall through
@@ -85,7 +85,7 @@ BOOL RemoveBmkDlg::OnCommand(HWindow *pDlg, WPARAM wParam, LPARAM lParam)
  * @param [in] lParam The optional parameter for the command.
  * @return TRUE if the message was handled, FALSE otherwise.
  */
-INT_PTR RemoveBmkDlg::DlgProc(HWindow *pDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR RemoveBmkDlg::DlgProc(HWindow* pDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (iMsg)
 	{
@@ -100,3 +100,4 @@ INT_PTR RemoveBmkDlg::DlgProc(HWindow *pDlg, UINT iMsg, WPARAM wParam, LPARAM lP
 	}
 	return FALSE;
 }
+

@@ -41,7 +41,7 @@ bool OpenPartiallyDlg::bShowFileStatsPL = false;
  * @param [in] hDlg Handle to the dialog.
  * @return TRUE.
  */
-BOOL OpenPartiallyDlg::OnInitDialog(HWindow *pDlg)
+BOOL OpenPartiallyDlg::OnInitDialog(HWindow* pDlg)
 {
 	INT64 iPLFileLen = _filelengthi64(filehandle);
 	TCHAR buf[128] = {0};
@@ -61,14 +61,14 @@ BOOL OpenPartiallyDlg::OnInitDialog(HWindow *pDlg)
  * @param [in] hDlg Handle to the dialog.
  * @return TRUE if file was successfully opened, FALSE otherwise.
  */
-BOOL OpenPartiallyDlg::Apply(HWindow *pDlg)
+BOOL OpenPartiallyDlg::Apply(HWindow* pDlg)
 {
 	const INT64 iPLFileLen = _filelengthi64(filehandle);
 	const UINT state = pDlg->IsDlgButtonChecked(IDC_OPENPARTIAL_RELOFFSET);
 	bShowFileStatsPL = state == BST_CHECKED;
 	TCHAR buf[128];
 	UINT numBytesPl = 0; // Bytes to read
-	
+
 	// Only complain about wrong offset in start offset editbox if loading from start.
 	if (pDlg->GetDlgItemText(IDC_OPENPARTIAL_BYTES, buf, RTL_NUMBER_OF(buf)) &&
 		_stscanf(buf, _T("%u"), &numBytesPl) == 0)
@@ -142,7 +142,7 @@ BOOL OpenPartiallyDlg::Apply(HWindow *pDlg)
  * @param [in] lParam The optional parameter for the command.
  * @return TRUE if the message was handled, FALSE otherwise.
  */
-INT_PTR OpenPartiallyDlg::DlgProc(HWindow *pDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR OpenPartiallyDlg::DlgProc(HWindow* pDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (iMsg)
 	{
@@ -161,7 +161,7 @@ INT_PTR OpenPartiallyDlg::DlgProc(HWindow *pDlg, UINT iMsg, WPARAM wParam, LPARA
 		case IDC_OPENPARTIAL_BEGINOFF:
 		case IDC_OPENPARTIAL_ENDBYTES:
 			EnableDlgItem(pDlg, IDC_OPENPARTIAL_OFFSET,
-				pDlg->IsDlgButtonChecked(IDC_OPENPARTIAL_BEGINOFF));
+			              pDlg->IsDlgButtonChecked(IDC_OPENPARTIAL_BEGINOFF));
 			return TRUE;
 		}
 		break;
@@ -172,3 +172,4 @@ INT_PTR OpenPartiallyDlg::DlgProc(HWindow *pDlg, UINT iMsg, WPARAM wParam, LPARA
 	}
 	return FALSE;
 }
+

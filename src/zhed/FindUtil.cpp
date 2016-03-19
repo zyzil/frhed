@@ -96,7 +96,7 @@ int find_bytes(BYTE* ps, int ls, BYTE* pb, int lb, int mode, BYTE (*cmp)(BYTE))
 	{
 		for (i = start; i < start + lb; i++)
 		{
-			if (cmp (ps[i]) != cmp (pb[i - start]))
+			if (cmp(ps[i]) != cmp(pb[i - start]))
 				break;
 		}
 		if (i == start + lb)
@@ -105,3 +105,4 @@ int find_bytes(BYTE* ps, int ls, BYTE* pb, int lb, int mode, BYTE (*cmp)(BYTE))
 
 	return -1;
 }
+

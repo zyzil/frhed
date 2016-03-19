@@ -35,8 +35,12 @@ extern PartitionInfo* SelectedPartitionInfo;
 class EncodeDecodeDialog : public HexEditorWindow
 {
 public:
-	enum { IDD = IDD_ENCODE_DECODE_DIALOG };
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM);
+	enum
+	{
+		IDD = IDD_ENCODE_DECODE_DIALOG
+	};
+
+	INT_PTR DlgProc(HWindow*, UINT, WPARAM, LPARAM);
 };
 
 /**
@@ -45,8 +49,12 @@ public:
 class OpenDriveDialog : public HexEditorWindow
 {
 public:
-	enum { IDD = IDD_OPEN_DRIVE_DIALOG };
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM);
+	enum
+	{
+		IDD = IDD_OPEN_DRIVE_DIALOG
+	};
+
+	INT_PTR DlgProc(HWindow*, UINT, WPARAM, LPARAM);
 };
 
 /**
@@ -55,9 +63,15 @@ public:
 class GotoTrackDialog : public HexEditorWindow
 {
 public:
-	enum { IDD = IDD_GOTO_TRACK_DIALOG };
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM);
+	enum
+	{
+		IDD = IDD_GOTO_TRACK_DIALOG
+	};
+
+	INT_PTR DlgProc(HWindow*, UINT, WPARAM, LPARAM);
 };
 
 
 #endif // gktools_h
+
+

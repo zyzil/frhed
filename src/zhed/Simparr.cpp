@@ -69,7 +69,7 @@ SimpleString& SimpleString::operator=(LPCSTR ps)
  * @param [in] str String to replace current content.
  * @return TRUE.
  */
-SimpleString& SimpleString::operator=(const SimpleString &str)
+SimpleString& SimpleString::operator=(const SimpleString& str)
 {
 	SetToString(&str[0]);
 	return *this;
@@ -156,7 +156,7 @@ bool SimpleString::IsEmpty() const
  * @param [in] ps2 Second string to concat.
  * @return String with given strings combined.
  */
-SimpleString operator+(const SimpleString &ps1, LPCSTR ps2)
+SimpleString operator+(const SimpleString& ps1, LPCSTR ps2)
 {
 	SimpleString s1;
 	s1 += ps1;
@@ -170,10 +170,11 @@ SimpleString operator+(const SimpleString &ps1, LPCSTR ps2)
  * @param [in] ps2 Second string to concat.
  * @return String with given strings combined.
  */
-SimpleString operator+(LPCSTR ps1, const SimpleString &ps2)
+SimpleString operator+(LPCSTR ps1, const SimpleString& ps2)
 {
 	SimpleString s1;
 	s1 += ps1;
 	s1 += ps2;
 	return SimpleString(s1);
 }
+

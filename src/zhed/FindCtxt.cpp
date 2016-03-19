@@ -32,10 +32,10 @@ Last change: 2013-02-24 by Jochen Neubeck
  * @brief Constructor. 
  */
 FindCtxt::FindCtxt()
-: m_pText(NULL)
-, m_bMatchCase(false)
-, m_iDirection(0)
-, m_bUnicode(false)
+	: m_pText(NULL)
+	  , m_bMatchCase(false)
+	  , m_iDirection(0)
+	  , m_bUnicode(false)
 {
 }
 
@@ -65,3 +65,4 @@ void FindCtxt::SetText(LPCSTR text)
 	ClearText();
 	m_pText = _strdup(text);
 }
+

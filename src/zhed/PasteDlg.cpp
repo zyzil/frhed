@@ -37,7 +37,7 @@ Last change: 2013-02-24 by Jochen Neubeck
  * @param [in] hDlg Handle to dialog.
  * @return TRUE.
  */
-BOOL PasteDlg::OnInitDialog(HWindow *pDlg)
+BOOL PasteDlg::OnInitDialog(HWindow* pDlg)
 {
 	if (bSelected) // iPasteMode = 0
 	{
@@ -72,7 +72,7 @@ BOOL PasteDlg::OnInitDialog(HWindow *pDlg)
  * @param [in] hDlg Handle to dialog.
  * @return TRUE if paste succeeded, FALSE if failed.
  */
-BOOL PasteDlg::Apply(HWindow *pDlg)
+BOOL PasteDlg::Apply(HWindow* pDlg)
 {
 	bPasteAsText = pDlg->IsDlgButtonChecked(IDC_PASTE_BINARY) == BST_CHECKED;
 	iPasteTimes = pDlg->GetDlgItemInt(IDC_PASTE_TIMES);
@@ -82,15 +82,15 @@ BOOL PasteDlg::Apply(HWindow *pDlg)
 		return FALSE;
 	}
 	iPasteSkip = pDlg->GetDlgItemInt(IDC_PASTE_SKIPBYTES);
-	HEdit *pwndEdit1 = static_cast<HEdit *>(pDlg->GetDlgItem(IDC_PASTE_CLIPBOARD));
+	HEdit* pwndEdit1 = static_cast<HEdit *>(pDlg->GetDlgItem(IDC_PASTE_CLIPBOARD));
 	int destlen = pwndEdit1->GetWindowTextLength() + 1;
-	char *pcPastestring = new char[destlen];
+	char* pcPastestring = new char[destlen];
 	destlen = pwndEdit1->GetWindowTextA(pcPastestring, destlen);
 	if (!bPasteAsText)
 	{
-		char *pc = 0;
+		char* pc = 0;
 		destlen = create_bc_translation((BYTE **)&pc, pcPastestring,
-			static_cast<int>(strlen(pcPastestring)), iCharacterSet, iBinaryMode);
+		                                static_cast<int>(strlen(pcPastestring)), iCharacterSet, iBinaryMode);
 		delete [] pcPastestring;
 		pcPastestring = pc;
 	}
@@ -118,7 +118,7 @@ BOOL PasteDlg::Apply(HWindow *pDlg)
 			olddata.AppendArray(&m_dataArray[iCurByte], (iPasteTimes - 1) * iPasteSkip);
 		}
 		int i = iCurByte;
-		for (int k = 0 ; k < iPasteTimes ; k++)
+		for (int k = 0; k < iPasteTimes; k++)
 		{
 			if (!m_dataArray.InsertAtGrow(i, (BYTE*)pcPastestring, 0, destlen))
 			{
@@ -143,9 +143,9 @@ BOOL PasteDlg::Apply(HWindow *pDlg)
 		}
 		olddata.AppendArray(&m_dataArray[iCurByte], (iPasteTimes - 1) * (iPasteSkip + destlen) + destlen);
 		// Overwrite data.
-		for (int k = 0 ; k < iPasteTimes ; k++)
+		for (int k = 0; k < iPasteTimes; k++)
 		{
-			for (int i = 0 ; i < destlen ; i++)
+			for (int i = 0; i < destlen; i++)
 			{
 				m_dataArray[iCurByte + k * (iPasteSkip + destlen) + i] = pcPastestring[i];
 			}
@@ -163,7 +163,7 @@ BOOL PasteDlg::Apply(HWindow *pDlg)
  * @param [in] hDlg Handle to the dialog.
  * @param [in] wParam Control ID.
  */
-BOOL PasteDlg::OnCommand(HWindow *pDlg, WPARAM wParam, LPARAM)
+BOOL PasteDlg::OnCommand(HWindow* pDlg, WPARAM wParam, LPARAM)
 {
 	switch (wParam)
 	{
@@ -186,7 +186,7 @@ BOOL PasteDlg::OnCommand(HWindow *pDlg, WPARAM wParam, LPARAM)
  * @param [in] lParam The optional parameter for the command.
  * @return TRUE if the message was handled, FALSE otherwise.
  */
-INT_PTR PasteDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR PasteDlg::DlgProc(HWindow* pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
@@ -201,3 +201,4 @@ INT_PTR PasteDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam
 	}
 	return FALSE;
 }
+

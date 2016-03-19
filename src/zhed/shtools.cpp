@@ -42,14 +42,14 @@ Last change: 2013-02-24 by Jochen Neubeck
 STDAPI CreateLink(LPCTSTR lpszPathObj, LPCTSTR lpszPathLink)
 {
 	HRESULT hres;
-	IShellLink *psl;
+	IShellLink* psl;
 
 	// Get a pointer to the IShellLink interface.
 	hres = CoCreateInstance(CLSID_ShellLink, NULL,
-		CLSCTX_INPROC_SERVER, IID_IShellLink, (void **)&psl);
+	                        CLSCTX_INPROC_SERVER, IID_IShellLink, (void **)&psl);
 	if (SUCCEEDED(hres))
 	{
-		IPersistFile *ppf;
+		IPersistFile* ppf;
 		// Set the path to the shortcut target
 		psl->SetPath(lpszPathObj);
 		// Query IShellLink for the IPersistFile interface for saving the
@@ -83,7 +83,7 @@ STDAPI CreateLinkToMe(LPCTSTR lpszPathLink)
 STDAPI ResolveIt(HWND hwnd, LPCTSTR lpszLinkFile, LPTSTR lpszPath)
 {
 	HRESULT hres;
-	IShellLink *psl;
+	IShellLink* psl;
 	WIN32_FIND_DATA fd;
 	*lpszPath = _T('\0'); // assume failure
 
@@ -126,7 +126,7 @@ STDAPI PathsEqual(LPCTSTR p0, LPCTSTR p1)
 	HRESULT hr;
 	if (SUCCEEDED(hr = SHGetDesktopFolder(&pFolder)))
 	{
-		LPITEMIDLIST pidl[2] = { NULL, NULL };
+		LPITEMIDLIST pidl[2] = {NULL, NULL};
 		ULONG chEaten;//only needed by parse dispname
 		// Convert the paths to ITEMIDLISTs.
 		if (SUCCEEDED(hr = pFolder->ParseDisplayName(NULL, NULL,
@@ -216,3 +216,4 @@ STDAPI GetLongPathNameWin32(LPCTSTR lpszShortPath, LPTSTR lpszLongPath)
 	}
 	return S_OK;
 }
+

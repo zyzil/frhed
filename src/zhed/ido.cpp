@@ -63,7 +63,7 @@ void CDataObject::Empty()
 }
 
 //IUnknown members
-STDMETHODIMP CDataObject::QueryInterface(REFIID iid, void **ppvObject)
+STDMETHODIMP CDataObject::QueryInterface(REFIID iid, void** ppvObject)
 {
 	if (iid == IID_IUnknown || iid == IID_IDataObject)
 	{
@@ -86,7 +86,7 @@ STDMETHODIMP_(ULONG) CDataObject::Release()
 }
 
 //IDataObject members
-STDMETHODIMP CDataObject::GetData( FORMATETC* pFormatetc, STGMEDIUM* pmedium )
+STDMETHODIMP CDataObject::GetData(FORMATETC* pFormatetc, STGMEDIUM* pmedium)
 {
 	//Error handling
 	if (pFormatetc == 0 || pmedium == 0)
@@ -98,7 +98,7 @@ STDMETHODIMP CDataObject::GetData( FORMATETC* pFormatetc, STGMEDIUM* pmedium )
 
 	HRESULT hr = DV_E_FORMATETC;
 	//Search for the requested aspect of the requested format
-	for (UINT i = 0; i < numdata ; i++)
+	for (UINT i = 0; i < numdata; i++)
 	{
 		if (data[i].format.cfFormat == pFormatetc->cfFormat)
 		{
@@ -114,27 +114,27 @@ STDMETHODIMP CDataObject::GetData( FORMATETC* pFormatetc, STGMEDIUM* pmedium )
 	return hr;
 }
 
-STDMETHODIMP CDataObject::GetDataHere(FORMATETC *, STGMEDIUM *pmedium)
+STDMETHODIMP CDataObject::GetDataHere(FORMATETC*, STGMEDIUM* pmedium)
 {
 	pmedium->pUnkForRelease = NULL;
 	return E_NOTIMPL;
 }
 
-STDMETHODIMP CDataObject::QueryGetData(FORMATETC *pFormatetc)
+STDMETHODIMP CDataObject::QueryGetData(FORMATETC* pFormatetc)
 {
-	for (UINT i = 0 ; i < numdata ; i++)
+	for (UINT i = 0; i < numdata; i++)
 		if (data[i].format.cfFormat == pFormatetc->cfFormat)
 			if (data[i].format.dwAspect == pFormatetc->dwAspect)
 				return S_OK;
 	return DV_E_FORMATETC;
 }
 
-STDMETHODIMP CDataObject::GetCanonicalFormatEtc(FORMATETC *, FORMATETC *)
+STDMETHODIMP CDataObject::GetCanonicalFormatEtc(FORMATETC*, FORMATETC*)
 {
 	return E_NOTIMPL;
 }
 
-STDMETHODIMP CDataObject::SetData(FORMATETC *pFormatetc, STGMEDIUM *pmedium, BOOL fRelease)
+STDMETHODIMP CDataObject::SetData(FORMATETC* pFormatetc, STGMEDIUM* pmedium, BOOL fRelease)
 {
 	if (!allowSetData)
 		return E_NOTIMPL;
@@ -149,7 +149,7 @@ STDMETHODIMP CDataObject::SetData(FORMATETC *pFormatetc, STGMEDIUM *pmedium, BOO
 
 	//Create a new entry
 	UINT n = numdata + 1;
-	DataSpecifier *t = (DataSpecifier *)realloc(data, n * sizeof *data);
+	DataSpecifier* t = (DataSpecifier *)realloc(data, n * sizeof *data);
 	if (t == 0)
 		return E_OUTOFMEMORY;
 	t[numdata].medium = *pmedium;
@@ -159,18 +159,18 @@ STDMETHODIMP CDataObject::SetData(FORMATETC *pFormatetc, STGMEDIUM *pmedium, BOO
 	return S_OK;
 }
 
-STDMETHODIMP CDataObject::EnumFormatEtc( DWORD dwDirection, IEnumFORMATETC** ppenumFormatetc )
+STDMETHODIMP CDataObject::EnumFormatEtc(DWORD dwDirection, IEnumFORMATETC** ppenumFormatetc)
 {
 	//Don't support DATADIR_SET since we accept any format
-	if(dwDirection!=DATADIR_GET) return E_NOTIMPL;
+	if (dwDirection != DATADIR_GET) return E_NOTIMPL;
 
 	*ppenumFormatetc = NULL;//FIXME: should we do this?
 
 	/*Find an array member that is NULL (has been freed)
 	  or resize the array to make space for one*/
 	unsigned int i = numenums;
-	if(enums) for( i = 0; i < numenums && enums[i] != NULL; i++ );
-	CEnumFORMATETC **t;
+	if (enums) for (i = 0; i < numenums && enums[i] != NULL; i++);
+	CEnumFORMATETC** t;
 	if (i == numenums)
 		t = (CEnumFORMATETC**) realloc(enums, sizeof(CEnumFORMATETC *) * (numenums + 1));
 	else
@@ -185,14 +185,14 @@ STDMETHODIMP CDataObject::EnumFormatEtc( DWORD dwDirection, IEnumFORMATETC** ppe
 	if (i == numenums)
 		numenums++;
 	if (ret != S_OK || *ppenumFormatetc == NULL)
-		//FIXME: Should we return E_INVALIDARG or E_OUTOFMEMORY or what?
+	//FIXME: Should we return E_INVALIDARG or E_OUTOFMEMORY or what?
 		return E_OUTOFMEMORY;
 	return S_OK;
 }
 
 //CEnumFORMATETC
 //Members
-CEnumFORMATETC::CEnumFORMATETC(CDataObject *par)
+CEnumFORMATETC::CEnumFORMATETC(CDataObject* par)
 {
 	m_cRefCount = 0;
 	parent = par;
@@ -205,7 +205,7 @@ CEnumFORMATETC::~CEnumFORMATETC()
 }
 
 //IUnknown members
-STDMETHODIMP CEnumFORMATETC::QueryInterface(REFIID iid, void **ppvObject)
+STDMETHODIMP CEnumFORMATETC::QueryInterface(REFIID iid, void** ppvObject)
 {
 	if (iid == IID_IUnknown || iid == IID_IEnumFORMATETC)
 	{
@@ -228,12 +228,12 @@ STDMETHODIMP_(ULONG) CEnumFORMATETC::Release()
 }
 
 //IEnumFORMATETC members
-STDMETHODIMP CEnumFORMATETC::Next(ULONG celt, FORMATETC *rgelt, ULONG *pceltFetched)
+STDMETHODIMP CEnumFORMATETC::Next(ULONG celt, FORMATETC* rgelt, ULONG* pceltFetched)
 {
 	if (rgelt == 0)
 		return E_INVALIDARG;
 	ULONG fetched = 0;
-	unsigned int e=index+celt;
+	unsigned int e = index + celt;
 	while (index < e && index < parent->numdata)
 	{
 		rgelt[fetched++] = parent->data[index++].format;
@@ -255,13 +255,13 @@ STDMETHODIMP CEnumFORMATETC::Reset()
 	return S_OK;
 }
 
-STDMETHODIMP CEnumFORMATETC::Clone(IEnumFORMATETC **ppenum)
+STDMETHODIMP CEnumFORMATETC::Clone(IEnumFORMATETC** ppenum)
 {
 	return parent->EnumFormatEtc(DATADIR_GET, ppenum);
 }
 
 //Following methods not implemented yet
-STDMETHODIMP CDataObject::DAdvise(FORMATETC *, DWORD, IAdviseSink *, DWORD *)
+STDMETHODIMP CDataObject::DAdvise(FORMATETC*, DWORD, IAdviseSink*, DWORD*)
 {
 	return E_NOTIMPL;
 }
@@ -271,7 +271,8 @@ STDMETHODIMP CDataObject::DUnadvise(DWORD)
 	return E_NOTIMPL;
 }
 
-STDMETHODIMP CDataObject::EnumDAdvise(IEnumSTATDATA **)
+STDMETHODIMP CDataObject::EnumDAdvise(IEnumSTATDATA**)
 {
 	return E_NOTIMPL;
 }
+

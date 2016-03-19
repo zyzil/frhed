@@ -42,7 +42,7 @@ static const UINT EditLen = 16;
  * @param [in] hDlg Handle to dialog to initialize.
  * @return TRUE.
  */
-BOOL GoToDlg::OnInitDialog(HWindow *pDlg)
+BOOL GoToDlg::OnInitDialog(HWindow* pDlg)
 {
 	// Get current offset
 	TCHAR buffer[EditLen + 1];
@@ -58,7 +58,7 @@ BOOL GoToDlg::OnInitDialog(HWindow *pDlg)
  * @param [in] hDlg Handle of Goto-dialog.
  * @return TRUE if new offset was applied, FALSE for invalid offset.
  */
-BOOL GoToDlg::Apply(HWindow *pDlg)
+BOOL GoToDlg::Apply(HWindow* pDlg)
 {
 	TCHAR buffer[EditLen + 1];
 	int offset, i = 0, r = 0;
@@ -74,11 +74,11 @@ BOOL GoToDlg::Apply(HWindow *pDlg)
 	if (r)
 	{
 		// Relative jump.
-		if (buffer[0] == '-' )
+		if (buffer[0] == '-')
 			offset = -offset;
 		offset += iCurByte;
 	}
-	
+
 	// Absolute jump.
 	// Check limits and jump to begin/end if out of limits
 	if (offset < 0)
@@ -99,7 +99,7 @@ BOOL GoToDlg::Apply(HWindow *pDlg)
  * @param [in] lParam The optional parameter for the command.
  * @return TRUE if the message was handled, FALSE otherwise.
  */
-INT_PTR GoToDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR GoToDlg::DlgProc(HWindow* pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
@@ -124,3 +124,4 @@ INT_PTR GoToDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 	return FALSE;
 }
+

@@ -28,12 +28,13 @@ Last change: 2013-02-24 by Jochen Neubeck
 #include "StringTable.h"
 
 //Members
-CDropTarget::CDropTarget(HexEditorWindow &hexwnd)
-: hexwnd(hexwnd)
+CDropTarget::CDropTarget(HexEditorWindow& hexwnd)
+	: hexwnd(hexwnd)
 {
 #ifdef _DEBUG
 	printf("IDropTarget::IDropTarget\n");
 #endif //_DEBUG
+
 	m_cRefCount = 0;
 }
 
@@ -44,6 +45,7 @@ CDropTarget::~CDropTarget()
 	if (m_cRefCount != 0)
 		printf("Deleting %s too early %p.m_cRefCount = %d\n", "IDropTarget", this, m_cRefCount);
 #endif //_DEBUG
+
 	hexwnd.target = NULL;
 }
 
@@ -54,6 +56,7 @@ STDMETHODIMP CDropTarget::QueryInterface(REFIID iid, void** ppvObject)
 #ifdef _DEBUG
 	printf("IDropTarget::QueryInterface\n");
 #endif //_DEBUG
+
 
 	*ppvObject = NULL;
 
@@ -76,6 +79,7 @@ STDMETHODIMP_(ULONG) CDropTarget::AddRef()
 #ifdef _DEBUG
 	printf("IDropTarget::AddRef\n");
 #endif //_DEBUG
+
 	return ++m_cRefCount;
 }
 
@@ -84,6 +88,7 @@ STDMETHODIMP_(ULONG) CDropTarget::Release()
 #ifdef _DEBUG
 	printf("IDropTarget::Release\n");
 #endif //_DEBUG
+
 	if (--m_cRefCount == 0)
 		delete this;
 	return m_cRefCount;
@@ -96,12 +101,13 @@ STDMETHODIMP CDropTarget::DragEnter(IDataObject* pDataObject, DWORD grfKeyState,
 #ifdef _DEBUG
 	printf("IDropTarget::DragEnter\n");
 #endif //_DEBUG
+
 	pDataObj = pDataObject;
 	pDataObject->AddRef();
 	hdrop_present = false;
 	if (hexwnd.prefer_CF_HDROP)
 	{
-		FORMATETC fe = { CF_HDROP, NULL, DVASPECT_CONTENT, -1, 0xffffffff };
+		FORMATETC fe = {CF_HDROP, NULL, DVASPECT_CONTENT, -1, 0xffffffff};
 		STGMEDIUM stm;
 		if (S_OK == pDataObject->QueryGetData(&fe))
 		{
@@ -129,6 +135,7 @@ STDMETHODIMP CDropTarget::DragOver(DWORD grfKeyState, POINTL pt, DWORD* pdwEffec
 	printf("IDropTarget::DragOver\n");
 #endif //_DEBUG
 
+
 	LastKeyState = grfKeyState;
 
 	DWORD dwOKEffects = *pdwEffect;
@@ -144,15 +151,15 @@ STDMETHODIMP CDropTarget::DragOver(DWORD grfKeyState, POINTL pt, DWORD* pdwEffec
 	else if (grfKeyState & MK_CONTROL)
 		*pdwEffect =
 			dwOKEffects & DROPEFFECT_COPY ? DROPEFFECT_COPY :
-			dwOKEffects & DROPEFFECT_MOVE ? DROPEFFECT_MOVE :
-			DROPEFFECT_NONE;
+				dwOKEffects & DROPEFFECT_MOVE ? DROPEFFECT_MOVE :
+				DROPEFFECT_NONE;
 	else
 		*pdwEffect =
 			dwOKEffects & DROPEFFECT_MOVE ? DROPEFFECT_MOVE :
-			dwOKEffects & DROPEFFECT_COPY ? DROPEFFECT_COPY :
-			DROPEFFECT_NONE;
+				dwOKEffects & DROPEFFECT_COPY ? DROPEFFECT_COPY :
+				DROPEFFECT_NONE;
 
-	POINT p = { pt.x, pt.y };
+	POINT p = {pt.x, pt.y};
 	hexwnd.pwnd->ScreenToClient(&p);
 	hexwnd.iMouseX = p.x;
 	hexwnd.iMouseY = p.y;
@@ -162,7 +169,7 @@ STDMETHODIMP CDropTarget::DragOver(DWORD grfKeyState, POINTL pt, DWORD* pdwEffec
 	else
 		hexwnd.set_drag_caret(p.x, p.y, *pdwEffect == DROPEFFECT_COPY, (grfKeyState & MK_SHIFT) != 0);
 
-	hexwnd.fix_scroll_timers(p.x,p.y);
+	hexwnd.fix_scroll_timers(p.x, p.y);
 
 	return S_OK;
 }
@@ -172,6 +179,7 @@ STDMETHODIMP CDropTarget::DragLeave(void)
 #ifdef _DEBUG
 	printf("IDropTarget::DragLeave\n");
 #endif //_DEBUG
+
 
 	//This is the lesser of two evils
 	//1. recreate the editing caret whenever the mouse leaves the client area
@@ -195,12 +203,12 @@ STDMETHODIMP CDropTarget::DragLeave(void)
 
 int CDropTarget::PopupDropMenu(POINTL pt)
 {
-	HMenu *pMenu = HMenu::CreatePopupMenu();
+	HMenu* pMenu = HMenu::CreatePopupMenu();
 	pMenu->InsertMenu(0, MF_BYPOSITION | MF_STRING, 1, GetLangString(IDS_DD_MENU_MOVE));
 	pMenu->InsertMenu(1, MF_BYPOSITION | MF_STRING, 2, GetLangString(IDS_DD_MENU_COPY));
 	pMenu->InsertMenu(2, MF_BYPOSITION | MF_SEPARATOR, 0, 0);
 	pMenu->InsertMenu(3, MF_BYPOSITION | MF_STRING, 0, GetLangString(IDS_DD_MENU_CANCEL));
-	int choice = pMenu->TrackPopupMenuEx(TPM_NONOTIFY|TPM_RIGHTBUTTON|TPM_RETURNCMD, pt.x, pt.y, hexwnd.pwnd);
+	int choice = pMenu->TrackPopupMenuEx(TPM_NONOTIFY | TPM_RIGHTBUTTON | TPM_RETURNCMD, pt.x, pt.y, hexwnd.pwnd);
 	pMenu->DestroyMenu();
 	return choice;
 }
@@ -210,6 +218,7 @@ STDMETHODIMP CDropTarget::Drop(IDataObject* pDataObject, DWORD grfKeyState, POIN
 #ifdef _DEBUG
 	printf("IDropTarget::Drop\n");
 #endif //_DEBUG
+
 
 	DWORD dwOKEffects = *pdwEffect;
 	{
@@ -226,13 +235,13 @@ STDMETHODIMP CDropTarget::Drop(IDataObject* pDataObject, DWORD grfKeyState, POIN
 	bool copying = (*pdwEffect & DROPEFFECT_COPY) != 0;
 
 	size_t totallen = 0;
-	BYTE *data = NULL;
+	BYTE* data = NULL;
 	bool gotdata = false;
 
-	UINT *formats = NULL;
+	UINT* formats = NULL;
 	UINT numformats = 0;
 
-	FORMATETC *fel = NULL;
+	FORMATETC* fel = NULL;
 	UINT numfe = 0;
 
 	bool NeedToChooseFormat = true;
@@ -289,28 +298,28 @@ STDMETHODIMP CDropTarget::Drop(IDataObject* pDataObject, DWORD grfKeyState, POIN
 				{
 					olddata.AppendArray(&hexwnd.m_dataArray[iMove1stEnd], iMovePosOrg + len - iMove1stEnd);
 					hexwnd.move_copy_sub(iMove1stEnd, iMove2ndEndorLen, 0);
-					hexwnd.m_dataArray.RemoveAt(iMovePos+len,len);
+					hexwnd.m_dataArray.RemoveAt(iMovePos + len, len);
 					hexwnd.push_undorecord(iMove1stEnd, olddata, olddata.GetLength(), &hexwnd.m_dataArray[iMove1stEnd], iMovePosOrg - iMove1stEnd);
 				}
 				else //Backward
 				{
-					if (iMove1stEnd-iMovePos>=len)
+					if (iMove1stEnd - iMovePos >= len)
 					{
 						olddata.AppendArray(&hexwnd.m_dataArray[iMovePos], iMove1stEnd + len - iMovePos);
-						memmove(&hexwnd.m_dataArray[iMovePos],&hexwnd.m_dataArray[iMove1stEnd],len);
-						hexwnd.m_dataArray.RemoveAt(iMove1stEnd,len);
+						memmove(&hexwnd.m_dataArray[iMovePos], &hexwnd.m_dataArray[iMove1stEnd], len);
+						hexwnd.m_dataArray.RemoveAt(iMove1stEnd, len);
 					}
 					else
 					{
 						olddata.AppendArray(&hexwnd.m_dataArray[iMovePos], iMove1stEnd + len - (iMovePos + len - iMove1stEnd) - iMovePos);
-						memmove(&hexwnd.m_dataArray[iMovePos],&hexwnd.m_dataArray[iMove1stEnd],len);
-						hexwnd.m_dataArray.RemoveAt(iMovePos+len,len-(iMovePos + len - iMove1stEnd));
+						memmove(&hexwnd.m_dataArray[iMovePos], &hexwnd.m_dataArray[iMove1stEnd], len);
+						hexwnd.m_dataArray.RemoveAt(iMovePos + len, len - (iMovePos + len - iMove1stEnd));
 					}
 					hexwnd.push_undorecord(iMovePos, olddata, olddata.GetLength(), &hexwnd.m_dataArray[iMovePos], iMove1stEnd - iMovePos);
 				}
 			}
 			hexwnd.iStartOfSelection = iMovePos;
-			hexwnd.iEndOfSelection = iMovePos+len-1;
+			hexwnd.iEndOfSelection = iMovePos + len - 1;
 			hexwnd.bFilestatusChanged = true;
 			hexwnd.bSelected = true;
 			hexwnd.resize_window();
@@ -326,21 +335,22 @@ STDMETHODIMP CDropTarget::Drop(IDataObject* pDataObject, DWORD grfKeyState, POIN
 		HRESULT err = E_UNEXPECTED;
 
 		//Get the formats enumerator
-		IEnumFORMATETC *iefe = 0;
+		IEnumFORMATETC* iefe = 0;
 		pDataObject->EnumFormatEtc(DATADIR_GET, &iefe);
 		if (iefe == 0)
 		{
 #ifdef _DEBUG
 			printf("Unable to create a drag-drop data enumerator\n");
 #endif //_DEBUG
+
 			goto ERR;
 		}
 		iefe->Reset();
 
 		//Get the available formats
-		for(;;)
+		for (;;)
 		{
-			void *temp = realloc(fel, (numfe + 1) * sizeof(FORMATETC));
+			void* temp = realloc(fel, (numfe + 1) * sizeof(FORMATETC));
 			if (temp != NULL)
 			{
 				fel = (FORMATETC*) temp;
@@ -357,6 +367,7 @@ STDMETHODIMP CDropTarget::Drop(IDataObject* pDataObject, DWORD grfKeyState, POIN
 #ifdef _DEBUG
 				printf("Not enough memory for the drag-drop format list\n");
 #endif //_DEBUG
+
 				goto ERR_ENUM;
 			}
 		}
@@ -371,7 +382,7 @@ STDMETHODIMP CDropTarget::Drop(IDataObject* pDataObject, DWORD grfKeyState, POIN
 		}
 		if (hexwnd.prefer_CF_HDROP)
 		{
-			for (i = 0 ; i < numfe ; i++)
+			for (i = 0; i < numfe; i++)
 			{
 				if (fel[i].cfFormat == CF_HDROP)
 				{
@@ -392,7 +403,7 @@ STDMETHODIMP CDropTarget::Drop(IDataObject* pDataObject, DWORD grfKeyState, POIN
 		}
 		else if (hexwnd.prefer_CF_BINARYDATA)
 		{
-			for (i = 0 ; i < numfe ; i++)
+			for (i = 0; i < numfe; i++)
 			{
 				if (fel[i].cfFormat == CF_BINARYDATA)
 				{
@@ -404,7 +415,7 @@ STDMETHODIMP CDropTarget::Drop(IDataObject* pDataObject, DWORD grfKeyState, POIN
 		}
 		else if (hexwnd.prefer_CF_TEXT)
 		{
-			for (i = 0 ; i < numfe ; i++)
+			for (i = 0; i < numfe; i++)
 			{
 				if (fel[i].cfFormat == CF_TEXT)
 				{
@@ -454,7 +465,7 @@ STDMETHODIMP CDropTarget::Drop(IDataObject* pDataObject, DWORD grfKeyState, POIN
 		}
 
 		//for each selected format
-		for (i = 0 ; i < numformats ; i++)
+		for (i = 0; i < numformats; i++)
 		{
 			FORMATETC fe = fel[formats[i]];
 			/*It is important that when debugging (with M$VC at least) you do not step __into__ the below GetData call
@@ -468,11 +479,11 @@ STDMETHODIMP CDropTarget::Drop(IDataObject* pDataObject, DWORD grfKeyState, POIN
 				size_t len = 0;
 				switch (stm.tymed)
 				{
-					case TYMED_HGLOBAL:
-						len = GlobalSize(stm.hGlobal);
-						break;
+				case TYMED_HGLOBAL:
+					len = GlobalSize(stm.hGlobal);
+					break;
 #ifndef __CYGWIN__
-					case TYMED_FILE:
+				case TYMED_FILE:
 					{
 						int fh = _wopen(stm.lpszFileName, _O_BINARY | _O_RDONLY);
 						if (fh != -1)
@@ -482,58 +493,61 @@ STDMETHODIMP CDropTarget::Drop(IDataObject* pDataObject, DWORD grfKeyState, POIN
 								len = 0;
 							_close(fh);
 						}
-					} break;
+					}
+					break;
 #endif //__CYGWIN__
-					case TYMED_ISTREAM:
-						{
-							STATSTG stat;
-							if (S_OK == stm.pstm->Stat(&stat, STATFLAG_NONAME))
-								len = (size_t)stat.cbSize.LowPart;
-						}
-						break;
+
+				case TYMED_ISTREAM:
+					{
+						STATSTG stat;
+						if (S_OK == stm.pstm->Stat(&stat, STATFLAG_NONAME))
+							len = (size_t)stat.cbSize.LowPart;
+					}
+					break;
 					//This case is going to be a bitch to implement so it can wait for a while
 					//It will need to be a recursive method that stores the STATSTG structures (+ the name), contents/the bytes of data in streams/property sets
-					case TYMED_ISTORAGE:
+				case TYMED_ISTORAGE:
+					{
+						MessageBox(hexwnd.pwnd, GetLangString(IDS_DD_TYMED_NOTSUP), MB_OK);
+					}
+					break; // IStorage*
+				case TYMED_GDI:
+					{
+						len = GetObject(stm.hBitmap, 0, NULL);
+						if (len)
 						{
-							MessageBox(hexwnd.pwnd, GetLangString(IDS_DD_TYMED_NOTSUP), MB_OK);
-						} 
-						break; // IStorage*
-					case TYMED_GDI:
-						{
-							len = GetObject(stm.hBitmap, 0, NULL);
-							if (len)
-							{
-								DIBSECTION t;
-								GetObject(stm.hBitmap, len, &t);
-								len += t.dsBm.bmHeight*t.dsBm.bmWidthBytes*t.dsBm.bmPlanes;
-							}
+							DIBSECTION t;
+							GetObject(stm.hBitmap, len, &t);
+							len += t.dsBm.bmHeight * t.dsBm.bmWidthBytes * t.dsBm.bmPlanes;
 						}
-						break; // HBITMAP
-					case TYMED_MFPICT:
+					}
+					break; // HBITMAP
+				case TYMED_MFPICT:
+					{
+						len = GlobalSize(stm.hMetaFilePict);
+						METAFILEPICT* pMFP = (METAFILEPICT*)GlobalLock(stm.hMetaFilePict);
+						if (pMFP)
 						{
-							len = GlobalSize(stm.hMetaFilePict);
-							METAFILEPICT *pMFP = (METAFILEPICT*)GlobalLock(stm.hMetaFilePict);
-							if (pMFP)
-							{
-								len += GetMetaFileBitsEx(pMFP->hMF, 0, NULL);
-								GlobalUnlock(stm.hMetaFilePict);
-							}
+							len += GetMetaFileBitsEx(pMFP->hMF, 0, NULL);
+							GlobalUnlock(stm.hMetaFilePict);
 						}
-						break; // HMETAFILE
+					}
+					break; // HMETAFILE
 #ifndef __CYGWIN__
-					case TYMED_ENHMF:
-						{
-							len = GetEnhMetaFileHeader(stm.hEnhMetaFile, 0, NULL);
-							DWORD n = GetEnhMetaFileDescriptionW(stm.hEnhMetaFile, 0, NULL);
-							if (n && n != GDI_ERROR)
-								len += sizeof(WCHAR) * n;
-							len += GetEnhMetaFileBits(stm.hEnhMetaFile, 0, NULL);
-							n = GetEnhMetaFilePaletteEntries(stm.hEnhMetaFile, 0, NULL);
-							if (n && n != GDI_ERROR)
-								len += sizeof(LOGPALETTE) + (n - 1) * sizeof(PALETTEENTRY);
-						}
-						break; // HENHMETAFILE
+				case TYMED_ENHMF:
+					{
+						len = GetEnhMetaFileHeader(stm.hEnhMetaFile, 0, NULL);
+						DWORD n = GetEnhMetaFileDescriptionW(stm.hEnhMetaFile, 0, NULL);
+						if (n && n != GDI_ERROR)
+							len += sizeof(WCHAR) * n;
+						len += GetEnhMetaFileBits(stm.hEnhMetaFile, 0, NULL);
+						n = GetEnhMetaFilePaletteEntries(stm.hEnhMetaFile, 0, NULL);
+						if (n && n != GDI_ERROR)
+							len += sizeof(LOGPALETTE) + (n - 1) * sizeof(PALETTEENTRY);
+					}
+					break; // HENHMETAFILE
 #endif //__CYGWIN__
+
 					//case TYMED_NULL:break;
 				}
 				if (!len)
@@ -552,103 +566,111 @@ STDMETHODIMP CDropTarget::Drop(IDataObject* pDataObject, DWORD grfKeyState, POIN
 				//Get data
 				switch (stm.tymed)
 				{
-					case TYMED_HGLOBAL:
+				case TYMED_HGLOBAL:
+					{
+						if (LPVOID pmem = GlobalLock(stm.hGlobal))
 						{
-							if (LPVOID pmem = GlobalLock(stm.hGlobal))
-							{
-								memcpy(data, pmem, len);
-								gotdata = true;
-								GlobalUnlock(stm.hGlobal);
-							}
+							memcpy(data, pmem, len);
+							gotdata = true;
+							GlobalUnlock(stm.hGlobal);
 						}
-						break;
+					}
+					break;
 #ifndef __CYGWIN__
-					case TYMED_FILE:
+				case TYMED_FILE:
+					{
+						int fh = _wopen(stm.lpszFileName, _O_BINARY | _O_RDONLY);
+						if (fh != -1)
 						{
-							int fh = _wopen(stm.lpszFileName, _O_BINARY | _O_RDONLY);
-							if (fh != -1)
-							{
-								if (0 < _read(fh, data, len))
-									gotdata = true;
-								_close(fh);
-							}
+							if (0 < _read(fh, data, len))
+								gotdata = true;
+							_close(fh);
 						}
-						break;
+					}
+					break;
 #endif //__CYGWIN__
-					case TYMED_ISTREAM:
+
+				case TYMED_ISTREAM:
+					{
+						LARGE_INTEGER zero = {0};
+						ULARGE_INTEGER pos;
+						if (S_OK == stm.pstm->Seek(zero, STREAM_SEEK_CUR, &pos))
 						{
-							LARGE_INTEGER zero = { 0 };
-							ULARGE_INTEGER pos;
-							if (S_OK == stm.pstm->Seek(zero, STREAM_SEEK_CUR, &pos))
-							{
-								stm.pstm->Seek(zero, STREAM_SEEK_SET, NULL);
-								if (S_OK == stm.pstm->Read(data, len, NULL))
-									gotdata = true;
-								stm.pstm->Seek(*(LARGE_INTEGER*)&pos, STREAM_SEEK_SET, NULL);
-							}
+							stm.pstm->Seek(zero, STREAM_SEEK_SET, NULL);
+							if (S_OK == stm.pstm->Read(data, len, NULL))
+								gotdata = true;
+							stm.pstm->Seek(*(LARGE_INTEGER*)&pos, STREAM_SEEK_SET, NULL);
 						}
-						break;
+					}
+					break;
 					//This case is going to be a bitch to implement so it can wait for a while
 					//It will need to be a recursive method that stores the STATSTG structures (+ the name), contents/the bytes of data in streams/property sets
-					case TYMED_ISTORAGE:
+				case TYMED_ISTORAGE:
+					{
+						MessageBox(hexwnd.pwnd, GetLangString(IDS_DD_TYMED_NOTSUP), MB_OK);
+						goto ERR_ENUM;
+					}
+					break;//IStorage*
+				case TYMED_GDI:
+					{
+						int l = GetObject(stm.hBitmap, len, data);
+						if (l)
 						{
-							MessageBox(hexwnd.pwnd, GetLangString(IDS_DD_TYMED_NOTSUP), MB_OK);
-							goto ERR_ENUM;
+							BITMAP* bm = (BITMAP*)data;
+							if (bm->bmBits)
+								memcpy(&data[l], bm->bmBits, len - l);
+							else
+								GetBitmapBits(stm.hBitmap, len - l, &data[l]);
+							gotdata = true;
 						}
-						break;//IStorage*
-					case TYMED_GDI:
+					}
+					break; // HBITMAP
+				case TYMED_MFPICT:
+					{
+						if (METAFILEPICT* pMFP = (METAFILEPICT *)GlobalLock(stm.hMetaFilePict))
 						{
-							int l = GetObject(stm.hBitmap, len, data);
-							if (l)
-							{
-								BITMAP* bm = (BITMAP*)data;
-								if (bm->bmBits)
-									memcpy(&data[l], bm->bmBits, len-l);
-								else
-									GetBitmapBits(stm.hBitmap, len-l, &data[l]);
-								gotdata = true;
-							}
-						} break; // HBITMAP
-					case TYMED_MFPICT:
-						{
-							if (METAFILEPICT *pMFP = (METAFILEPICT *)GlobalLock(stm.hMetaFilePict))
-							{
-								memcpy(data, pMFP, sizeof *pMFP);
-								GetMetaFileBitsEx(pMFP->hMF, len - sizeof(*pMFP), &data[sizeof(*pMFP)]);
-								GlobalUnlock(stm.hMetaFilePict);
-								gotdata = true;
-							}
-						} break;//HMETAFILE
+							memcpy(data, pMFP, sizeof *pMFP);
+							GetMetaFileBitsEx(pMFP->hMF, len - sizeof(*pMFP), &data[sizeof(*pMFP)]);
+							GlobalUnlock(stm.hMetaFilePict);
+							gotdata = true;
+						}
+					}
+					break;//HMETAFILE
 #ifndef __CYGWIN__
-					case TYMED_ENHMF:
+				case TYMED_ENHMF:
+					{
+						DWORD i = 0, n = 0, l = len;
+						n = GetEnhMetaFileHeader(stm.hEnhMetaFile, l, (ENHMETAHEADER*)&data[i]);
+						l -= n;
+						i += n;
+						n = GetEnhMetaFileDescriptionW(stm.hEnhMetaFile,
+						                               l / sizeof(WCHAR), (LPWSTR)&data[i]);
+						if (n && n != GDI_ERROR)
 						{
-							DWORD i = 0, n = 0, l = len;
-							n = GetEnhMetaFileHeader(stm.hEnhMetaFile, l, (ENHMETAHEADER*)&data[i]);
+							n *= sizeof(WCHAR);
 							l -= n;
 							i += n;
-							n = GetEnhMetaFileDescriptionW(stm.hEnhMetaFile,
-									l / sizeof(WCHAR), (LPWSTR)&data[i]);
-							if (n && n != GDI_ERROR)
-							{
-								n *= sizeof(WCHAR);l -= n; i += n;
-							}
-							n = GetEnhMetaFileBits(stm.hEnhMetaFile, l, &data[i]);
-							l -= n; i += n;
-							n = GetEnhMetaFilePaletteEntries(stm.hEnhMetaFile, 0, NULL);
-							if (n && n != GDI_ERROR)
-							{
-								LOGPALETTE* lp = (LOGPALETTE*)&data[i];
-								lp->palVersion = 0x300;
-								lp->palNumEntries = (USHORT)n;
-								l -= sizeof(lp->palVersion) + sizeof(lp->palNumEntries);
-								n = GetEnhMetaFilePaletteEntries(stm.hEnhMetaFile,
-										l / sizeof(PALETTEENTRY), &lp->palPalEntry[0]);
-								i += n*sizeof(PALETTEENTRY);
-							}
-							if (i)
-								gotdata = true;
-						} break; // HENHMETAFILE
+						}
+						n = GetEnhMetaFileBits(stm.hEnhMetaFile, l, &data[i]);
+						l -= n;
+						i += n;
+						n = GetEnhMetaFilePaletteEntries(stm.hEnhMetaFile, 0, NULL);
+						if (n && n != GDI_ERROR)
+						{
+							LOGPALETTE* lp = (LOGPALETTE*)&data[i];
+							lp->palVersion = 0x300;
+							lp->palNumEntries = (USHORT)n;
+							l -= sizeof(lp->palVersion) + sizeof(lp->palNumEntries);
+							n = GetEnhMetaFilePaletteEntries(stm.hEnhMetaFile,
+							                                 l / sizeof(PALETTEENTRY), &lp->palPalEntry[0]);
+							i += n * sizeof(PALETTEENTRY);
+						}
+						if (i)
+							gotdata = true;
+					}
+					break; // HENHMETAFILE
 #endif //__CYGWIN__
+
 					//case TYMED_NULL:break;
 				}
 
@@ -668,16 +690,16 @@ STDMETHODIMP CDropTarget::Drop(IDataObject* pDataObject, DWORD grfKeyState, POIN
 					}
 					else if (fe.cfFormat == CF_UNICODETEXT)
 					{
-						len = sizeof(wchar_t)*wcslen((wchar_t*)data);
+						len = sizeof(wchar_t) * wcslen((wchar_t*)data);
 					}
 
 					// Insert/overwrite data into m_dataArray
-					if (grfKeyState&MK_SHIFT)
+					if (grfKeyState & MK_SHIFT)
 					{
 						/* Overwite */
 						SimpleArray<BYTE> olddata;
 						DWORD upper = 1 + hexwnd.m_dataArray.GetUpperBound();
-						if (hexwnd.new_pos+len > upper)
+						if (hexwnd.new_pos + len > upper)
 						{
 							olddata.AppendArray(&hexwnd.m_dataArray[hexwnd.new_pos + (int)totallen], upper - hexwnd.new_pos + (int)totallen);
 							/* Need more space */
@@ -685,7 +707,7 @@ STDMETHODIMP CDropTarget::Drop(IDataObject* pDataObject, DWORD grfKeyState, POIN
 							{
 								hexwnd.m_dataArray.ExpandToSize();
 								memcpy(&hexwnd.m_dataArray[hexwnd.new_pos +
-										(int)totallen], DataToInsert, len);
+									       (int)totallen], DataToInsert, len);
 								hexwnd.push_undorecord(hexwnd.new_pos + totallen, olddata, olddata.GetLength(), DataToInsert, len);
 								gotdata = true;
 								totallen += len;
@@ -696,7 +718,7 @@ STDMETHODIMP CDropTarget::Drop(IDataObject* pDataObject, DWORD grfKeyState, POIN
 							/* Enough space */
 							olddata.AppendArray(&hexwnd.m_dataArray[hexwnd.new_pos + (int)totallen], len);
 							memcpy(&hexwnd.m_dataArray[hexwnd.new_pos +
-									(int)totallen], DataToInsert, len);
+								       (int)totallen], DataToInsert, len);
 							hexwnd.push_undorecord(hexwnd.new_pos + totallen, olddata, olddata.GetLength(), DataToInsert, len);
 							gotdata = true;
 							totallen += len;
@@ -711,7 +733,6 @@ STDMETHODIMP CDropTarget::Drop(IDataObject* pDataObject, DWORD grfKeyState, POIN
 					}
 				}
 			}
-
 		} // For each selected format
 
 		// Release the data
@@ -733,14 +754,14 @@ STDMETHODIMP CDropTarget::Drop(IDataObject* pDataObject, DWORD grfKeyState, POIN
 			hexwnd.synch_sibling();
 		}
 
-		*pdwEffect = copying  ? DROPEFFECT_COPY : DROPEFFECT_MOVE;
+		*pdwEffect = copying ? DROPEFFECT_COPY : DROPEFFECT_MOVE;
 
 		err = S_OK;
 
-ERR_ENUM:
+	ERR_ENUM:
 		iefe->Release();
 		free(fel);
-ERR:
+	ERR:
 		pDataObject->Release();
 		return err;
 	}
@@ -748,3 +769,4 @@ ERR:
 
 	return S_OK;
 }
+

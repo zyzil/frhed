@@ -22,13 +22,14 @@ Software Foundation, 59 Temple Place - Suite 330, Boston, MA
 #ifndef _SE_MSAB_MAUTIL_REFCOUNTED_H_
 #define _SE_MSAB_MAUTIL_REFCOUNTED_H_
 
-namespace MAUtil {
-
+namespace MAUtil
+{
 	/// A base class for reference counting.
-	class RefCounted {
+	class RefCounted
+	{
 	public:
 		/// Constructor, initializes the initial reference count to startCount.
-		RefCounted(int startCount=1);
+		RefCounted(int startCount = 1);
 		/// Increments the reference count by one.
 		void addRef();
 		/// Decrements the reference count by one.
@@ -36,12 +37,15 @@ namespace MAUtil {
 		/// Returns the current reference count.
 		int getRefCount();
 
-		virtual ~RefCounted() {}
+		virtual ~RefCounted()
+		{
+		}
+
 	private:
 		/// A variable that keeps track of the reference count.
 		int mRefCount;
 	};
-
 }
 
 #endif
+

@@ -42,8 +42,8 @@ public:
 	INT64 m_StartingSector;
 	INT64 m_PartitionLength;
 
-	LPTSTR GetNameAsString(PFormat * = PString<80>());
-	LPTSTR GetSizeAsString(PFormat * = PString<80>());
+	LPTSTR GetNameAsString(PFormat* = PString<80>());
+	LPTSTR GetSizeAsString(PFormat* = PString<80>());
 };
 
 
@@ -51,13 +51,13 @@ public:
 class IPhysicalDrive
 {
 public:
-	virtual BOOL Open( int iDrive ) = 0;
+	virtual BOOL Open(int iDrive) = 0;
 	virtual void Close() = 0;
-	virtual BOOL GetDriveGeometry( DISK_GEOMETRY* lpDG ) = 0;
-	virtual BOOL GetDriveGeometryEx( DISK_GEOMETRY_EX* lpDG, DWORD dwSize ) = 0;
-	virtual BOOL GetDriveLayout( LPBYTE lpbMemory, DWORD dwSize ) = 0;
-	virtual BOOL GetDriveLayoutEx( LPBYTE lpbMemory, DWORD dwSize ) = 0;
-	virtual BOOL ReadAbsolute( LPBYTE lpbMemory, DWORD dwSize, INT64 Sector ) = 0;
+	virtual BOOL GetDriveGeometry(DISK_GEOMETRY* lpDG) = 0;
+	virtual BOOL GetDriveGeometryEx(DISK_GEOMETRY_EX* lpDG, DWORD dwSize) = 0;
+	virtual BOOL GetDriveLayout(LPBYTE lpbMemory, DWORD dwSize) = 0;
+	virtual BOOL GetDriveLayoutEx(LPBYTE lpbMemory, DWORD dwSize) = 0;
+	virtual BOOL ReadAbsolute(LPBYTE lpbMemory, DWORD dwSize, INT64 Sector) = 0;
 	virtual BOOL IsOpen() = 0;
 
 	//Creates a list of PartitionInfo elements

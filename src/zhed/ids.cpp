@@ -25,7 +25,7 @@ Last change: 2013-02-24 by Jochen Neubeck
 
 //Members
 CDropSource::CDropSource()
-: m_cRefCount(0)
+	: m_cRefCount(0)
 {
 }
 
@@ -35,7 +35,7 @@ CDropSource::~CDropSource()
 }
 
 //IUnknown members
-STDMETHODIMP CDropSource::QueryInterface(REFIID iid, void **ppvObject)
+STDMETHODIMP CDropSource::QueryInterface(REFIID iid, void** ppvObject)
 {
 	if (iid == IID_IUnknown || iid == IID_IDropSource)
 	{
@@ -69,8 +69,9 @@ STDMETHODIMP CDropSource::QueryContinueDrag(BOOL fEscapePressed, DWORD grfKeySta
 	if (fEscapePressed)
 		return DRAGDROP_S_CANCEL;
 	//Complete if there are no mouse buttons pressed
-	if(!(grfKeyState & (MK_LBUTTON|MK_MBUTTON|MK_RBUTTON)))
+	if (!(grfKeyState & (MK_LBUTTON | MK_MBUTTON | MK_RBUTTON)))
 		return DRAGDROP_S_DROP;
 	//Otherwise continue the drag operation
 	return S_OK;
 }
+

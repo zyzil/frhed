@@ -34,11 +34,11 @@ Last change: 2013-02-24 by Jochen Neubeck
 /**
  * @brief Constructor.
  */
-Template::Template(const SimpleArray<BYTE> &dataArray)
-: m_filehandle(-1)
-, m_tmplBuf(NULL)
-, m_filelen(0)
-, m_dataArray(dataArray)
+Template::Template(const SimpleArray<BYTE>& dataArray)
+	: m_filehandle(-1)
+	  , m_tmplBuf(NULL)
+	  , m_filelen(0)
+	  , m_dataArray(dataArray)
 {
 }
 
@@ -175,14 +175,14 @@ void Template::ApplyTemplate(HexEditorWindow::BYTE_ENDIAN binaryMode, int curByt
 							if (m_dataArray[fpos] != 0)
 							{
 								_stprintf(buf, GetLangString(IDS_TPL_FMT_BYTE_0),
-									(int) (signed char) m_dataArray[fpos], m_dataArray[fpos],
-									m_dataArray[fpos], m_dataArray[fpos]);
+								          (int) (signed char) m_dataArray[fpos], m_dataArray[fpos],
+								          m_dataArray[fpos], m_dataArray[fpos]);
 							}
 							else
 							{
 								_stprintf(buf, GetLangString(IDS_TPL_FMT_BYTE),
-									(int) (signed char) m_dataArray[fpos], m_dataArray[fpos],
-									m_dataArray[fpos]);
+								          (int) (signed char) m_dataArray[fpos], m_dataArray[fpos],
+								          m_dataArray[fpos]);
 							}
 							m_resultString += _T(" ");
 							m_resultString += buf;
@@ -236,7 +236,7 @@ void Template::ApplyTemplate(HexEditorWindow::BYTE_ENDIAN binaryMode, int curByt
 							}
 							TCHAR buf[TPL_NAME_MAXLEN + 200];
 							_stprintf(buf, GetLangString(IDS_TPL_FMT_WORD),
-								(int) (signed short) wd, wd, wd);
+							          (int) (signed short) wd, wd, wd);
 							m_resultString += _T(" ");
 							m_resultString += buf;
 							m_resultString += _T("\r\n");
@@ -285,7 +285,7 @@ void Template::ApplyTemplate(HexEditorWindow::BYTE_ENDIAN binaryMode, int curByt
 							}
 							TCHAR buf[TPL_NAME_MAXLEN + 200];
 							_stprintf(buf, GetLangString(IDS_TPL_FTM_DWORD),
-								(signed long) dw, (unsigned long) dw, dw);
+							          (signed long) dw, (unsigned long) dw, dw);
 							m_resultString += _T(" ");
 							m_resultString += buf;
 							m_resultString += _T("\r\n");
@@ -333,7 +333,7 @@ void Template::ApplyTemplate(HexEditorWindow::BYTE_ENDIAN binaryMode, int curByt
 							}
 							TCHAR buf[TPL_NAME_MAXLEN + 200];
 							_stprintf(buf, GetLangString(IDS_TPL_FMT_FLOAT),
-								f, (unsigned long) *((int*) &f));
+							          f, (unsigned long) *((int*) &f));
 							m_resultString += _T(" ");
 							m_resultString += buf;
 							m_resultString += _T("\r\n");
@@ -442,7 +442,7 @@ bool Template::ignore_non_code(char* pcTpl, int tpl_len, int& index)
 	while (index < tpl_len)
 	{
 		// If code found, return.
-		switch(pcTpl[index])
+		switch (pcTpl[index])
 		{
 		case ' ':
 		case '\t':
@@ -463,7 +463,7 @@ bool Template::ignore_non_code(char* pcTpl, int tpl_len, int& index)
 // with a zero-byte. index is set to position of the first space-
 // character. Return is false if there is only the array end after the
 // keyword. In that case index is set to tpl_len.
-bool Template::read_tpl_token(char *pcTpl, int tpl_len, int &index, TCHAR *dest)
+bool Template::read_tpl_token(char* pcTpl, int tpl_len, int& index, TCHAR* dest)
 {
 	int i = 0;
 	while (index + i < tpl_len)
@@ -487,3 +487,4 @@ bool Template::read_tpl_token(char *pcTpl, int tpl_len, int &index, TCHAR *dest)
 	index += i;
 	return false;
 }
+

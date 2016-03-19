@@ -31,12 +31,12 @@ Last change: 2013-02-24 by Jochen Neubeck
 #include "Simparr.h"
 #include "Resource.h"
 
-void GetWindowText(HWindow *, SimpleString &);
-void GetDlgItemText(HWindow *, int, SimpleString &);
-BOOL EnableDlgItem(HWindow *, int, BOOL);
-BOOL IsDlgItemEnabled(HWindow *, int);
-int MessageBox(HWindow *, LPCTSTR, UINT);
-int CheckHResult(HWindow *, HRESULT, UINT = MB_ICONSTOP);
+void GetWindowText(HWindow*, SimpleString&);
+void GetDlgItemText(HWindow*, int, SimpleString&);
+BOOL EnableDlgItem(HWindow*, int, BOOL);
+BOOL IsDlgItemEnabled(HWindow*, int);
+int MessageBox(HWindow*, LPCTSTR, UINT);
+int CheckHResult(HWindow*, HRESULT, UINT = MB_ICONSTOP);
 
 /**
  * @brief About-dialog for zhed application.
@@ -45,18 +45,26 @@ int CheckHResult(HWindow *, HRESULT, UINT = MB_ICONSTOP);
 class AboutDlg : public HexEditorWindow
 {
 public:
-	enum { IDD = IDD_ABOUTDIALOG };
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM) const;
+	enum
+	{
+		IDD = IDD_ABOUTDIALOG
+	};
+
+	INT_PTR DlgProc(HWindow*, UINT, WPARAM, LPARAM) const;
 protected:
-	static BOOL OnInitDialog(HWindow *);
-	BOOL OnCommand(HWindow *, WPARAM, LPARAM) const;
+	static BOOL OnInitDialog(HWindow*);
+	BOOL OnCommand(HWindow*, WPARAM, LPARAM) const;
 };
 
 class DragDropOptionsDlg : public HexEditorWindow
 {
 public:
-	enum { IDD = IDD_DRAG_DROP_OPTIONS };
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM);
+	enum
+	{
+		IDD = IDD_DRAG_DROP_OPTIONS
+	};
+
+	INT_PTR DlgProc(HWindow*, UINT, WPARAM, LPARAM);
 };
 
 /**
@@ -65,31 +73,43 @@ public:
 class ViewSettingsDlg : public HexEditorWindow
 {
 public:
-	enum { IDD = IDD_VIEWSETTINGSDIALOG };
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM);
+	enum
+	{
+		IDD = IDD_VIEWSETTINGSDIALOG
+	};
+
+	INT_PTR DlgProc(HWindow*, UINT, WPARAM, LPARAM);
 private:
-	static HComboBox *pCbLang;
+	static HComboBox* pCbLang;
 	static BOOL CALLBACK EnumLocalesProc(LPTSTR);
 	static int FormatLangId(LPWSTR, LANGID, bool verbose = false);
-	void OnDrawitemLangId(DRAWITEMSTRUCT *);
-	INT_PTR OnCompareitemLangId(COMPAREITEMSTRUCT *);
-	BOOL OnInitDialog(HWindow *);
-	BOOL Apply(HWindow *);
-	void SelectEditor(HWindow *);
+	void OnDrawitemLangId(DRAWITEMSTRUCT*);
+	INT_PTR OnCompareitemLangId(COMPAREITEMSTRUCT*);
+	BOOL OnInitDialog(HWindow*);
+	BOOL Apply(HWindow*);
+	void SelectEditor(HWindow*);
 };
 
 class CharacterSetDlg : public HexEditorWindow
 {
 public:
-	enum { IDD = IDD_CHARACTERSETDIALOG };
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM);
+	enum
+	{
+		IDD = IDD_CHARACTERSETDIALOG
+	};
+
+	INT_PTR DlgProc(HWindow*, UINT, WPARAM, LPARAM);
 };
 
 class BinaryModeDlg : public HexEditorWindow
 {
 public:
-	enum { IDD = IDD_BINARYMODEDIALOG };
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM);
+	enum
+	{
+		IDD = IDD_BINARYMODEDIALOG
+	};
+
+	INT_PTR DlgProc(HWindow*, UINT, WPARAM, LPARAM);
 };
 
 /**
@@ -98,20 +118,27 @@ public:
 class FillWithDialog : public HexEditorWindow
 {
 public:
-	enum { IDD = IDD_FILL_WITH };
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM);
+	enum
+	{
+		IDD = IDD_FILL_WITH
+	};
+
+	INT_PTR DlgProc(HWindow*, UINT, WPARAM, LPARAM);
 private:
-	enum { FW_MAX = 1024 }; //max bytes to fill with
+	enum
+	{
+		FW_MAX = 1024
+	}; //max bytes to fill with
 	static TCHAR pcFWText[FW_MAX];//hex representation of bytes to fill with
 	static BYTE buf[FW_MAX];//bytes to fill with
 	static int buflen;//number of bytes to fill with
-	static TCHAR szFWFileName[_MAX_PATH];//fill with file name
-	static int FWFile,FWFilelen;//fill with file and len
+	static TCHAR szFWFileName[_MAX_PATH ];//fill with file name
+	static int FWFile, FWFilelen;//fill with file and len
 	static LONG_PTR oldproc;//old hex box proc
 	static HFONT hfon;//needed so possible to display infinity char in fill with dlg box
 	static TCHAR curtyp;//filling with input-0 or file-1
 	static TCHAR asstyp;
-	void inittxt(HWindow *) const;
+	void inittxt(HWindow*) const;
 	static BYTE input(int);
 	static BYTE file(int);
 	static void hexstring2charstring();
@@ -125,19 +152,27 @@ private:
 class ReverseDlg : public HexEditorWindow
 {
 public:
-	enum { IDD = IDD_REVERSE_BYTES_DIALOG };
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM);
+	enum
+	{
+		IDD = IDD_REVERSE_BYTES_DIALOG
+	};
+
+	INT_PTR DlgProc(HWindow*, UINT, WPARAM, LPARAM);
 };
 
 class ShortcutsDlg : public HexEditorWindow
 {
 public:
-	enum { IDD = IDD_SHORTCUTS };
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM);
+	enum
+	{
+		IDD = IDD_SHORTCUTS
+	};
+
+	INT_PTR DlgProc(HWindow*, UINT, WPARAM, LPARAM);
 private:
-	BOOL OnInitDialog(HWindow *);
-	BOOL OnCommand(HWindow *, WPARAM, LPARAM);
-	BOOL OnNotify(HWindow *, WPARAM, LPARAM);
+	BOOL OnInitDialog(HWindow*);
+	BOOL OnCommand(HWindow*, WPARAM, LPARAM);
+	BOOL OnNotify(HWindow*, WPARAM, LPARAM);
 	static int CALLBACK BrowseCallbackProc(HWND, UINT, LPARAM, LPARAM);
 	static int CALLBACK SearchCallbackProc(HWND, UINT, LPARAM, LPARAM);
 };
@@ -145,8 +180,12 @@ private:
 class ChangeInstDlg : public HexEditorWindow
 {
 public:
-	enum { IDD = IDD_CHANGEINST };
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM);
+	enum
+	{
+		IDD = IDD_CHANGEINST
+	};
+
+	INT_PTR DlgProc(HWindow*, UINT, WPARAM, LPARAM);
 };
 
 /**
@@ -158,11 +197,15 @@ public:
 class FindDlg : public HexEditorWindow
 {
 public:
-	enum { IDD = IDD_FINDDIALOG };
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM);
+	enum
+	{
+		IDD = IDD_FINDDIALOG
+	};
+
+	INT_PTR DlgProc(HWindow*, UINT, WPARAM, LPARAM);
 private:
-	BOOL OnInitDialog(HWindow *);
-	BOOL OnCommand(HWindow *, WPARAM, LPARAM);
+	BOOL OnInitDialog(HWindow*);
+	BOOL OnCommand(HWindow*, WPARAM, LPARAM);
 };
 
 /**
@@ -174,14 +217,18 @@ private:
 class ReplaceDlg : public HexEditorWindow
 {
 public:
-	enum { IDD = IDD_REPLACEDIALOG };
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM);
-	int transl_text_to_binary(SimpleArray<BYTE> &out);
+	enum
+	{
+		IDD = IDD_REPLACEDIALOG
+	};
+
+	INT_PTR DlgProc(HWindow*, UINT, WPARAM, LPARAM);
+	int transl_text_to_binary(SimpleArray<BYTE>& out);
 	static int transl_binary_to_text(const BYTE*, int);
 	bool find_and_select_data(int finddir, bool case_sensitive);
-	bool replace_selected_data(HWindow *);
-	void find_directed(HWindow *, int finddir);
-	void replace_directed(HWindow *, int finddir, bool showCount);
+	bool replace_selected_data(HWindow*);
+	void find_directed(HWindow*, int finddir);
+	void replace_directed(HWindow*, int finddir, bool showCount);
 	static SimpleString strToReplaceData;
 	static SimpleString strReplaceWithData;
 };
@@ -192,25 +239,33 @@ public:
 class ChooseDiffDlg : public HexEditorWindow
 {
 public:
-	enum { IDD = IDD_CHOOSEDIFFDIALOG };
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM);
+	enum
+	{
+		IDD = IDD_CHOOSEDIFFDIALOG
+	};
+
+	INT_PTR DlgProc(HWindow*, UINT, WPARAM, LPARAM);
 private:
-	BOOL OnInitDialog(HWindow *);
-	BOOL OnCommand(HWindow *, WPARAM, LPARAM);
-	void add_diff(HListBox *, int diff, int lower, int upper);
-	int get_diffs(HListBox *, BYTE *ps, int sl, BYTE *pd, int dl);
+	BOOL OnInitDialog(HWindow*);
+	BOOL OnCommand(HWindow*, WPARAM, LPARAM);
+	void add_diff(HListBox*, int diff, int lower, int upper);
+	int get_diffs(HListBox*, BYTE* ps, int sl, BYTE* pd, int dl);
 };
 
 class CopyHexdumpDlg : public HexEditorWindow
 {
 public:
-	enum { IDD = IDD_HEXDUMPDIALOG };
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM);
+	enum
+	{
+		IDD = IDD_HEXDUMPDIALOG
+	};
+
+	INT_PTR DlgProc(HWindow*, UINT, WPARAM, LPARAM);
 	static int iCopyHexdumpMode;
 	static int iCopyHexdumpType;
 private:
-	BOOL OnInitDialog(HWindow *);
-	BOOL OnCommand(HWindow *, WPARAM, LPARAM);
+	BOOL OnInitDialog(HWindow*);
+	BOOL OnCommand(HWindow*, WPARAM, LPARAM);
 };
 
 /**
@@ -219,11 +274,15 @@ private:
 class AddBmkDlg : public HexEditorWindow
 {
 public:
-	enum { IDD = IDD_ADDBMK_DIALOG };
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM);
+	enum
+	{
+		IDD = IDD_ADDBMK_DIALOG
+	};
+
+	INT_PTR DlgProc(HWindow*, UINT, WPARAM, LPARAM);
 private:
-	BOOL OnInitDialog(HWindow *);
-	BOOL OnCommand(HWindow *, WPARAM, LPARAM);
+	BOOL OnInitDialog(HWindow*);
+	BOOL OnCommand(HWindow*, WPARAM, LPARAM);
 };
 
 /**
@@ -232,11 +291,15 @@ private:
 class RemoveBmkDlg : public HexEditorWindow
 {
 public:
-	enum { IDD = IDD_REMOVEBMK_DIALOG };
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM);
+	enum
+	{
+		IDD = IDD_REMOVEBMK_DIALOG
+	};
+
+	INT_PTR DlgProc(HWindow*, UINT, WPARAM, LPARAM);
 private:
-	BOOL OnInitDialog(HWindow *);
-	BOOL OnCommand(HWindow *, WPARAM, LPARAM);
+	BOOL OnInitDialog(HWindow*);
+	BOOL OnCommand(HWindow*, WPARAM, LPARAM);
 };
 
 /**
@@ -245,11 +308,15 @@ private:
 class SelectBlockDlg : public HexEditorWindow
 {
 public:
-	enum { IDD = IDD_SELECT_BLOCK_DIALOG };
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM);
+	enum
+	{
+		IDD = IDD_SELECT_BLOCK_DIALOG
+	};
+
+	INT_PTR DlgProc(HWindow*, UINT, WPARAM, LPARAM);
 private:
-	BOOL OnInitDialog(HWindow *);
-	BOOL OnCommand(HWindow *, WPARAM, LPARAM);
+	BOOL OnInitDialog(HWindow*);
+	BOOL OnCommand(HWindow*, WPARAM, LPARAM);
 };
 
 /**
@@ -260,12 +327,16 @@ private:
 class PasteDlg : public HexEditorWindow
 {
 public:
-	enum { IDD = IDD_PASTEDIALOG };
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM);
+	enum
+	{
+		IDD = IDD_PASTEDIALOG
+	};
+
+	INT_PTR DlgProc(HWindow*, UINT, WPARAM, LPARAM);
 private:
-	BOOL OnInitDialog(HWindow *);
-	BOOL OnCommand(HWindow *, WPARAM, LPARAM);
-	BOOL Apply(HWindow *);
+	BOOL OnInitDialog(HWindow*);
+	BOOL OnCommand(HWindow*, WPARAM, LPARAM);
+	BOOL Apply(HWindow*);
 };
 
 /**
@@ -275,13 +346,17 @@ private:
 class FastPasteDlg : public HexEditorWindow
 {
 public:
-	enum { IDD = IDD_FASTPASTE_DIALOG };
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM);
+	enum
+	{
+		IDD = IDD_FASTPASTE_DIALOG
+	};
+
+	INT_PTR DlgProc(HWindow*, UINT, WPARAM, LPARAM);
 private:
-	BOOL OnInitDialog(HWindow *);
-	BOOL OnCommand(HWindow *, WPARAM, LPARAM);
-	BOOL Apply(HWindow *);
-	void RefreshClipboardFormats(HWindow *);
+	BOOL OnInitDialog(HWindow*);
+	BOOL OnCommand(HWindow*, WPARAM, LPARAM);
+	BOOL Apply(HWindow*);
+	void RefreshClipboardFormats(HWindow*);
 };
 
 /**
@@ -291,15 +366,19 @@ private:
 class MoveCopyDlg : public HexEditorWindow
 {
 public:
-	enum { IDD = IDD_MOVE_COPY };
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM);
+	enum
+	{
+		IDD = IDD_MOVE_COPY
+	};
+
+	INT_PTR DlgProc(HWindow*, UINT, WPARAM, LPARAM);
 private:
-	BOOL OnInitDialog(HWindow *);
-	bool ReadStartOffset(HWindow *, int &);
-	bool ReadEndOffset(HWindow *, int &);
-	bool ReadTargetOffset(HWindow *, int &);
-	BOOL OnCommand(HWindow *, WPARAM, LPARAM);
-	BOOL Apply(HWindow *);
+	BOOL OnInitDialog(HWindow*);
+	bool ReadStartOffset(HWindow*, int&);
+	bool ReadEndOffset(HWindow*, int&);
+	bool ReadTargetOffset(HWindow*, int&);
+	BOOL OnCommand(HWindow*, WPARAM, LPARAM);
+	BOOL Apply(HWindow*);
 };
 
 /**
@@ -308,13 +387,17 @@ private:
 class EnterDecimalValueDlg : public HexEditorWindow
 {
 public:
-	enum { IDD = IDD_DECIMALDIALOG };
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM);
+	enum
+	{
+		IDD = IDD_DECIMALDIALOG
+	};
+
+	INT_PTR DlgProc(HWindow*, UINT, WPARAM, LPARAM);
 	static int iDecValDlgSize; /**< Value length (Byte/Word/DWord). */
 	static bool bSigned; /**< Edit value as signed value? */
 private:
-	BOOL OnInitDialog(HWindow *);
-	BOOL Apply(HWindow *);
+	BOOL OnInitDialog(HWindow*);
+	BOOL Apply(HWindow*);
 };
 
 /**
@@ -327,11 +410,15 @@ private:
 class GoToDlg : public HexEditorWindow
 {
 public:
-	enum { IDD = IDD_GOTODIALOG };
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM);
+	enum
+	{
+		IDD = IDD_GOTODIALOG
+	};
+
+	INT_PTR DlgProc(HWindow*, UINT, WPARAM, LPARAM);
 private:
-	BOOL OnInitDialog(HWindow *);
-	BOOL Apply(HWindow *);
+	BOOL OnInitDialog(HWindow*);
+	BOOL Apply(HWindow*);
 };
 
 /**
@@ -344,12 +431,15 @@ private:
 class CutDlg : public HexEditorWindow
 {
 public:
-	enum { IDD = IDD_CUTDIALOG };
+	enum
+	{
+		IDD = IDD_CUTDIALOG
+	};
 
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM);
+	INT_PTR DlgProc(HWindow*, UINT, WPARAM, LPARAM);
 private:
-	BOOL OnInitDialog(HWindow *);
-	BOOL Apply(HWindow *);
+	BOOL OnInitDialog(HWindow*);
+	BOOL Apply(HWindow*);
 };
 
 /**
@@ -362,12 +452,15 @@ private:
 class DeleteDlg : public HexEditorWindow
 {
 public:
-	enum { IDD = IDD_DELETEDIALOG };
+	enum
+	{
+		IDD = IDD_DELETEDIALOG
+	};
 
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM);
+	INT_PTR DlgProc(HWindow*, UINT, WPARAM, LPARAM);
 private:
-	BOOL OnInitDialog(HWindow *);
-	BOOL Apply(HWindow *);
+	BOOL OnInitDialog(HWindow*);
+	BOOL Apply(HWindow*);
 };
 
 /**
@@ -376,11 +469,15 @@ private:
 class CopyDlg : public HexEditorWindow
 {
 public:
-	enum { IDD = IDD_COPYDIALOG };
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM);
+	enum
+	{
+		IDD = IDD_COPYDIALOG
+	};
+
+	INT_PTR DlgProc(HWindow*, UINT, WPARAM, LPARAM);
 private:
-	BOOL OnInitDialog(HWindow *);
-	BOOL Apply(HWindow *);
+	BOOL OnInitDialog(HWindow*);
+	BOOL Apply(HWindow*);
 };
 
 /**
@@ -389,11 +486,15 @@ private:
 class AppendDlg : public HexEditorWindow
 {
 public:
-	enum { IDD = IDD_APPENDDIALOG };
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM);
+	enum
+	{
+		IDD = IDD_APPENDDIALOG
+	};
+
+	INT_PTR DlgProc(HWindow*, UINT, WPARAM, LPARAM);
 private:
-	BOOL OnInitDialog(HWindow *);
-	BOOL Apply(HWindow *);
+	BOOL OnInitDialog(HWindow*);
+	BOOL Apply(HWindow*);
 };
 
 /**
@@ -402,11 +503,15 @@ private:
 class BitManipDlg : public HexEditorWindow
 {
 public:
-	enum { IDD = IDD_MANIPBITSDIALOG };
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM);
+	enum
+	{
+		IDD = IDD_MANIPBITSDIALOG
+	};
+
+	INT_PTR DlgProc(HWindow*, UINT, WPARAM, LPARAM);
 private:
-	BOOL OnInitDialog(HWindow *);
-	BOOL Apply(HWindow *, WPARAM);
+	BOOL OnInitDialog(HWindow*);
+	BOOL Apply(HWindow*, WPARAM);
 };
 
 /**
@@ -417,13 +522,19 @@ private:
 class OpenPartiallyDlg : public HexEditorWindow
 {
 public:
-	enum { IDD = IDD_OPEN_PARTIAL_DIALOG };
-	INT_PTR DlgProc(HWindow *, UINT, WPARAM, LPARAM);
+	enum
+	{
+		IDD = IDD_OPEN_PARTIAL_DIALOG
+	};
+
+	INT_PTR DlgProc(HWindow*, UINT, WPARAM, LPARAM);
 	static int filehandle;
 	static bool bShowFileStatsPL;
 private:
-	BOOL OnInitDialog(HWindow *);
-	BOOL Apply(HWindow *);
+	BOOL OnInitDialog(HWindow*);
+	BOOL Apply(HWindow*);
 };
 
 #endif // _HEXW_DLG_H_
+
+

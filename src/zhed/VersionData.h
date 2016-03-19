@@ -9,20 +9,22 @@ private:
 	// Disallow construction
 	CVersionData();
 public:
-	WORD   wLength;
-	WORD   wValueLength;
-	WORD   wType;
-	WCHAR  szKey[1];
-	const WCHAR *Data() const
+	WORD wLength;
+	WORD wValueLength;
+	WORD wType;
+	WCHAR szKey[1];
+
+	const WCHAR* Data() const
 	{
 		if (this)
 		{
-			const WCHAR *p = szKey + lstrlenW(szKey) + 1;
+			const WCHAR* p = szKey + lstrlenW(szKey) + 1;
 			return (const WCHAR *)((INT_PTR)p + 3 & ~3);
 		}
 		return 0;
 	}
-	const CVersionData *First() const
+
+	const CVersionData* First() const
 	{
 		if (this)
 		{
@@ -30,7 +32,8 @@ public:
 		}
 		return 0;
 	}
-	const CVersionData *Next() const
+
+	const CVersionData* Next() const
 	{
 		if (this)
 		{
@@ -38,9 +41,10 @@ public:
 		}
 		return 0;
 	}
-	const CVersionData *Find(LPCWSTR szKey) const
+
+	const CVersionData* Find(LPCWSTR szKey) const
 	{
-		const CVersionData *p = First();
+		const CVersionData* p = First();
 		while (p < Next())
 		{
 			if (szKey == 0 || StrCmpW(szKey, p->szKey) == 0)
@@ -49,9 +53,11 @@ public:
 		}
 		return 0;
 	}
-	static const CVersionData *Load(HMODULE hModule = 0, LPCTSTR lpszRes = MAKEINTRESOURCE(VS_VERSION_INFO))
+
+	static const CVersionData* Load(HMODULE hModule = 0, LPCTSTR lpszRes = MAKEINTRESOURCE(VS_VERSION_INFO))
 	{
 		HRSRC hRes = FindResource(hModule, lpszRes, RT_VERSION);
 		return (const CVersionData *)LoadResource(hModule, hRes);
 	}
 };
+

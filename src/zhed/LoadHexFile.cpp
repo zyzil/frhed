@@ -30,12 +30,12 @@ int hexfile_stream::lheatwhite()
 {
 	int c;
 	do c = lhgetc();
-		while (isspace(c));
+	while (isspace(c));
 	lhungetc(c);
 	return c;
 }
 
-bool load_hexfile_0::StreamIn(HexEditorWindow &hexwnd, hexfile_stream &hexin)
+bool load_hexfile_0::StreamIn(HexEditorWindow& hexwnd, hexfile_stream& hexin)
 {
 	load_hexfile_0 instance(hexwnd);
 	if (!instance.StreamIn(hexin))
@@ -45,15 +45,15 @@ bool load_hexfile_0::StreamIn(HexEditorWindow &hexwnd, hexfile_stream &hexin)
 	return true;
 }
 
-bool load_hexfile_0::StreamIn(hexfile_stream &hexin)
+bool load_hexfile_0::StreamIn(hexfile_stream& hexin)
 {
 	int temp[4] = {0,0,0,0};
-//Use only if U know c is a hex digit & not something else like' ', 'z' etc
+	//Use only if U know c is a hex digit & not something else like' ', 'z' etc
 #	define hex2nibble(c) (isdigit((c)) ? (c) - '0' : (c) - (islower((c)) ? 'a' : 'A') + 10)
 	BYTE flnd = 0;//Start with the first nibble
 	int ii = 0;
 	int diio = 1;
-	for (int i = 0 ; (temp[0] = hexin.lhgetc()) != EOF ; i++)
+	for (int i = 0; (temp[0] = hexin.lhgetc()) != EOF; i++)
 	{
 		if (isxdigit(temp[0]))
 		{
@@ -86,7 +86,7 @@ bool load_hexfile_0::StreamIn(hexfile_stream &hexin)
 	return true;
 }
 
-bool load_hexfile_1::StreamIn(hexfile_stream &hexin)
+bool load_hexfile_1::StreamIn(hexfile_stream& hexin)
 {
 	int temp[4] = {0,0,0,0};
 	unsigned char c[4] = {0,0,0,0};
@@ -173,10 +173,10 @@ bool load_hexfile_1::StreamIn(hexfile_stream &hexin)
 		ls = ii;//remember the start of the line in the DataArray
 
 		//get data bytes
-		for (bpl = 0 ;; bpl++)
+		for (bpl = 0;; bpl++)
 		{
 			//get the three chars
-			for(i = 0 ; i < 3 ; i++)
+			for (i = 0; i < 3; i++)
 			{
 				temp[i] = hexin.lhgetc();
 				if (temp[i] == EOF)
@@ -197,7 +197,7 @@ bool load_hexfile_1::StreamIn(hexfile_stream &hexin)
 			m_pT[ii] = (BYTE)tmp;
 			ii++;//next byte
 
-			for (i = 0 ; i < 3 ; i++)
+			for (i = 0; i < 3; i++)
 			{
 				temp[i] = hexin.lhgetc();
 				if (temp[i] == EOF)
@@ -207,18 +207,18 @@ bool load_hexfile_1::StreamIn(hexfile_stream &hexin)
 			hexin.lhungetc(c[2]);
 			hexin.lhungetc(c[1]);
 			hexin.lhungetc(c[0]);
-			if (c[0] == ' ' || c[0] =='_')
+			if (c[0] == ' ' || c[0] == '_')
 			{
 				if (c[1] == c[0] && c[2] == ' ')
 				{
 					//get those back
-					for (i = 0 ; i < 3 ; i++)
+					for (i = 0; i < 3; i++)
 						if (hexin.lhgetc() == EOF)
 							goto UnexpectedEndOfData;
 					bpl++;
-					for (;;bpl++)
+					for (;; bpl++)
 					{
-						for (i = 0 ; i < 3 ; i++)
+						for (i = 0; i < 3; i++)
 						{
 							temp[i] = hexin.lhgetc();
 							if (temp[i] == EOF)
@@ -241,7 +241,7 @@ bool load_hexfile_1::StreamIn(hexfile_stream &hexin)
 						}
 					}
 				}
-				else if (c[0]=='_')
+				else if (c[0] == '_')
 					goto IllegalCharacter;
 
 				if (flnd)
@@ -250,7 +250,6 @@ bool load_hexfile_1::StreamIn(hexfile_stream &hexin)
 					iAutomaticBPL = 0;
 				}
 				break;
-
 			}
 			else if (!isxdigit(c[0]))
 			{
@@ -262,9 +261,9 @@ bool load_hexfile_1::StreamIn(hexfile_stream &hexin)
 		//trash the extra space
 		if (hexin.lhgetc() == EOF)
 			goto UnexpectedEndOfData;
-		
+
 		//Verify that the data read by the above loop is correct and equal to that read by this loop
-		for ( ; ls < ii ; ls++)
+		for (; ls < ii; ls++)
 		{
 			temp[0] = hexin.lhgetc();
 			if (temp[0] == EOF)
@@ -279,7 +278,7 @@ bool load_hexfile_1::StreamIn(hexfile_stream &hexin)
 			{//0 (both OEM & ANSI translate) or one of those ranges where neither cset translates the character
 				if (c[0] != c[1])
 				{
-BadData:
+				BadData:
 					if (dim)
 					{
 						switch (MessageBox(pwnd, GetLangString(IDS_HEXF_CHAR_HEX_NO_MATCH), MB_YESNOCANCEL | MB_ICONWARNING))
@@ -307,9 +306,10 @@ BadData:
 				}
 			}
 		}//get rest of line
-NextLine:
+	NextLine:
 		flnd = 0;
-	} while (hexin.lheatwhite() != EOF);
+	}
+	while (hexin.lheatwhite() != EOF);
 	//parsing loop
 	return true;
 
@@ -323,7 +323,7 @@ OutOfMemory:
 	return IDYES == MessageBox(pwnd, GetLangString(IDS_HEXF_NO_MEM), MB_YESNO | MB_ICONERROR);
 }
 
-bool load_hexfile_1::StreamIn(HexEditorWindow &hexwnd, hexfile_stream &hexin)
+bool load_hexfile_1::StreamIn(HexEditorWindow& hexwnd, hexfile_stream& hexin)
 {
 	load_hexfile_1 instance(hexwnd);
 	if (!instance.StreamIn(hexin))
@@ -344,3 +344,4 @@ bool load_hexfile_1::StreamIn(HexEditorWindow &hexwnd, hexfile_stream &hexin)
 	instance.m_pT = 0;
 	return true;
 }
+

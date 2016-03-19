@@ -31,3 +31,5 @@ Last change: 2013-02-24 by Jochen Neubeck
 BOOL ostools_HaveAdminAccess();
 
 #endif // _OS_TOOLS_H_
+
+

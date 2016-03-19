@@ -22,7 +22,7 @@ Last change: 2013-02-24 by Jochen Neubeck
 #include "precomp.h"
 
 PList::PList()
-: Count(0)
+	: Count(0)
 {
 }
 
@@ -38,7 +38,7 @@ void PList::DeleteContents()
 	Count = 0;
 }
 
-void PList::AddTail(PNode *p)
+void PList::AddTail(PNode* p)
 {
 	p->Flink = Blink->Flink;
 	p->Blink = Blink;
@@ -66,7 +66,7 @@ void TRACE(const char* pszFormat,...)
 {
 #ifdef _DEBUG
 	static bool bFirstTime = true;
-	if (FILE *fp = fopen("zhed.log", bFirstTime ? "w" : "a"))
+	if (FILE* fp = fopen("zhed.log", bFirstTime ? "w" : "a"))
 	{
 		bFirstTime = false;
 		va_list args;
@@ -75,4 +75,6 @@ void TRACE(const char* pszFormat,...)
 		fclose(fp);
 	}
 #endif //_DEBUG
+
 }
+

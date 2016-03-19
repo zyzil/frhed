@@ -32,8 +32,8 @@ Last change: 2013-02-24 by Jochen Neubeck
  * @brief A constructor.
  */
 PMemoryBlock::PMemoryBlock()
-: m_lpbMemory(0)
-, m_dwSize(0)
+	: m_lpbMemory(0)
+	  , m_dwSize(0)
 {
 }
 
@@ -54,9 +54,9 @@ PMemoryBlock::PMemoryBlock(DWORD dwSize, LPBYTE lpbSource, DWORD dwPadBytes)
 		if (m_lpbMemory)
 		{
 			if (lpbSource)
-				CopyMemory(m_lpbMemory, lpbSource, dwSize);
+			CopyMemory(m_lpbMemory, lpbSource, dwSize);
 			else
-				ZeroMemory(m_lpbMemory, dwSize);
+			ZeroMemory(m_lpbMemory, dwSize);
 			m_dwSize = dwSize;
 		}
 		else
@@ -81,9 +81,9 @@ PMemoryBlock::PMemoryBlock(const PMemoryBlock& objectSrc)
 		if (m_lpbMemory)
 		{
 			if (objectSrc.m_lpbMemory)
-				CopyMemory(m_lpbMemory, objectSrc.m_lpbMemory, objectSrc.m_dwSize);
+			CopyMemory(m_lpbMemory, objectSrc.m_lpbMemory, objectSrc.m_dwSize);
 			else
-				ZeroMemory(m_lpbMemory, objectSrc.m_dwSize);
+			ZeroMemory(m_lpbMemory, objectSrc.m_dwSize);
 			m_dwSize = objectSrc.m_dwSize;
 		}
 		else
@@ -127,7 +127,7 @@ void PMemoryBlock::Delete()
  * @return TRUE if the create succeeded, FALSE otherwise.
  */
 BOOL PMemoryBlock::CreateAligned(DWORD dwUnalignedSize, DWORD dwAlignment,
-		LPBYTE lpbSource, DWORD dwPadBytes)
+                                 LPBYTE lpbSource, DWORD dwPadBytes)
 {
 	DWORD dwRest = dwUnalignedSize % dwAlignment;
 	if (dwRest)
@@ -156,9 +156,9 @@ BOOL PMemoryBlock::Create(DWORD dwSize, LPBYTE lpbSource, DWORD dwPadBytes)
 		if (m_lpbMemory)
 		{
 			if (lpbSource)
-				CopyMemory(m_lpbMemory, lpbSource, dwSize);
+			CopyMemory(m_lpbMemory, lpbSource, dwSize);
 			else
-				ZeroMemory(m_lpbMemory, dwSize+dwPadBytes);
+			ZeroMemory(m_lpbMemory, dwSize+dwPadBytes);
 			m_dwSize = dwSize;
 		}
 		else
@@ -189,9 +189,9 @@ PMemoryBlock& PMemoryBlock::operator=(const PMemoryBlock& objectSrc)
 		if (m_lpbMemory)
 		{
 			if (objectSrc.m_lpbMemory)
-				CopyMemory(m_lpbMemory, objectSrc.m_lpbMemory, objectSrc.m_dwSize);
+			CopyMemory(m_lpbMemory, objectSrc.m_lpbMemory, objectSrc.m_dwSize);
 			else
-				ZeroMemory(m_lpbMemory, objectSrc.m_dwSize);
+			ZeroMemory(m_lpbMemory, objectSrc.m_dwSize);
 			m_dwSize = objectSrc.m_dwSize;
 		}
 		else
@@ -222,3 +222,4 @@ LPBYTE PMemoryBlock::GetObjectMemory() const
 {
 	return m_lpbMemory;
 }
+

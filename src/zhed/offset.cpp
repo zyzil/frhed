@@ -35,7 +35,7 @@ Last change: 2013-02-24 by Jochen Neubeck
  * @return true if parsing succeeded, false if failed.
  * @todo Find a faster way to parse all possibilities.
  */
-bool offset_parse(LPCTSTR str, int &offset)
+bool offset_parse(LPCTSTR str, int& offset)
 {
 	bool negate = false;
 	if (*str == '-')
@@ -64,7 +64,7 @@ bool offset_parse(LPCTSTR str, int &offset)
  * @return true if parsing succeeded, false if failed.
  * @todo Find a faster way to parse all possibilities.
  */
-bool offset_parse64(LPCTSTR str, INT64 &offset)
+bool offset_parse64(LPCTSTR str, INT64& offset)
 {
 	bool negate = false;
 	if (*str == '-')
@@ -85,3 +85,4 @@ bool offset_parse64(LPCTSTR str, INT64 &offset)
 		offset = -offset;
 	return true;
 }
+

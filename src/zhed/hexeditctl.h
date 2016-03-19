@@ -88,17 +88,17 @@ public:
 	};
 
 	virtual unsigned STDMETHODCALLTYPE get_interface_version() = 0;
-	virtual unsigned char *STDMETHODCALLTYPE get_buffer(int) = 0;
+	virtual unsigned char*STDMETHODCALLTYPE get_buffer(int) = 0;
 	virtual int STDMETHODCALLTYPE get_length() = 0;
-	virtual void STDMETHODCALLTYPE set_sibling(IHexEditorWindow *) = 0;
-	virtual Colors *STDMETHODCALLTYPE get_colors() = 0;
-	virtual Settings *STDMETHODCALLTYPE get_settings() = 0;
-	virtual Status *STDMETHODCALLTYPE get_status() = 0;
+	virtual void STDMETHODCALLTYPE set_sibling(IHexEditorWindow*) = 0;
+	virtual Colors*STDMETHODCALLTYPE get_colors() = 0;
+	virtual Settings*STDMETHODCALLTYPE get_settings() = 0;
+	virtual Status*STDMETHODCALLTYPE get_status() = 0;
 	virtual void STDMETHODCALLTYPE resize_window() = 0;
 	virtual void STDMETHODCALLTYPE repaint(int from, int to) = 0;
 	virtual void STDMETHODCALLTYPE adjust_hscrollbar() = 0;
 	virtual void STDMETHODCALLTYPE adjust_vscrollbar() = 0;
-	virtual int STDMETHODCALLTYPE translate_accelerator(MSG *) = 0;
+	virtual int STDMETHODCALLTYPE translate_accelerator(MSG*) = 0;
 	virtual void STDMETHODCALLTYPE CMD_find() = 0;
 	virtual void STDMETHODCALLTYPE CMD_findprev() = 0;
 	virtual void STDMETHODCALLTYPE CMD_findnext() = 0;
@@ -112,9 +112,9 @@ public:
 	virtual BOOL STDMETHODCALLTYPE load_lang(LANGID langid, LPCWSTR langdir = NULL) = 0;
 	virtual void STDMETHODCALLTYPE CMD_zoom(int) = 0;
 	virtual void STDMETHODCALLTYPE CMD_select_all() = 0;
-	virtual void STDMETHODCALLTYPE set_sibling2(IHexEditorWindow *, IHexEditorWindow *) = 0;
-	virtual void STDMETHODCALLTYPE copy_sel_from(IHexEditorWindow *) = 0;
-	virtual void STDMETHODCALLTYPE copy_all_from(IHexEditorWindow *) = 0;
+	virtual void STDMETHODCALLTYPE set_sibling2(IHexEditorWindow*, IHexEditorWindow*) = 0;
+	virtual void STDMETHODCALLTYPE copy_sel_from(IHexEditorWindow*) = 0;
+	virtual void STDMETHODCALLTYPE copy_all_from(IHexEditorWindow*) = 0;
 	virtual void STDMETHODCALLTYPE CMD_edit_undo() = 0;
 	virtual void STDMETHODCALLTYPE CMD_edit_redo() = 0;
 	virtual bool STDMETHODCALLTYPE can_undo() const = 0;
@@ -122,11 +122,13 @@ public:
 	virtual void STDMETHODCALLTYPE set_savepoint() = 0;
 	virtual bool STDMETHODCALLTYPE get_modified() const = 0;
 	virtual void STDMETHODCALLTYPE clear_undorecords() = 0;
-	virtual void STDMETHODCALLTYPE share_undorecords(IHexEditorWindow *) = 0;
+	virtual void STDMETHODCALLTYPE share_undorecords(IHexEditorWindow*) = 0;
 	virtual void STDMETHODCALLTYPE CMD_view_settings() = 0;
 	virtual void STDMETHODCALLTYPE CMD_binarymode() = 0;
 	virtual void STDMETHODCALLTYPE CMD_character_set() = 0;
-	virtual void STDMETHODCALLTYPE read_ini_data(TCHAR *key = 0) = 0;
+	virtual void STDMETHODCALLTYPE read_ini_data(TCHAR* key = 0) = 0;
 };
 
 #endif // _hexeditctl_H_
+
+

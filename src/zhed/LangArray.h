@@ -31,14 +31,16 @@ class LangArray : public SimpleArray<char *>
 {
 public:
 	static const LANGID DefLangId;
+
 	struct StringData
 	{
 		int refcount;
 		char data[1];
-		static StringData *Create(const char *, size_t);
-		char *Share();
-		static void Unshare(char *);
+		static StringData* Create(const char*, size_t);
+		char* Share();
+		static void Unshare(char*);
 	};
+
 	HMODULE m_hLangDll;
 	unsigned m_codepage;
 	LANGID m_langid;
@@ -54,3 +56,4 @@ public:
 	static int LangCodeMajor(LANGID, LPTSTR);
 	static int LangCodeMinor(LANGID, LPTSTR);
 };
+

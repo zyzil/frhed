@@ -38,7 +38,7 @@ int CopyHexdumpDlg::iCopyHexdumpType = IDC_EXPORTDISPLAY;
  * @brief Initialize the dialog.
  * @param [in] hDlg Handle to the dialog.
  */
-BOOL CopyHexdumpDlg::OnInitDialog(HWindow *pDlg)
+BOOL CopyHexdumpDlg::OnInitDialog(HWindow* pDlg)
 {
 	int iCopyHexdumpDlgStart, iCopyHexdumpDlgEnd;
 	if (!bSelected)
@@ -60,7 +60,7 @@ BOOL CopyHexdumpDlg::OnInitDialog(HWindow *pDlg)
 	_stprintf(buf, _T("0x%x"), iCopyHexdumpDlgEnd);
 	pDlg->SetDlgItemText(IDC_HEXDUMP_OFFSET2, buf);
 	pDlg->CheckDlgButton(iCopyHexdumpMode ? IDC_HEXDUMP_EXPORTCLIPB :
-			IDC_HEXDUMP_EXPORTFILE, BST_CHECKED);
+		                     IDC_HEXDUMP_EXPORTFILE, BST_CHECKED);
 	pDlg->CheckDlgButton(iCopyHexdumpType, BST_CHECKED);
 	return TRUE;
 }
@@ -72,7 +72,7 @@ BOOL CopyHexdumpDlg::OnInitDialog(HWindow *pDlg)
  * @param [in] lParam Optional parameter for the command.
  * @return TRUE if the command was handled, FALSE otherwise.
  */
-BOOL CopyHexdumpDlg::OnCommand(HWindow *pDlg, WPARAM wParam, LPARAM lParam)
+BOOL CopyHexdumpDlg::OnCommand(HWindow* pDlg, WPARAM wParam, LPARAM lParam)
 {
 	int iCopyHexdumpDlgStart, iCopyHexdumpDlgEnd;
 	const int bufSize = 16;
@@ -114,7 +114,7 @@ BOOL CopyHexdumpDlg::OnCommand(HWindow *pDlg, WPARAM wParam, LPARAM lParam)
  * @param [in] lParam The optional parameter for the command.
  * @return TRUE if the message was handled, FALSE otherwise.
  */
-INT_PTR CopyHexdumpDlg::DlgProc(HWindow *pDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR CopyHexdumpDlg::DlgProc(HWindow* pDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (iMsg)
 	{
@@ -128,3 +128,4 @@ INT_PTR CopyHexdumpDlg::DlgProc(HWindow *pDlg, UINT iMsg, WPARAM wParam, LPARAM 
 	}
 	return FALSE;
 }
+

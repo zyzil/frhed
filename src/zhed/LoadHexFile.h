@@ -27,7 +27,7 @@ public:
 	virtual int lhungetc(int) = 0;
 	virtual long lhtell() = 0;
 	virtual int lhseek(long) = 0;
-	virtual int scanf(const char *, int *) = 0;
+	virtual int scanf(const char*, int*) = 0;
 	int lheatwhite();
 };
 
@@ -35,27 +35,35 @@ class fhexfile_stream : public hexfile_stream
 {
 public:
 	// Data
-	FILE *i;
+	FILE* i;
+
 	// Constructor
-	fhexfile_stream(FILE *i): i(i) { }
+	fhexfile_stream(FILE* i): i(i)
+	{
+	}
+
 	// Methods
 	virtual int lhgetc()
 	{
 		return fgetc(i);
 	}
+
 	virtual int lhungetc(int c)
 	{
 		return ungetc(c, i);
 	}
+
 	virtual long lhtell()
 	{
 		return ftell(i);
 	}
+
 	virtual int lhseek(long p)
 	{
 		return fseek(i, p, SEEK_SET);
 	}
-	virtual int scanf(const char *fmt, int *p)
+
+	virtual int scanf(const char* fmt, int* p)
 	{
 		return fscanf(i, fmt, p);
 	}
@@ -65,10 +73,14 @@ class chexfile_stream : public hexfile_stream
 {
 public:
 	// Data
-	char *i;
+	char* i;
 	long lhpos;
+
 	// Constructor
-	chexfile_stream(char *i): i(i), lhpos(0) { }
+	chexfile_stream(char* i): i(i), lhpos(0)
+	{
+	}
+
 	// Methods
 	virtual int lhgetc()
 	{
@@ -79,19 +91,23 @@ public:
 			c = EOF;
 		return c;
 	}
+
 	virtual int lhungetc(int c)
 	{
 		return BYTE(i[--lhpos] = (BYTE)c);
 	}
+
 	virtual long lhtell()
 	{
 		return lhpos;
 	}
+
 	virtual int lhseek(long p)
 	{
 		return lhpos = p;
 	}
-	virtual int scanf(const char *fmt, int *p)
+
+	virtual int scanf(const char* fmt, int* p)
 	{
 		return sscanf(i + lhpos, fmt, p);
 	}
@@ -100,20 +116,22 @@ public:
 class load_hexfile_0 : SimpleArray<unsigned char>
 {
 private:
-	HWindow *pwnd;
-	load_hexfile_0(HexEditorWindow &hexwnd)
-	: pwnd(hexwnd.pwnd)
+	HWindow* pwnd;
+
+	load_hexfile_0(HexEditorWindow& hexwnd)
+		: pwnd(hexwnd.pwnd)
 	{
 	}
-	bool StreamIn(hexfile_stream &);
+
+	bool StreamIn(hexfile_stream&);
 public:
-	static bool StreamIn(HexEditorWindow &, hexfile_stream &);
+	static bool StreamIn(HexEditorWindow&, hexfile_stream&);
 };
 
 class load_hexfile_1 : SimpleArray<unsigned char>
 {
 private:
-	HWindow *pwnd;
+	HWindow* pwnd;
 	int iMinOffsetLen;
 	int bAutoOffsetLen;
 	int iBytesPerLine;
@@ -121,18 +139,21 @@ private:
 	int iCharacterSet;
 	int bPartialStats;
 	INT64 iPartialOffset;
-	load_hexfile_1(HexEditorWindow &hexwnd)
-	: pwnd(hexwnd.pwnd)
-	, iMinOffsetLen(hexwnd.iMinOffsetLen)
-	, bAutoOffsetLen(hexwnd.bAutoOffsetLen)
-	, iBytesPerLine(hexwnd.iBytesPerLine)
-	, iAutomaticBPL(hexwnd.iAutomaticBPL)
-	, iCharacterSet(hexwnd.iCharacterSet)
-	, bPartialStats(hexwnd.bPartialStats)
-	, iPartialOffset(hexwnd.iPartialOffset)
+
+	load_hexfile_1(HexEditorWindow& hexwnd)
+		: pwnd(hexwnd.pwnd)
+		  , iMinOffsetLen(hexwnd.iMinOffsetLen)
+		  , bAutoOffsetLen(hexwnd.bAutoOffsetLen)
+		  , iBytesPerLine(hexwnd.iBytesPerLine)
+		  , iAutomaticBPL(hexwnd.iAutomaticBPL)
+		  , iCharacterSet(hexwnd.iCharacterSet)
+		  , bPartialStats(hexwnd.bPartialStats)
+		  , iPartialOffset(hexwnd.iPartialOffset)
 	{
 	}
-	bool StreamIn(hexfile_stream &);
+
+	bool StreamIn(hexfile_stream&);
 public:
-	static bool StreamIn(HexEditorWindow &, hexfile_stream &);
+	static bool StreamIn(HexEditorWindow&, hexfile_stream&);
 };
+

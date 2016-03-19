@@ -38,18 +38,18 @@ static const TCHAR ZhedLink[] = _T("zhed.lnk");
 class TraverseFolders
 {
 public:
-	HListView *const list;
+	HListView*const list;
 	TCHAR rn[MAX_PATH];
 	TCHAR vn[50];
 	LVITEM li;
 	LVFINDINFO fi;
 	BOOL cr;
 
-	TraverseFolders(HListView *);
+	TraverseFolders(HListView*);
 	void Recurse();
 };
 
-TraverseFolders::TraverseFolders(HListView *list) 
+TraverseFolders::TraverseFolders(HListView* list)
 	: cr(FALSE), list(list)
 {
 	ZeroMemory(rn, sizeof(rn));
@@ -71,72 +71,76 @@ void TraverseFolders::Recurse()
 	//First find all the links
 	if ((S = _tfindfirst(_T("*.lnk"), &F)) != -1)
 	{
-		do if ( !( F.attrib & _A_SUBDIR ) && !ResolveIt(NULL, F.name, rn) )
-		{
-			int si;
-			if (cr)
-			{//findnfix
-				PathStripPath(rn);//strip to file name
-				si = _tcsicmp(rn, _T("zhed.exe"));
-			}
-			else
+		do
+			if (!(F.attrib & _A_SUBDIR) && !ResolveIt(NULL, F.name, rn))
 			{
-				si = PathPointsToMe(rn);//update
-			}
-			if (si == 0)
-			{
-				_tfullpath(rn, F.name, MAX_PATH);
-				_tremove(rn);//get rid of the file if we are fixing (in case of 2 links to zhed in same dir & links with the wrong name)
-				TCHAR *fnam = PathFindFileName(rn);
-				fnam[-1] = 0; //strip the file name (& '\\') off
-				if (-1 == list->FindItem(&fi)) //Not present yet
-				{
-					//Insert the item
-					list->InsertItem(&li);
-					//Add to the Registry
-					_stprintf(vn, _T("%d"), li.iItem);
-					TCHAR keyname[64];
-					_sntprintf(keyname, RTL_NUMBER_OF(keyname), _T("%s\\links"),
-						OptionsRegistrySettingsPath);
-					SHSetValue(HKEY_CURRENT_USER, keyname, vn, REG_SZ, rn,
-						static_cast<DWORD>(fnam - rn));
-					li.iItem++;
+				int si;
+				if (cr)
+				{//findnfix
+					PathStripPath(rn);//strip to file name
+					si = _tcsicmp(rn, _T("zhed.exe"));
 				}
-				PathAppend(rn, ZhedLink);//put the name backon
-				CreateLinkToMe(rn);//create the new link
+				else
+				{
+					si = PathPointsToMe(rn);//update
+				}
+				if (si == 0)
+				{
+					_tfullpath(rn, F.name, MAX_PATH);
+					_tremove(rn);//get rid of the file if we are fixing (in case of 2 links to zhed in same dir & links with the wrong name)
+					TCHAR* fnam = PathFindFileName(rn);
+					fnam[-1] = 0; //strip the file name (& '\\') off
+					if (-1 == list->FindItem(&fi)) //Not present yet
+					{
+						//Insert the item
+						list->InsertItem(&li);
+						//Add to the Registry
+						_stprintf(vn, _T("%d"), li.iItem);
+						TCHAR keyname[64];
+						_sntprintf(keyname, RTL_NUMBER_OF(keyname), _T("%s\\links"),
+						           OptionsRegistrySettingsPath);
+						SHSetValue(HKEY_CURRENT_USER, keyname, vn, REG_SZ, rn,
+						                            static_cast<DWORD>(fnam - rn));
+						li.iItem++;
+					}
+					PathAppend(rn, ZhedLink);//put the name backon
+					CreateLinkToMe(rn);//create the new link
+				}
 			}
-		} while (_tfindnext(S, &F) == 0);
+		while (_tfindnext(S, &F) == 0);
 		_findclose(S);
 	}
 	//Then find all the subdirs
 	if ((S = _tfindfirst(_T("*"), &F)) != -1)
 	{
 		//except "." && ".."
-		do if (F.attrib & _A_SUBDIR && _tcsstr(_T(".."), F.name) == 0)
-		{
-			_tchdir(F.name);
-			Recurse();
-			_tchdir(_T(".."));
-		} while (_tfindnext(S, &F) == 0);
+		do
+			if (F.attrib & _A_SUBDIR && _tcsstr(_T(".."), F.name) == 0)
+			{
+				_tchdir(F.name);
+				Recurse();
+				_tchdir(_T(".."));
+			}
+		while (_tfindnext(S, &F) == 0);
 		_findclose(S);
 	}
 }
 
-BOOL ShortcutsDlg::OnInitDialog(HWindow *pDlg)
+BOOL ShortcutsDlg::OnInitDialog(HWindow* pDlg)
 {
 	//Add a column
 	LVCOLUMN col;
 	ZeroMemory(&col, sizeof col);
 	col.mask = LVCF_TEXT | LVCF_WIDTH;
-	col.fmt = LVCFMT_LEFT;
+	col.fmt = LVCFMT_LEFT ;
 	col.pszText = GetLangString(IDS_SCUT_LINKNAMES);
 	col.cx = 153;
 	static_cast<HListView *>(pDlg->GetDlgItem(IDC_SHORTCUT_LINKS))->InsertColumn(0, &col);
 	//Load links from the registry
 	//Tricky-tricky
 	pDlg->SendMessage(WM_COMMAND,
-		MAKEWPARAM(IDC_RELOAD, BN_CLICKED),
-		(LPARAM)pDlg->GetDlgItem(IDC_RELOAD));
+	                            MAKEWPARAM(IDC_RELOAD, BN_CLICKED),
+	                            (LPARAM)pDlg->GetDlgItem(IDC_RELOAD));
 	return TRUE;
 }
 
@@ -147,7 +151,7 @@ int CALLBACK ShortcutsDlg::BrowseCallbackProc(HWND hw, UINT m, LPARAM l, LPARAM)
 	if (m == BFFM_SELCHANGED)
 	{
 		TCHAR szDir[MAX_PATH];
-		if (SHGetPathFromIDList((LPITEMIDLIST) l ,szDir) && PathIsDirectory(szDir))
+		if (SHGetPathFromIDList((LPITEMIDLIST) l, szDir) && PathIsDirectory(szDir))
 		{
 			PathAddBackslash(szDir);
 			_tcsncat(szDir, ZhedLink, RTL_NUMBER_OF(szDir) - _tcslen(szDir));
@@ -188,15 +192,15 @@ int CALLBACK ShortcutsDlg::SearchCallbackProc(HWND hw, UINT m, LPARAM l, LPARAM)
 	if (m == BFFM_SELCHANGED)
 	{
 		TCHAR szDir[MAX_PATH];
-		BOOL ret = SHGetPathFromIDList((LPITEMIDLIST) l ,szDir) && PathIsDirectory(szDir);
+		BOOL ret = SHGetPathFromIDList((LPITEMIDLIST) l, szDir) && PathIsDirectory(szDir);
 		SendMessage(hw, BFFM_ENABLEOK, 0, ret);//Enable/Disable
 		SendMessage(hw, BFFM_SETSTATUSTEXT, 0,
-			(LPARAM)(ret ? GetLangString(IDS_SCUT_CAN_SEARCH) : GetLangString(IDS_SCUT_CANNOT_SEARCH)));
+		            (LPARAM)(ret ? GetLangString(IDS_SCUT_CAN_SEARCH) : GetLangString(IDS_SCUT_CANNOT_SEARCH)));
 	}
 	return 0;
 }
 
-BOOL ShortcutsDlg::OnCommand(HWindow *pDlg, WPARAM w, LPARAM l)
+BOOL ShortcutsDlg::OnCommand(HWindow* pDlg, WPARAM w, LPARAM l)
 {
 	switch (LOWORD(w))
 	{
@@ -211,7 +215,7 @@ BOOL ShortcutsDlg::OnCommand(HWindow *pDlg, WPARAM w, LPARAM l)
 			HKEY hk;
 			if (ERROR_SUCCESS == RegCreateKey(HKEY_CURRENT_USER, keyname, &hk))
 			{
-				HListView *list = static_cast<HListView *>(pDlg->GetDlgItem(IDC_SHORTCUT_LINKS));//get the list
+				HListView* list = static_cast<HListView *>(pDlg->GetDlgItem(IDC_SHORTCUT_LINKS));//get the list
 				int num = list->GetItemCount(); //get the # items in the list
 				for (int i = 0; i < num; i++)
 				{
@@ -220,7 +224,7 @@ BOOL ShortcutsDlg::OnCommand(HWindow *pDlg, WPARAM w, LPARAM l)
 					TCHAR buf[MAX_PATH]; //location of the link (all links named zhed.lnk)
 					list->GetItemText(i, 0, buf, MAX_PATH);
 					RegSetValueEx(hk, valnam, 0, REG_SZ, (BYTE*)buf,
-						static_cast<DWORD>(_tcslen(buf) + 1) * sizeof(TCHAR));
+					              static_cast<DWORD>(_tcslen(buf) + 1) * sizeof(TCHAR));
 					//Just in case
 					PathAppend(buf, ZhedLink);
 					CreateLinkToMe(buf);
@@ -250,7 +254,7 @@ BOOL ShortcutsDlg::OnCommand(HWindow *pDlg, WPARAM w, LPARAM l)
 			TCHAR szDir[MAX_PATH] = {0};
 			LPITEMIDLIST pidl;
 			LPMALLOC pMalloc;
-			HListView *list = static_cast<HListView *>(pDlg->GetDlgItem(IDC_SHORTCUT_LINKS));
+			HListView* list = static_cast<HListView *>(pDlg->GetDlgItem(IDC_SHORTCUT_LINKS));
 			int di = -1;
 			HKEY hk;
 
@@ -320,7 +324,7 @@ BOOL ShortcutsDlg::OnCommand(HWindow *pDlg, WPARAM w, LPARAM l)
 						{
 							TCHAR keyname[64];
 							_sntprintf(keyname, RTL_NUMBER_OF(keyname), _T("%s\\links"),
-									OptionsRegistrySettingsPath);
+							           OptionsRegistrySettingsPath);
 
 							if (LOWORD(w) == IDC_ADD)
 							{
@@ -334,13 +338,13 @@ BOOL ShortcutsDlg::OnCommand(HWindow *pDlg, WPARAM w, LPARAM l)
 								//Add to the registry (find a string name that doesn't exist first)
 								if (ERROR_SUCCESS == RegCreateKey(HKEY_CURRENT_USER, keyname, &hk))
 								{
-									for (DWORD i = 0 ; ; i++)
+									for (DWORD i = 0; ; i++)
 									{
 										_sntprintf(valnam, RTL_NUMBER_OF(valnam) - 1, _T("%d"), i);
 										if (ERROR_FILE_NOT_FOUND == RegQueryValueEx(hk, valnam, 0, NULL, NULL, NULL))
 										{
 											RegSetValueEx(hk, valnam, 0, REG_SZ, (BYTE*)szDir,
-												static_cast<DWORD>(_tcslen(szDir) + 1) * sizeof(TCHAR));
+											              static_cast<DWORD>(_tcslen(szDir) + 1) * sizeof(TCHAR));
 											break;
 										}
 									}
@@ -371,10 +375,10 @@ BOOL ShortcutsDlg::OnCommand(HWindow *pDlg, WPARAM w, LPARAM l)
 										valbuf[0] = valnam[0] = 0;
 										ret = RegEnumValue(hk, i, valnam, &valnamsize, 0, &typ, (BYTE*) valbuf, &valbufsize);
 										_tcsupr(valbuf);
-										if (typ == REG_SZ && valbuf[0] != 0 && !_tcscmp(valbuf ,cursel))
+										if (typ == REG_SZ && valbuf[0] != 0 && !_tcscmp(valbuf, cursel))
 										{
 											RegSetValueEx(hk, valnam, 0, REG_SZ, (BYTE*)szDir,
-												static_cast<DWORD>(_tcslen(szDir) + 1) * sizeof(TCHAR));
+											              static_cast<DWORD>(_tcslen(szDir) + 1) * sizeof(TCHAR));
 											break;
 										}
 										if (ERROR_NO_MORE_ITEMS == ret)
@@ -405,7 +409,7 @@ BOOL ShortcutsDlg::OnCommand(HWindow *pDlg, WPARAM w, LPARAM l)
 			//Go through the file system searching for links to this exe
 			//-Thanks to Raihan for the traversing code this was based on.
 			if (LOWORD(w) == IDC_FIND_AND_FIX &&
-					IDNO == MessageBox(pDlg, GetLangString(IDS_SCUT_UPDATE_LINKS), MB_YESNO))
+				IDNO == MessageBox(pDlg, GetLangString(IDS_SCUT_UPDATE_LINKS), MB_YESNO))
 				return TRUE;
 			//Find a spot to start from
 			LPMALLOC pMalloc;
@@ -443,8 +447,8 @@ BOOL ShortcutsDlg::OnCommand(HWindow *pDlg, WPARAM w, LPARAM l)
 		{
 			TCHAR keyname[64];
 			_sntprintf(keyname, RTL_NUMBER_OF(keyname), _T("%s\\links"),
-					OptionsRegistrySettingsPath);
-			HListView *list = static_cast<HListView *>(pDlg->GetDlgItem(IDC_SHORTCUT_LINKS));//get the list
+			           OptionsRegistrySettingsPath);
+			HListView* list = static_cast<HListView *>(pDlg->GetDlgItem(IDC_SHORTCUT_LINKS));//get the list
 			//Delete the selected links from the registry & the filesystem
 			int di = list->GetSelectedCount();
 			if (di == 0)
@@ -452,7 +456,7 @@ BOOL ShortcutsDlg::OnCommand(HWindow *pDlg, WPARAM w, LPARAM l)
 				MessageBox(pDlg, GetLangString(IDS_SCUT_NO_SELECT_DEL), MB_OK);
 				return TRUE;
 			}
-			for( ; ; )
+			for (; ;)
 			{
 				di = list->GetNextItem(-1, LVNI_SELECTED);
 				if (di == -1)
@@ -496,15 +500,15 @@ BOOL ShortcutsDlg::OnCommand(HWindow *pDlg, WPARAM w, LPARAM l)
 			//Reload links from the registry zhed\subreleaseno\links\ all values loaded & tested
 			TCHAR keyname[64] = {0};
 			_sntprintf(keyname, RTL_NUMBER_OF(keyname), _T("%s\\links"),
-					OptionsRegistrySettingsPath);
-			HListView *list = static_cast<HListView *>(pDlg->GetDlgItem(IDC_SHORTCUT_LINKS));//get the list
+			           OptionsRegistrySettingsPath);
+			HListView* list = static_cast<HListView *>(pDlg->GetDlgItem(IDC_SHORTCUT_LINKS));//get the list
 			//Delete list
 			list->DeleteAllItems();
 			HKEY hk;
 			if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, keyname, 0, KEY_ALL_ACCESS, &hk))
 			{
 				//Load all the string values
-				for (DWORD i = 0 ; ; i++)
+				for (DWORD i = 0; ; i++)
 				{
 					TCHAR valnam[MAX_PATH];
 					DWORD valnamsize = sizeof valnam;
@@ -544,7 +548,7 @@ BOOL ShortcutsDlg::OnCommand(HWindow *pDlg, WPARAM w, LPARAM l)
 			//HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders\Desktop = C:\WINDOWS\Desktop on my computer
 			TCHAR keyname[64];
 			_sntprintf(keyname, RTL_NUMBER_OF(keyname), _T("%s\\links"),
-					OptionsRegistrySettingsPath);
+			           OptionsRegistrySettingsPath);
 			HKEY hk;
 			if (ERROR_SUCCESS == RegOpenKey(HKEY_CURRENT_USER, _T("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders"), &hk))
 			{
@@ -568,7 +572,7 @@ BOOL ShortcutsDlg::OnCommand(HWindow *pDlg, WPARAM w, LPARAM l)
 				}
 				RegCloseKey(hk);
 
-				HListView *list = static_cast<HListView *>(pDlg->GetDlgItem(IDC_SHORTCUT_LINKS));//get the list
+				HListView* list = static_cast<HListView *>(pDlg->GetDlgItem(IDC_SHORTCUT_LINKS));//get the list
 				int num = list->GetItemCount();//get the # items in the list
 				int done = 0;
 				TCHAR path[MAX_PATH];
@@ -611,7 +615,7 @@ BOOL ShortcutsDlg::OnCommand(HWindow *pDlg, WPARAM w, LPARAM l)
 							{
 								//Add the value to the registry
 								RegSetValueEx(hk, valnam, 0, REG_SZ, (BYTE*)szDir,
-									static_cast<DWORD>(_tcslen(szDir) + 1) * sizeof(TCHAR));
+								              static_cast<DWORD>(_tcslen(szDir) + 1) * sizeof(TCHAR));
 								break;
 							}
 						}
@@ -627,9 +631,9 @@ BOOL ShortcutsDlg::OnCommand(HWindow *pDlg, WPARAM w, LPARAM l)
 	return FALSE;
 }
 
-BOOL ShortcutsDlg::OnNotify(HWindow *pDlg, WPARAM w, LPARAM l)
+BOOL ShortcutsDlg::OnNotify(HWindow* pDlg, WPARAM w, LPARAM l)
 {
-	NMLVKEYDOWN *nmh = ((NMLVKEYDOWN*)l);
+	NMLVKEYDOWN* nmh = ((NMLVKEYDOWN*)l);
 	if (nmh->hdr.idFrom == IDC_SHORTCUT_LINKS &&
 		nmh->hdr.code == LVN_KEYDOWN &&
 		nmh->wVKey == VK_DELETE)
@@ -639,7 +643,7 @@ BOOL ShortcutsDlg::OnNotify(HWindow *pDlg, WPARAM w, LPARAM l)
 	return TRUE;
 }
 
-INT_PTR ShortcutsDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
+INT_PTR ShortcutsDlg::DlgProc(HWindow* pDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
@@ -656,3 +660,4 @@ INT_PTR ShortcutsDlg::DlgProc(HWindow *pDlg, UINT uMsg, WPARAM wParam, LPARAM lP
 	}
 	return FALSE;
 }
+
