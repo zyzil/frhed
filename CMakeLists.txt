@@ -46,6 +46,17 @@ file(GLOB zhed_res
     "src/zhed/*.rc"
 )
 
+MESSAGE( STATUS "Use STATIC runtime" )
+set(NAME_RT MT)
+set (CMAKE_CXX_FLAGS_MINSIZEREL     "${CMAKE_CXX_FLAGS_MINSIZEREL} /MT")
+set (CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /MT")
+set (CMAKE_CXX_FLAGS_RELEASE        "${CMAKE_CXX_FLAGS_RELEASE} /MT")
+set (CMAKE_CXX_FLAGS_DEBUG          "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
+set (CMAKE_C_FLAGS_MINSIZEREL       "${CMAKE_C_FLAGS_MINSIZEREL} /MT")
+set (CMAKE_C_FLAGS_RELWITHDEBINFO   "${CMAKE_C_FLAGS_RELWITHDEBINFO} /MT")
+set (CMAKE_C_FLAGS_RELEASE          "${CMAKE_C_FLAGS_RELEASE} /MT")
+set (CMAKE_C_FLAGS_DEBUG            "${CMAKE_C_FLAGS_DEBUG} /MTd")
+
 add_executable (zhed ${zhed_src} ${zhed_hdr} ${zhed_res})
 target_link_libraries (zhed version comctl32 wininet shlwapi Htmlhelp)
 set_target_properties(zhed PROPERTIES COMPILE_FLAGS "/Yuprecomp.h")
